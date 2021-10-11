@@ -1,0 +1,27 @@
+version: '3'
+services:
+  frontend_test:
+    build:
+      dockerfile: ./Dockerfile.test
+      args:
+        project: frontend
+    volumes:
+      - testing_vol:/usr/src/sudoku-frontend/
+    networks:
+      - monorepo_net
+  ocean_test:
+    build:
+      dockerfile: ./Dockerfile.test
+      args:
+        project: backend
+    volumes:
+      - testing_vol:/usr/src/sudoku-backend/
+    networks:
+      - monorepo_net
+
+volumes:
+  testing_vol:
+
+networks:
+  monorepo_net:
+    driver: bridge

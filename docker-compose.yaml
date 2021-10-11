@@ -1,0 +1,39 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.angular
+      args:
+        project: frontend
+    ports:
+      - 8000:80
+    restart: on-failure
+    volumes:
+      - frontend_vol:/usr/src/sudoku-frontend/
+      - node_modules:/usr/src/sudoku-frontend/node_modules/
+    networks:
+      - monorepo_net
+  backend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.nest
+      args:
+        project: backend
+    ports:
+      - 8003:3333
+    restart: on-failure
+    volumes:
+      - backend_vol:/usr/src/sudoku-backend/
+      - node_modules:/usr/src/sudoku-backend/node_modules/
+    networks:
+      - monorepo_net
+
+volumes:
+  frontend_vol:
+  backend_vol:
+  node_modules:
+
+networks:
+  monorepo_net:
+    driver: bridge

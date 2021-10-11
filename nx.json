@@ -27,12 +27,18 @@
     ]
   },
   "projects": {
+    "sudoku-backend": {
+      "tags": []
+    },
     "sudoku-frontend": {
       "tags": []
     },
     "sudoku-frontend-e2e": {
       "tags": [],
       "implicitDependencies": ["sudoku-frontend"]
+    },
+    "true-sudoku-backend": {
+      "tags": []
     }
   }
 }
