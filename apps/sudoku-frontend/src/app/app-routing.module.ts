@@ -5,12 +5,12 @@ import { DemoGuard } from './guards/demo.guard';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
+    canActivate: [DemoGuard]
   },{
     path: '',
     redirectTo: '/home',
-    pathMatch: 'full',
-    canActivate: [DemoGuard]
+    pathMatch: 'full'
   },
   {
     path: '**',
