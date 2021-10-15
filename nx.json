@@ -1,7 +1,7 @@
 {
   "npmScope": "se-sudoku",
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "main"
   },
   "implicitDependencies": {
     "package.json": {
@@ -14,7 +14,12 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ]
       }
     }
   },
@@ -35,10 +40,9 @@
     },
     "sudoku-frontend-e2e": {
       "tags": [],
-      "implicitDependencies": ["sudoku-frontend"]
-    },
-    "true-sudoku-backend": {
-      "tags": []
+      "implicitDependencies": [
+        "sudoku-frontend"
+      ]
     }
   }
 }
