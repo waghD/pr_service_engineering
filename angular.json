@@ -202,6 +202,9 @@
     },
     "@nrwl/angular:component": {
       "style": "scss"
+    },
+    "@schematics/angular:component": {
+      "style": "scss"
     }
   },
   "defaultProject": "sudoku-frontend"

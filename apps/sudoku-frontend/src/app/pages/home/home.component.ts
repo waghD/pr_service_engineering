@@ -4,7 +4,7 @@ import { HomeStateService } from './home-state.service';
 @Component({
   selector: 'se-sudoku-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
 
