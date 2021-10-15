@@ -171,57 +171,6 @@
           }
         }
       }
-    },
-    "true-sudoku-backend": {
-      "root": "apps/true/sudoku-backend",
-      "sourceRoot": "apps/true/sudoku-backend/src",
-      "projectType": "application",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/true/sudoku-backend",
-            "main": "apps/true/sudoku-backend/src/main.ts",
-            "tsConfig": "apps/true/sudoku-backend/tsconfig.app.json",
-            "assets": ["apps/true/sudoku-backend/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/true/sudoku-backend/src/environments/environment.ts",
-                  "with": "apps/true/sudoku-backend/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "true-sudoku-backend:build"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
-          "options": {
-            "lintFilePatterns": ["apps/true/sudoku-backend/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/true/sudoku-backend"],
-          "options": {
-            "jestConfig": "apps/true/sudoku-backend/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
     }
   },
   "cli": {
