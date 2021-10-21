@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DemoGuard } from './guards/demo.guard';
 import { ImpressComponent } from './pages/impress/impress.component';
 import { HowToPlayComponent } from './pages/how-to-play/how-to-play.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
