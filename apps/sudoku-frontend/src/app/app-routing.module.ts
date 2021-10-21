@@ -4,16 +4,15 @@ import { DemoGuard } from './guards/demo.guard';
 import { ImpressComponent } from './pages/impress/impress.component';
 import { HowToPlayComponent } from './pages/how-to-play/how-to-play.component';
 import { PrivacyComponent } from './pages/privacy/privacy.component';
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
-    canActivate: [DemoGuard]
+    component: HomeComponent
   }, {
     path: '',
-    redirectTo: '/home',
-    pathMatch: 'full',
+    component: HomeComponent
   }, {
     path: 'impress',
     component: ImpressComponent
