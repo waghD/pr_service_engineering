@@ -7,6 +7,7 @@ import { ImpressComponent } from '../impress/impress.component';
 import { HowToPlayComponent } from '../how-to-play/how-to-play.component';
 import { PrivacyComponent } from '../privacy/privacy.component';
 import { AppModule } from '../../app.module';
+import { FooterComponent } from '../footer/footer.component';
 
 
 const routes: Routes = [
@@ -19,10 +20,12 @@ const routes: Routes = [
     HeaderComponent,
     ImpressComponent,
     HowToPlayComponent,
-    PrivacyComponent
+    PrivacyComponent,
+    FooterComponent
   ],
   exports: [
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,

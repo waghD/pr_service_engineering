@@ -4,19 +4,16 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { FooterComponent } from './pages/footer/footer.component';
 
 @NgModule({
-  declarations: [AppComponent, FooterComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule
   ],
   providers: [],
-  bootstrap: [AppComponent],
-  exports: [
-    FooterComponent
-  ]
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+}

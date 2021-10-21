@@ -6,9 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./impress.component.scss']
 })
 export class ImpressComponent {
-
-  // constructor() { }
-
-
-
 }
