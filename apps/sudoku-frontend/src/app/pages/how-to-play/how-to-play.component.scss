@@ -1,0 +1,13 @@
+.htp-container {
+  margin: 0 12em;
+
+  .htp-img-container {
+    display: flex;
+    justify-content: center;
+
+    .elim-img {
+      max-width: 25em;
+    }
+  }
+
+}
