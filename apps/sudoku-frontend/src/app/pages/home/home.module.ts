@@ -5,6 +5,7 @@ import { HomeComponent } from './home.component';
 import { HeaderComponent } from '../header/header.component';
 import { ImpressComponent } from '../impress/impress.component';
 import { HowToPlayComponent } from '../how-to-play/how-to-play.component';
+import { PrivacyComponent } from '../privacy/privacy.component';
 
 
 const routes: Routes = [
@@ -16,7 +17,8 @@ const routes: Routes = [
     HomeComponent,
     HeaderComponent,
     ImpressComponent,
-    HowToPlayComponent
+    HowToPlayComponent,
+    PrivacyComponent
   ],
   imports: [
     CommonModule,

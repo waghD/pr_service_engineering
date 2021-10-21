@@ -1,0 +1,51 @@
+@import "~apps/sudoku-frontend/src/colors";
+
+header {
+  min-width: 35em;
+
+  .heading-blue-line {
+    background: #8ac5d1;
+    height: 35px;
+    position: absolute;
+    top: 20px;
+    width: 100vw;
+    left: 0;
+  }
+
+  .heading-chars {
+    font-size: 100px;
+    font-weight: 100;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+
+  .heading-container {
+    .heading-first-row-container, .heading-second-row-container, .heading-third-row-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .heading-third-row-container {
+      .heading-title {
+        font-size: 70px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.2;
+        letter-spacing: normal;
+        color: #000;
+      }
+    }
+
+    .heading-img-container {
+      .heading-logo {
+        width: 8em;
+        margin: 0 2em;
+      }
+    }
+  }
+}
