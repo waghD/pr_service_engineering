@@ -6,6 +6,7 @@ import { HeaderComponent } from '../header/header.component';
 import { ImpressComponent } from '../impress/impress.component';
 import { HowToPlayComponent } from '../how-to-play/how-to-play.component';
 import { PrivacyComponent } from '../privacy/privacy.component';
+import { AppModule } from '../../app.module';
 
 
 const routes: Routes = [
@@ -20,9 +21,13 @@ const routes: Routes = [
     HowToPlayComponent,
     PrivacyComponent
   ],
+  exports: [
+    HeaderComponent
+  ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AppModule
   ]
 })
 export class HomeModule { }

@@ -1,0 +1,44 @@
+@import "~apps/sudoku-frontend/src/colors";
+
+footer {
+  .footer-container {
+    .footer-svg {
+      position: absolute;
+
+      .footer-rect {
+        fill: $light-blue
+      }
+    }
+
+    .footer-navbar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 9em;
+
+
+      .footer-link-container {
+        a {
+          color: $light-grey;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .footer-sep-container {
+        margin: 0 1em -1em 1em;
+
+        .footer-sep-svg {
+          width: 2px;
+
+          .footer-sep-rect {
+
+          }
+        }
+      }
+    }
+  }
+}
