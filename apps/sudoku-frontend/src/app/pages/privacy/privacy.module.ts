@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PageNotFoundRoutingModule } from './page-not-found-routing.module';
-import { PageNotFoundComponent } from './page-not-found.component';
+import { PrivacyRoutingModule } from './privacy-routing.module';
 import { SharedModule } from '../../shared/shared.module';
+import { PrivacyComponent } from './privacy.component';
 
 
 @NgModule({
   declarations: [
-    PageNotFoundComponent
+    PrivacyComponent
   ],
   imports: [
     CommonModule,
-    PageNotFoundRoutingModule,
+    PrivacyRoutingModule,
     SharedModule
   ]
 })
-export class PageNotFoundModule {
+export class PrivacyModule {
 }

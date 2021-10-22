@@ -1,1 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+@import "colors";
+
+// General
+* {
+  font-family: museo-sans, serif;
+}
+
+body {
+  margin: 0;
+}
+
+p {
+  font-size: 18px;
+}
+
+.main-content {
+  margin: 1em 7vw 1em 7vw;
+}
+
+.footnote {
+  font-weight: 100;
+  font-size: 1em;
+}

@@ -1,0 +1,60 @@
+<se-sudoku-header pageHeading='How to Play'></se-sudoku-header>
+<main class='main-content'>
+  <div class='htp-container'>
+
+    <h1>Introduction</h1>
+    <p>A sudoku puzzle (pronounced as three syllables soo-DOH-koo, or soo-doh-koo) is similar to a crossword puzzle, but
+      instead of filling in blank cells with letters to make words, numbers are filled in so that each row, column and
+      3x3
+      box contain the numbers one through nine. Because each row, column and 3x3 box contains nine cells, each of the
+      numbers one through nine will be used exactly once in each row, column or box. Although most sudoku puzzles use
+      numbers, any set of nine characters or symbols can be used.</p>
+    <figure class='htp-img-container'>
+      <div class='htp-figure-container'>
+        <img src='assets/img/htp-rows-cols-box.png' alt='rows, cols and boxes'>
+        <figcaption>Figure 1: Rows, Cols and Boxes</figcaption>
+      </div>
+    </figure>
+    <p>A cell is the basic unit of a sudoku puzzle. Cells are the smallest boxes in a puzzle. In one cell, you can
+      fit one number. A row is a grouping of nine cells, one
+      cell high and nine cells wide shown by the nine yellow cells in Figure 1, and similarly a column is a set of cells
+      one cell wide and nine cells high and illustrated by nine. A 3x3 box is a group of nine
+      cells three cells wide and three cells high as shown in the left bottom corner in Figure 1. The nine 3x3 boxes
+      in a sudoku puzzle are delineated by the bold lines.</p>
+    <p>
+      Sudoku is a game of logic and reasoning, so you shouldn’t have to guess. If you don’t know what number to put in a
+      certain space, keep scanning the other areas of the grid until you seen an opportunity to place a number. But
+      don’t try to “force” anything – Sudoku rewards patience, insights, and recognition of patterns, not blind luck or
+      guessing.
+    </p>
+    <h1>Solving - Elimination</h1>
+    <p>What do we mean by using “process of elimination” to play Sudoku? Here is an example. In this Sudoku grid (shown
+      in Figure 2), the far left-hand vertical column (circled in Blue) is missing only a few numbers: 1, 5 and 6.
+
+      One way to figure out which numbers can go in each space is to use “process of elimination” by checking to see
+      which other numbers are already included within each square – since there can be no duplication of numbers 1-9
+      within each square (or row or column).</p>
+    <figure class='htp-img-container'>
+      <div class='htp-figure-container'>
+        <img src='assets/img/htp-elimination.PNG' alt='elimination explained' class='elim-img'>
+        <figcaption>Figure 2: Elimination</figcaption>
+      </div>
+    </figure>
+    <p>In this case, we can quickly notice that there are already number 1s in the top left and center left squares of
+      the grid (with number 1s circled in red). This means that there is only one space remaining in the far left column
+      where a 1 could possibly go – circled in green. This is how the process of elimination works in Sudoku – you find
+      out which spaces are available, which numbers are missing – and then deduce, based on the position of those
+      numbers within the grid, which numbers fit into each space.
+
+      Sudoku rules are relatively uncomplicated – but the game is infinitely varied, with millions of possible number
+      combinations and a wide range of levels of difficulty. But it’s all based on the simple principles of using
+      numbers 1-9, filling in the blank spaces based on deductive reasoning, and never repeating any numbers within each
+      square, row or column.</p>
+    <p>Of course there are much more advanced techniques adn approaches for solving a Sudoko. But with this foundation
+      you should be able to solve your first Grids!</p>
+    <p class='footnote'>This explanations have been refactored from the pages <a
+      href='https://sudoku.com/how-to-play/sudoku-rules-for-complete-beginners/'>sudoku.com</a> and <a
+      href='https://dailystandard.com/sudoku/tutorial/tutorial_1.php'>dailystandard.com</a></p>
+  </div>
+</main>
+<se-sudoku-footer></se-sudoku-footer>

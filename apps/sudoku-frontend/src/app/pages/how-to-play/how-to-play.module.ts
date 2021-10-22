@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PageNotFoundRoutingModule } from './page-not-found-routing.module';
-import { PageNotFoundComponent } from './page-not-found.component';
+import { HowToPlayRoutingModule } from './how-to-play-routing.module';
+import { HowToPlayComponent } from './how-to-play.component';
 import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
   declarations: [
-    PageNotFoundComponent
+    HowToPlayComponent
   ],
   imports: [
     CommonModule,
-    PageNotFoundRoutingModule,
+    HowToPlayRoutingModule,
     SharedModule
   ]
 })
-export class PageNotFoundModule {
+export class HowToPlayModule {
 }
