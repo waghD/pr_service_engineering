@@ -1,27 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ImpressComponent } from './pages/impress/impress.component';
-import { HowToPlayComponent } from './pages/how-to-play/how-to-play.component';
-import { PrivacyComponent } from './pages/privacy/privacy.component';
-import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   {
     path: 'home',
-    component: HomeComponent
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
   }, {
     path: '',
-    component: HomeComponent
-  }, {
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
+  {
     path: 'impress',
-    component: ImpressComponent
+    loadChildren: () => import('./pages/impress/impress.module').then(m => m.ImpressModule)
+  },
+  {
+    path: 'privacy',
+    loadChildren: () => import('./pages/privacy/privacy.module').then(m => m.PrivacyModule)
   },
   {
     path: 'how-to-play',
-    component: HowToPlayComponent
-  }, {
-    path: 'privacy',
-    component: PrivacyComponent
+    loadChildren: () => import('./pages/how-to-play/how-to-play.module').then(m => m.HowToPlayModule)
   },
   {
     path: '**',

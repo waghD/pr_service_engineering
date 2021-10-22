@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PageNotFoundRoutingModule } from './page-not-found-routing.module';
-import { PageNotFoundComponent } from './page-not-found.component';
+import { ImpressRoutingModule } from './impress-routing.module';
+import { ImpressComponent } from './impress.component';
 import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
   declarations: [
-    PageNotFoundComponent
+    ImpressComponent
   ],
   imports: [
     CommonModule,
-    PageNotFoundRoutingModule,
+    ImpressRoutingModule,
     SharedModule
   ]
 })
-export class PageNotFoundModule {
+export class ImpressModule {
 }

@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DemoComponent } from './components/demo/demo.component';
-import { DemoDirective } from './directives/demo.directive';
-import { DemoPipe } from './pipes/demo.pipe';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
-    DemoComponent,
-    DemoDirective,
-    DemoPipe
+    HeaderComponent,
+    FooterComponent
+  ],
+  exports: [
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+}
