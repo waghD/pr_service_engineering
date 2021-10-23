@@ -14,10 +14,10 @@ describe('AppController', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to sudoku-backend!"', () => {
+    it('should return "Welcome to service-backend!"', () => {
       const appController = app.get<AppController>(AppController);
       expect(appController.getData()).toEqual({
-        message: 'Welcome to sudoku-backend!',
+        message: 'Welcome to service-backend!',
       });
     });
   });

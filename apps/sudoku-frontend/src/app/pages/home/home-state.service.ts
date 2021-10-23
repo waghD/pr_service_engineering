@@ -9,7 +9,7 @@ import { DemoInterface } from '../../../../../../libs/interfaces/demo-interface'
 })
 export class HomeStateService {
 
-  public readonly title = 'sudoku-frontend';
+  public readonly title = 'service-frontend';
   private httpSrc$ = new BehaviorSubject<string>('');
   public get httpRes$() {
     return this.httpSrc$.asObservable();

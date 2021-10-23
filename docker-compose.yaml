@@ -10,8 +10,8 @@ services:
       - 8000:80
     restart: on-failure
     volumes:
-      - frontend_vol:/usr/src/sudoku-frontend/
-      - node_modules:/usr/src/sudoku-frontend/node_modules/
+      - frontend_vol:/usr/src/service-frontend/
+      - node_modules:/usr/src/service-frontend/node_modules/
     networks:
       - monorepo_net
   backend:
@@ -24,8 +24,8 @@ services:
       - 8003:3333
     restart: on-failure
     volumes:
-      - backend_vol:/usr/src/sudoku-backend/
-      - node_modules:/usr/src/sudoku-backend/node_modules/
+      - backend_vol:/usr/src/service-backend/
+      - node_modules:/usr/src/service-backend/node_modules/
     networks:
       - monorepo_net
 
