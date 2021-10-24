@@ -1,40 +1,53 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SudokuEntity } from '../models/sudoku.entity';
 import { Repository } from 'typeorm';
-import { Sudoku } from '../models/sudoku.interface';
-import { from, Observable } from 'rxjs';
+import { SudokuFieldService } from './sudoku-field.service';
+import { SudokuDto } from '../models/sudoku.dto';
+
 
 @Injectable()
 export class SudokuService {
 
   constructor(
-    @InjectRepository(SudokuEntity) private readonly SudokuRepository: Repository<SudokuEntity>
+    @InjectRepository(SudokuEntity) private readonly sudokuRepository: Repository<SudokuEntity>,
+    @Inject(forwardRef(() => SudokuFieldService))
+    private readonly sudokuFieldService: SudokuFieldService
   ) {}
 
-  create(sudoku:Sudoku):Observable<Sudoku>{
-
-    return from(this.SudokuRepository.save(sudoku))
+  getSudokus(page = 1, take = 25): Promise<SudokuEntity[]> {
+    return this.sudokuRepository.find({
+      relations: ['fields'],
+      skip: take * (page - 1),
+      take,
+    });
   }
 
-  findOne(id:number):Observable<Sudoku> {
-
-    return from(this.SudokuRepository.findOne(id))
+  getOneSudoku(id: number): Promise<SudokuEntity> {
+    return this.sudokuRepository.findOneOrFail(id, {
+      relations: ['fields']
+    });
   }
 
-  findAll(): Observable<Sudoku[]>{
-
-    return from(this.SudokuRepository.find())
+  async createSudoku(sudokuDto: SudokuDto): Promise<SudokuEntity> {
+    const sudokuToCreate: SudokuEntity = { ...sudokuDto};
+    return this.sudokuRepository.save(sudokuToCreate);
   }
 
-  deleteOne(id:number): Observable<any>{
-
-    return from(this.SudokuRepository.delete(id))
+  async updateSudoku(id: number, sudokuDto: SudokuDto): Promise<any> {
+    await this.sudokuRepository.findOneOrFail(id);
+    return await this.sudokuRepository.update(id, sudokuDto);
   }
 
-  updateOne(id:number, sudoku:Sudoku): Observable<any>{
-
-    return from(this.SudokuRepository.update(id,sudoku))
+  async removeSudoku(id: number): Promise<any> {
+    const sudoku = await this.sudokuRepository.findOneOrFail(id, { relations: ['fields'] });
+    for (const f of sudoku.fields) {
+      await this.sudokuFieldService.removeSudokuField(f.id);
+    }
+    return this.sudokuRepository.remove(sudoku);
   }
+
+
+
 
 }

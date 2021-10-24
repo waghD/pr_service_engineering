@@ -11,7 +11,7 @@ import { SudokuModule } from './sudoku/sudoku.module';
     ConfigModule.forRoot( {isGlobal:true}),
     TypeOrmModule.forRoot({
       type: "sqlite",
-      database: "service",
+      database: "sudoku",
       autoLoadEntities:true,
       synchronize:true
 

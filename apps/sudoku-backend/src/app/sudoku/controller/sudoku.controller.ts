@@ -1,37 +1,55 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
-import { Sudoku } from '../models/sudoku.interface';
-import { Observable } from 'rxjs';
+import { SudokuDto } from '../models/sudoku.dto';
 
 @Controller('sudokus')
 export class SudokuController {
 
   constructor(private sudokuService:SudokuService) {}
 
-  @Post()
-  create(@Body()sudoku:Sudoku):Observable<Sudoku> {
-     return this.sudokuService.create(sudoku);
+  @Get()
+  getAll(@Query('page') page: number, @Query('take') take: number) {
+    try {
+      return this.sudokuService.getSudokus(page,take);
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.NOT_FOUND);
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id')id:string):Observable<Sudoku>{
-
-    return this.sudokuService.findOne(Number(id));
+  async getOne(@Param('id') id: number) {
+    try {
+      return await this.sudokuService.getOneSudoku(id);
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.NOT_FOUND);
+    }
   }
 
-  @Get()
-  findAll():Observable<Sudoku[]>{
-    return this.sudokuService.findAll();
-  }
-
-  @Delete(':id')
-  deleteOne(@Param('id')id:string):Observable<any>{
-      return this.sudokuService.deleteOne(Number(id));
+  @Post()
+  async create(@Body() sudokuDto: SudokuDto) {
+    try {
+      return await this.sudokuService.createSudoku(sudokuDto);
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
+    }
   }
 
   @Put(':id')
-  updateOne(@Param('id')id:string,@Body()sudoku:Sudoku):Observable<any>{
-    return this.sudokuService.updateOne(Number(id),sudoku);
+  async update(@Param('id') id: number, @Body() sudokuDto: SudokuDto) {
+    try {
+      return await this.sudokuService.updateSudoku(id, sudokuDto);
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
+    }
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: number) {
+    try {
+      return await this.sudokuService.removeSudoku(id);
+    } catch (err) {
+      throw new HttpException(err, HttpStatus.NOT_FOUND);
+    }
   }
 
 
