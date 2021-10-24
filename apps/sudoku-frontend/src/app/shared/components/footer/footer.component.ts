@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'se-sudoku-footer',
@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
 
+  @Input() additionalClass: string;
+
+  constructor() {
+    this.additionalClass = '';
+  }
 
 }
