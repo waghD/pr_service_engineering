@@ -7,8 +7,10 @@ import { Component, Input } from '@angular/core';
 })
 export class HeaderComponent {
   @Input() pageHeading: string;
+  @Input() additionalClass: string;
 
   constructor() {
-    this.pageHeading = ''
+    this.pageHeading = '';
+    this.additionalClass = '';
   }
 }

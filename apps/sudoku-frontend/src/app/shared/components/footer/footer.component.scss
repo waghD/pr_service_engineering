@@ -1,6 +1,13 @@
 @import "../../../../colors";
 
 footer {
+  .main-menu-footer {
+    clear: both;
+    position: relative;
+    height: 150px;
+    margin-top: -157px;
+  }
+
   .footer-container {
     .footer-svg {
       position: absolute;
