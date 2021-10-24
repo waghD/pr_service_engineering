@@ -122,6 +122,17 @@ a {
       font-weight: 100;
       line-height: 1.21;
     }
+
+    .error {
+      border-color: $red;
+      border-width: 2px;
+      color: $red;
+    }
+
+    span {
+      margin-top: 8px;
+      color: $red;
+    }
   }
 
   button {
@@ -133,7 +144,7 @@ a {
     font-size: 18px;
   }
 
-  span {
+  .signup {
     margin-top: 50px;
     font-size: 24px;
     line-height: 1.21;

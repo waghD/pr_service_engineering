@@ -21,19 +21,21 @@
     </div>
   </div>
   <div class='page-splitter'></div>
-  <div class='login-container'>
+  <form [formGroup]='loginForm' class='login-container' (ngSubmit)='login()'>
     <h1>Login</h1>
     <div class='input-container'>
       <label>Email</label>
-      <input type='email' placeholder='somebody@example.com'>
+      <input autocomplete='username' [ngClass]="{error: !!this.loginForm.get('email')?.errors && this.loginForm.get('email')?.touched}" formControlName='email' type='email' placeholder='somebody@example.com'>
+      <span *ngIf="this.loginForm.get('email')?.errors && this.loginForm.get('email')?.touched">Bitte valide E-Mail eingeben</span>
     </div>
     <div class='input-container'>
       <label>Password</label>
-      <input type='password' placeholder='**************'>
+      <input autocomplete='current-password' [ngClass]="{error: !!this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched}" formControlName='password' type='password' placeholder='**************'>
+      <span *ngIf="this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched">Passwort benötigt</span>
     </div>
-    <button (click)='login()'>Login</button>
-    <span>New User? - <a><b>Create an account!</b></a></span>
-  </div>
+    <button type='submit'>Login</button>
+    <span class='signup'>New User? - <a><b>Create an account!</b></a></span>
+  </form>
 
 </div>
 
