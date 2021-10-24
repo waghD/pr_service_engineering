@@ -20,6 +20,12 @@
         font-style: normal;
         line-height: 1.19;
         letter-spacing: normal;
+        transition: transform 250ms;
+
+        &:hover {
+          text-decoration: underline 1px;
+          transform: translateY(-5px);
+        }
 
         a {
           text-decoration: none;
