@@ -1,3 +1,31 @@
-/*
-   * Remove template code below
-   */
+@import "apps/sudoku-frontend/src/colors";
+
+.mm-container {
+  .mm-menu {
+    max-width: fit-content;
+    padding: 2em 3em 0 3em;
+    margin: -3em auto 0 auto;
+    border: 2px solid black;
+
+    .mm-ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+
+      .mm-li {
+        font-size: 48px;
+        font-weight: 100;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.19;
+        letter-spacing: normal;
+
+        a {
+          text-decoration: none;
+          color: black;
+        }
+      }
+    }
+  }
+}
