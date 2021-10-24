@@ -1,3 +1,22 @@
-<se-sudoku-header pageHeading='Menu'></se-sudoku-header>
-<se-sudoku-footer></se-sudoku-footer>
+<div class='content-body'>
+  <se-sudoku-header pageHeading='Menu' additionalClass='main-menu-header'></se-sudoku-header>
+  <main class='main-content'>
+    <div class='mm-container'>
+      <div class='mm-menu'>
+        <ul class='mm-ul'>
+          <li class='mm-li'><a routerLink=''>Sudoku Classic</a></li>
+          <!-- TODO: Insert link to the actual classic sudoku game -->
+        </ul>
+        <ul class='mm-ul'>
+          <li class='mm-li'><a routerLink=''>Load Saved Sudoku</a></li>
+          <!-- TODO: Insert link to the actual saved games -->
+        </ul>
+        <ul class='mm-ul'>
+          <li class='mm-li'><a routerLink='/how-to-play'>How to Play</a></li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</div>
+<se-sudoku-footer additionalClass='main-menu-footer'></se-sudoku-footer>
 
