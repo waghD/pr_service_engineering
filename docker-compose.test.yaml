@@ -6,7 +6,7 @@ services:
       args:
         project: frontend
     volumes:
-      - testing_vol:/usr/src/sudoku-frontend/
+      - testing_vol:/usr/src/service-frontend/
     networks:
       - monorepo_net
   ocean_test:
@@ -15,7 +15,7 @@ services:
       args:
         project: backend
     volumes:
-      - testing_vol:/usr/src/sudoku-backend/
+      - testing_vol:/usr/src/service-backend/
     networks:
       - monorepo_net
 

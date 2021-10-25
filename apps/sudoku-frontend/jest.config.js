@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'sudoku-frontend',
+  displayName: 'service-frontend',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/apps/sudoku-frontend',
+  coverageDirectory: '../../coverage/apps/service-frontend',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

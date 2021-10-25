@@ -14,9 +14,9 @@ describe('AppService', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to sudoku-backend!"', () => {
+    it('should return "Welcome to service-backend!"', () => {
       expect(service.getData()).toEqual({
-        message: 'Welcome to sudoku-backend!',
+        message: 'Welcome to service-backend!',
       });
     });
   });
