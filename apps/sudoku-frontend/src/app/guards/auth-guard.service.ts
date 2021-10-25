@@ -10,10 +10,9 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router, private authService: AuthStateService) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot,state: RouterStateSnapshot): boolean {
-    console.log('route: ', route);
-    console.log('state: ', state);
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if(route.url.some((segment) => segment.path === 'login')) {
+
       // already on /login. Redirect already authenticated users to /home
       if(this.authService.isLoggedIn) {
         this.router.navigateByUrl('/');
