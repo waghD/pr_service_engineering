@@ -29,7 +29,7 @@ export class SudokuFieldService {
     return this.getOneSudokuField(createdField.id);
   }
 
-  async getSudokuFields(sudokuId: number, page: number, take: number): Promise<SudokuFieldEntity[]> {
+  async getSudokuFields(sudokuId: number, page:number, take:number): Promise<SudokuFieldEntity[]> {
     const sudoku = await this.sudokuService.getOneSudoku(sudokuId);
     if (sudoku) {
       return sudoku.fields;
