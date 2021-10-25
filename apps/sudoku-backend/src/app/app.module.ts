@@ -3,6 +3,7 @@ import {ConfigModule} from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './services/app.service';
+import { TestController } from './controllers/test/test.controller';
 import { SudokuModule } from './sudoku/sudoku.module';
 
 @Module({
@@ -17,7 +18,7 @@ import { SudokuModule } from './sudoku/sudoku.module';
     }),
     SudokuModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, TestController],
   providers: [AppService],
 })
 export class AppModule {}
