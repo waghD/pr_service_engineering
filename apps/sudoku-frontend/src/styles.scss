@@ -6,7 +6,12 @@
 }
 
 body {
+  min-height: 100vh;
   margin: 0;
+}
+
+.content-body {
+  min-height: 100vh;
 }
 
 p {

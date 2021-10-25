@@ -2,17 +2,25 @@
   <div class='heading-blue-line'></div>
   <div class='heading-container'>
     <div class='heading-first-row-container'>
-      <span class='heading-chars'>DO</span>
+      <a routerLink=''>
+        <span class='heading-chars'>DO</span>
+      </a>
     </div>
     <div class='heading-second-row-container'>
-      <div class='heading-chars'>SU</div>
+      <a routerLink=''>
+        <div class='heading-chars'>SU</div>
+      </a>
       <div class='heading-img-container'>
-        <img class='heading-logo' src='../../../../assets/img/sudoku-rectangle-logo.jpg'>
+        <a routerLink=''>
+          <img class='heading-logo' src='../../../../assets/img/sudoku-rectangle-logo.jpg' alt='sudoku logo'>
+        </a>
       </div>
-      <div class='heading-chars'>KU</div>
+      <a routerLink=''>
+        <div class='heading-chars'>KU</div>
+      </a>
     </div>
     <div class='heading-third-row-container'>
-      <span class='heading-title'>{{pageHeading}}</span>
+      <span class='heading-title {{additionalClass}}'>{{pageHeading}}</span>
     </div>
   </div>
 </header>
