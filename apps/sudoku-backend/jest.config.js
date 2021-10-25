@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'sudoku-backend',
+  displayName: 'service-backend',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -11,5 +11,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/sudoku-backend',
+  coverageDirectory: '../../coverage/apps/service-backend',
 };
