@@ -1,0 +1,152 @@
+@import "../../../colors";
+
+a {
+  text-decoration: none;
+}
+
+.blue-rectangle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20vw;
+  height: 20vw;
+  border: solid 1px #fff;
+  background-color: $light-blue;
+  clip-path: polygon(85% 0, 100% 0%, 0 100%, 0 85%);
+}
+
+.page-splitter {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border: solid 3px #000;
+}
+
+.page-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.heading-chars {
+  font-size: 100px;
+  font-weight: 100;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000;
+}
+
+.heading-container {
+  display: flex;
+  flex-direction: row;
+  width: 40%;
+  justify-content: flex-end;
+  padding-right: 180px;
+
+  .heading-first-row-container, .heading-second-row-container, .heading-third-row-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .heading-third-row-container {
+    .heading-title {
+      font-size: 70px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.2;
+      letter-spacing: normal;
+      color: #000;
+    }
+  }
+
+  .heading-img-container {
+    .heading-logo {
+      width: 8em;
+      margin: 0 2em;
+    }
+  }
+}
+
+.login-container {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    font-size: 89px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 30px;
+
+    label {
+      color: $light-grey;
+      margin: 12px 0;
+      font-size: 24px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.21;
+      letter-spacing: normal;
+      text-align: left;
+    }
+
+    input {
+      padding: 17px 94px 17px 13px;
+      border-radius: 14px;
+      border: solid 1px #000;
+      background-color: #fff;
+      font-size: 19px;
+      font-weight: 100;
+      line-height: 1.21;
+    }
+
+    .error {
+      border-color: $red;
+      border-width: 2px;
+      color: $red;
+    }
+
+    span {
+      margin-top: 8px;
+      color: $red;
+    }
+  }
+
+  button {
+    padding: 6.7px 28px 6.7px 22px;
+    border-radius: 12px;
+    border: solid 1px #000;
+    background-color: $light-blue;
+    line-height: 1.22;
+    font-size: 18px;
+  }
+
+  .signup {
+    margin-top: 50px;
+    font-size: 24px;
+    line-height: 1.21;
+  }
+}

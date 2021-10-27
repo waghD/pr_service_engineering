@@ -1,0 +1,41 @@
+<div class='page-container'>
+  <div class='blue-rectangle'></div>
+  <div class='heading-container'>
+    <div class='heading-first-row-container'>
+      <a routerLink=''>
+        <span class='heading-chars'>DO</span>
+      </a>
+    </div>
+    <div class='heading-second-row-container'>
+      <a routerLink=''>
+        <div class='heading-chars'>SU</div>
+      </a>
+      <div class='heading-img-container'>
+        <a routerLink=''>
+          <img class='heading-logo' src='../../../../assets/img/sudoku-rectangle-logo.jpg' alt='sudoku logo'>
+        </a>
+      </div>
+      <a routerLink=''>
+        <div class='heading-chars'>KU</div>
+      </a>
+    </div>
+  </div>
+  <div class='page-splitter'></div>
+  <form [formGroup]='loginForm' class='login-container' (ngSubmit)='login()'>
+    <h1>Login</h1>
+    <div class='input-container'>
+      <label>Email</label>
+      <input autocomplete='username' [ngClass]="{error: !!this.loginForm.get('email')?.errors && this.loginForm.get('email')?.touched}" formControlName='email' type='email' placeholder='somebody@example.com'>
+      <span *ngIf="this.loginForm.get('email')?.errors && this.loginForm.get('email')?.touched">Bitte valide E-Mail eingeben</span>
+    </div>
+    <div class='input-container'>
+      <label>Password</label>
+      <input autocomplete='current-password' [ngClass]="{error: !!this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched}" formControlName='password' type='password' placeholder='**************'>
+      <span *ngIf="this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched">Passwort benötigt</span>
+    </div>
+    <button type='submit'>Login</button>
+    <span class='signup'>New User? - <a><b>Create an account!</b></a></span>
+  </form>
+
+</div>
+
