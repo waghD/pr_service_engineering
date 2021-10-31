@@ -28,17 +28,37 @@ export class SudokuFieldController {
     }
   }
 
+
+  async create( id:number, sudokuFieldDto:SudokuFieldDto[]);
+  async create( id:number, sudokuFieldDto:SudokuFieldDto);
   @Post()
   async create(
     @Param('id') id: number,
-    @Body() sudokuFieldDto: SudokuFieldDto,
+    @Body() sudokuFieldDto: any,
   ) {
-    try {
-      return await this.service.createSudokuField(id,sudokuFieldDto);
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
+    if(Array.isArray(sudokuFieldDto)){
+
+      for(const f of sudokuFieldDto){
+        try {
+          await this.service.createSudokuField(id,f);
+        } catch (err) {
+          throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+      }
+      return this.service.getSudokuFields(id);
+
+    }else{
+      try {
+        return await this.service.createSudokuField(id,sudokuFieldDto);
+      } catch (err) {
+        throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
+      }
+
     }
+
   }
+
 
   @Put(':id')
   async update(@Param('id') id: number, @Body() sudokuFieldDto: SudokuFieldDto) {
