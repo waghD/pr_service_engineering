@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AppController } from './app.controller';
-import { AppService } from './services/app.service';
+import { AppService } from './app.service';
 
 describe('AppController', () => {
   let app: TestingModule;
@@ -14,10 +14,10 @@ describe('AppController', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to service-backend!"', () => {
+    it('should return "Welcome to sudoku-backend!"', () => {
       const appController = app.get<AppController>(AppController);
       expect(appController.getData()).toEqual({
-        message: 'Welcome to service-backend!',
+        message: 'Welcome to sudoku-backend!',
       });
     });
   });
