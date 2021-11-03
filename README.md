@@ -4,102 +4,161 @@
 
 This project was generated using [Nx](https://nx.dev).
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+![login screen](./apps/sudoku-frontend/src/assets/img/sudoku-rectangle-logo.jpg)
 
-🔎 **Smart, Extensible Build Framework**
+## Project Setup
 
-## Quick Start & Documentation
+ - Download and install Node.js [here](https://nodejs.org/en/)
+ - Install Angular CLI with command `npm install -g @angular/cli`
+ - Install NPM dependencies, run command in project root directory `npm install`
 
-[Nx Documentation](https://nx.dev/angular)
+## Start Project
+Start all services with
 
-[10-minute video showing all Nx features](https://nx.dev/getting-started/intro)
+`npm run start-all`
 
-[Interactive Tutorial](https://nx.dev/tutorial/01-create-application)
+Frontend will be running on [localhost:4200](http://localhost:4200/)
 
-## Adding capabilities to your workspace
+Backend will be running on [localhost:8080/api](http://localhost:8080/api)
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+## Usefull Commands
+### Project Scripts
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+####Start Angular dev server
+`npm run start-frontend`
 
-Below are our core plugins:
+#### Start backend Nest server
+`npm run start-backend`
 
-- [Angular](https://angular.io)
-  - `ng add @nrwl/angular`
-- [React](https://reactjs.org)
-  - `ng add @nrwl/react`
-- Web (no framework frontends)
-  - `ng add @nrwl/web`
-- [Nest](https://nestjs.com)
-  - `ng add @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `ng add @nrwl/express`
-- [Node](https://nodejs.org)
-  - `ng add @nrwl/node`
+#### Start Frontend and Backend services parallel
+`npm run start-all`
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+#### Check Code quality
+`npm run check-code-quality`
 
-## Generate an application
+#### Frontend Unit tests
+`npm run unit-text-frontend`
 
-Run `ng g @nrwl/angular:app my-app` to generate an application.
+#### Backend Unit tests
+`npm run unit-test-backend`
 
-> You can use any of the plugins above to generate applications as well.
+### Code Generation
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+#### Generate new Angular UI Component
+`ng generate @schematics/angular:component --name=shared/components/{component-name} --project=sudoku-frontend --module=shared`
 
-## Generate a library
+This creates a new shared Component in shared/components and exports it via `SharedModule`
 
-Run `ng g @nrwl/angular:lib my-lib` to generate a library.
+Replace `{component-name}` with the name of the component
 
-> You can also use any of the plugins above to generate libraries as well.
+#### Generate new Angular Page Component with Lazy loaded Routing
+`ng generate @schematics/angular:module --name=/pages/{pagename} --project=sudoku-frontend --module=app --route={routename} --routing`
 
-Libraries are shareable across libraries and applications. They can be imported from `@se-sudoku/mylib`.
+This creates a new Module aswell as a Component in the /pages directory and Modifies `app.routing.module` to set up a lazy loaded route.
 
-## Development server
+Replace `{pagename}` with the name of the component and `{routename}` with the name of the route in the URL
 
-Run `ng serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+#### Create Backend Nest Feature Module
+`ng generate @nrwl/nest:module --name=/{module} --project=sudoku-backend --language=ts`
 
-## Code scaffolding
+Creates a new Module at `{modulename}`
 
-Run `ng g component my-component --project=my-app` to generate a new component.
+#### Create Backend Nest Controller
+`ng generate @nrwl/nest:controller --name=/{feature} --project=sudoku-backend --language=ts`
 
-## Build
+Creates a new Controller at `{feature}`
 
-Run `ng build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Tools
+Code generation is powered by [Nx](https://nx.dev), the easiest way to use the code generation is via its IDE plugins for [VS Code](https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console) and [Webstorm](https://plugins.jetbrains.com/plugin/15000-nx-webstorm)
 
-## Running unit tests
+## Project Structure
+### Overview
+```
+se-sudoku/
+├─ apps/
+│  ├─ sudoku-backend/
+│  │  ├─ src/
+│  │  │  ├─ app/
+│  │  │  ├─ assets/
+│  │  │  ├─ environment/
+│  ├─ sudoku-frontend/
+│  │  ├─ src/
+│  │  │  ├─ app/
+│  │  │  ├─ assets/
+│  │  │  ├─ environment/
+│  ├─ sudoku-frontend-e2e/
+│  │  ├─ src/
+│  │  │  ├─ fixtures/
+│  │  │  ├─ integration/
+│  │  │  ├─ support/
+├─ libs/
+│  ├─ models/
+│  ├─ interfaces/
+├─ node_modules/
+├─ angular.json
+├─ nx.json
+├─ package.json
+```
 
-Run `ng test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev/angular) to learn more.
-
-
-
-
-
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+### Backend Structure
+`apps/sudoku-backend/src/`
+```
+app/
+├─ feature/
+│  ├─ controller/
+│  │  ├─ feature.controller.ts
+│  │  ├─ feature.controller.spec.ts
+│  ├─ models/
+│  │  ├─ feature.dto.ts
+│  │  ├─ feature.entity.ts
+│  ├─ service/
+│  │  ├─ feature.service.ts
+│  │  ├─ feature.service.spec.ts
+│  ├─ feature.module.ts
+├─ app.controller.ts
+├─ app.controller.spec.ts
+├─ app.module.ts
+├─ app.service.ts
+├─ app.service.spec.ts
+```
+### Frontend Structure
+`apps/sudoku-frontend/src/`
+```
+app/
+├─ guards/
+│  ├─ demo.guard.ts
+│  ├─ demo.guard.spec.ts
+├─ pages/
+│  ├─ page/
+│  │  ├─ page.component.html
+│  │  ├─ page.component.scss
+│  │  ├─ page.component.ts
+│  │  ├─ page.component.spec.ts
+│  │  ├─ page.state.service.ts
+│  │  ├─ page.state.service.spec.ts
+│  │  ├─ page.module.ts
+│  │  ├─ page-routing.module.ts
+├─ services/
+│  ├─ demo.service.ts
+│  ├─ demo.service.spec.ts
+├─ shared/
+│  ├─ components/
+│  │  ├─ demo/
+│  │  │  ├─ demo.component.html
+│  │  │  ├─ demo.component.scss
+│  │  │  ├─ demo.component.ts
+│  │  │  ├─ demo.component.spec.ts
+│  ├─ directives/
+│  │  ├─ demo.directive.ts
+│  │  ├─ demo.directive.spec.ts
+│  ├─ pipes/
+│  │  ├─ demo.pipe.ts
+│  │  ├─ demo.pipe.spec.ts
+│  ├─ shared.module.ts
+├─ app.component.html
+├─ app.component.scss
+├─ app.component.ts
+├─ app.component.spec.ts
+├─ app.module.ts
+├─ app-routing.module.ts
+```
