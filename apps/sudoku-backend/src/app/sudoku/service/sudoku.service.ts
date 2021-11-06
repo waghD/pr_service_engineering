@@ -23,6 +23,15 @@ export class SudokuService {
     });
   }
 
+  generateSudoku():Promise<SudokuEntity>{
+    const sudokuDTO = new SudokuDto();
+    sudokuDTO.name = "New generated Sudoku";
+    sudokuDTO.difficutly = "Easy";
+    const generatedSudoku : SudokuEntity = {...sudokuDTO};
+    const sudoku = this.sudokuRepository.save(generatedSudoku);
+    return sudoku;
+  }
+
   getOneSudoku(id: number): Promise<SudokuEntity> {
     return this.sudokuRepository.findOneOrFail(id, {
       relations: ['fields']
