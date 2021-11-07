@@ -30,24 +30,24 @@ export class SudokuFieldService {
     return this.getOneSudokuField(createdField.id);
   }
 
-  async generateSudokuFields(sudokuID:number):Promise<SudokuFieldEntity[]>{
+  async generateSudokuFields(sudokuID:number){
     const sudoku = await this.sudokuService.getOneSudoku(sudokuID);
     if(sudoku){
       const sudokuGen = new SudokuGenerator(9,10);
-      const fields = sudokuGen.generate_sudoku();
-      for(let i = 0; i<9;i++){
+      const solutions = sudokuGen.generate_sudoku();
+      const fields = sudokuGen.remove_solution();
+      for(let i = 0; i<9;i++) {
 
-        for(let j = 0;j<9;j++){
+        for (let j = 0; j < 9; j++) {
           const field = new SudokuFieldEntity();
           field.y = i;
           field.x = j;
           field.value = fields[i][j];
-          field.solution = 0;
+          field.solution = solutions[i][j];
           field.sudoku = sudoku;
           await this.sudokufieldRepo.save(field);
         }
       }
-      return sudoku.fields;
     }
   }
 

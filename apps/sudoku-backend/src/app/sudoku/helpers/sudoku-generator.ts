@@ -13,6 +13,13 @@ export class SudokuGenerator {
   this.empty = empty;
   this.sizeMatrix = Math.sqrt(size);
   this.sudoku = [];
+
+    for (let i = 0; i < this.size; i++) {
+      this.sudoku[i] = [];
+      for (let j = 0; j < this.size; j++) {
+        this.sudoku[i][j] = 0;
+      }
+    }
   }
 
   generate_sudoku():number[][] {
@@ -34,7 +41,7 @@ export class SudokuGenerator {
       let num = 0;
     for(let i= 0; i<this.sizeMatrix;i++){
       for(let j=0;j<this.sizeMatrix;j++) {
-          while(this.unUsedInMatrix(x,y,num)){
+          while(this.unUsedInMatrix(y,x,num)){
               num = this.rNG(num);
           }
           this.sudoku[x+i][y+j] = num;
@@ -145,6 +152,24 @@ export class SudokuGenerator {
       return false;
 
     }
+
+    remove_solution():number[][]{
+    let count:number = this.empty;
+    while(count != 0){
+       const field:number= this.rNG(this.size*this.size) -1;
+       const i = field/this.size;
+       let j:number = field%9;
+       if (j != 0)
+        j = j - 1;
+      if (this.sudoku[i][j] != 0)
+      {
+        count--;
+        this.sudoku[i][j] = 0;
+      }
+
+    }
+    return  this.sudoku;
+     }
 
 
 }

@@ -23,12 +23,13 @@ export class SudokuService {
     });
   }
 
-  generateSudoku():Promise<SudokuEntity>{
-    const sudokuDTO = new SudokuDto();
-    sudokuDTO.name = "New generated Sudoku";
-    sudokuDTO.difficutly = "Easy";
-    const generatedSudoku : SudokuEntity = {...sudokuDTO};
-    const sudoku = this.sudokuRepository.save(generatedSudoku);
+  async generateSudoku():Promise<SudokuEntity>{
+    const generatedSudoku: SudokuEntity = new SudokuEntity();
+    generatedSudoku.name= 'sudoku';
+    generatedSudoku.difficulty='easy';
+    const sudoku:Promise<SudokuEntity> = this.sudokuRepository.save(generatedSudoku);
+    const id = sudoku.then(value => id);
+    this.sudokuFieldService.generateSudokuFields(id);
     return sudoku;
   }
 
