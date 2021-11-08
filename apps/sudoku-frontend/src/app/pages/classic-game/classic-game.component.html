@@ -1,3 +1,11 @@
 <se-sudoku-header additionalClass='single-line-heading' pageHeading='Classic'></se-sudoku-header>
-<p>classic-game works!</p>
+<div class='main-content'>
+  <div class='classic-game-container'>
+    <div class='game-grid'>
+      <p *ngFor='let field of sudokuGridData.fields'>
+        {{field.solution}}
+      </p>
+    </div>
+  </div>
+</div>
 <se-sudoku-footer></se-sudoku-footer>

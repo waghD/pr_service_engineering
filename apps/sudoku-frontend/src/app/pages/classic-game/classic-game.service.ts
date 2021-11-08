@@ -1,37 +1,23 @@
 import { Injectable } from '@angular/core';
-import { map, take } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
-import { DemoInterface } from '../../../../../../libs/interfaces/demo-interface';
+import { Observable } from 'rxjs';
+import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClassicGameService {
 
-  public readonly title = 'service-frontend';
-  private httpSrc$ = new BehaviorSubject<string>('');
+  private baseApiURL = 'http://localhost:8080/api';
 
-  public get httpRes$() {
-    return this.httpSrc$.asObservable();
-  }
+  public readonly title = 'service-frontend';
 
   constructor(private readonly http: HttpClient) {
-    this.http
-      .get<{ message: string }>('http://localhost:8080/api')
-      .pipe(
-        take(1),
-        map((cur) => cur.message)
-      )
-      .subscribe((res) => (this.httpSrc$.next(res)));
   }
 
-  getFoo() {
-    this.http
-      .get<DemoInterface>('http://localhost:8080/api/test')
-      .pipe(
-        take(1)
-      )
-      .subscribe(res => console.log('foo: ', res.foo));
+  getNewRandomSudoku(): Observable<SudokuEntity> {
+    return this.http
+      // TODO: currently hardcoded id number 1, later get here a new genereated sudoku when generator and API is rdy
+      .get<SudokuEntity>(this.baseApiURL + '/sudokus/1');
   }
 }
