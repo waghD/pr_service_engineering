@@ -30,6 +30,10 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'classic-game',
+    loadChildren: () => import('./pages/classic-game/classic-game.module').then(m => m.ClassicGameModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
   }
