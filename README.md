@@ -21,7 +21,7 @@ Frontend will be running on [localhost:4200](http://localhost:4200/)
 
 Backend will be running on [localhost:8080/api](http://localhost:8080/api)
 
-## Usefull Commands
+## Useful Commands
 ### Project Scripts
 
 ####Start Angular dev server
@@ -54,7 +54,7 @@ Replace `{component-name}` with the name of the component
 #### Generate new Angular Page Component with Lazy loaded Routing
 `ng generate @schematics/angular:module --name=/pages/{pagename} --project=sudoku-frontend --module=app --route={routename} --routing`
 
-This creates a new Module aswell as a Component in the /pages directory and Modifies `app.routing.module` to set up a lazy loaded route.
+This creates a new Module as well as a Component in the /pages directory and Modifies `app.routing.module` to set up a lazy loaded route.
 
 Replace `{pagename}` with the name of the component and `{routename}` with the name of the route in the URL
 
