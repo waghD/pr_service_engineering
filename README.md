@@ -21,6 +21,8 @@ Frontend will be running on [localhost:4200](http://localhost:4200/)
 
 Backend will be running on [localhost:8080/api](http://localhost:8080/api)
 
+Swagger Documentation for Rest API will be running on [localhost:8080/api/docs](http://localhost:8080/api/docs/)
+
 ## Useful Commands
 ### Project Scripts
 
