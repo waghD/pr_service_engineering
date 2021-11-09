@@ -41,7 +41,7 @@ export class SudokuGenerator {
       let num = 0;
     for(let i= 0; i<this.sizeMatrix;i++){
       for(let j=0;j<this.sizeMatrix;j++) {
-          while(this.unUsedInMatrix(y,x,num)){
+          while(!this.unUsedInMatrix(y,x,num)){
               num = this.rNG(num);
           }
           this.sudoku[x+i][y+j] = num;
