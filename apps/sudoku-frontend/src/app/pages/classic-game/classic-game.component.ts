@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ClassicGameService } from './classic-game.service';
 import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -21,7 +21,7 @@ export class ClassicGameComponent implements OnInit {
   emptyGrid: number[][];
   gridForm: FormGroup;
 
-  constructor(private classicGameService: ClassicGameService, private elem: ElementRef) {
+  constructor(private classicGameService: ClassicGameService) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', []); //dummy data for variable instance
 
     this.highlightGrid = [

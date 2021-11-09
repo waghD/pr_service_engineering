@@ -31,7 +31,8 @@ const routes: Routes = [
   },
   {
     path: 'classic-game',
-    loadChildren: () => import('./pages/classic-game/classic-game.module').then(m => m.ClassicGameModule)
+    loadChildren: () => import('./pages/classic-game/classic-game.module').then(m => m.ClassicGameModule),
+    canActivate: [AuthGuard]
   },
   {
     path: '**',
