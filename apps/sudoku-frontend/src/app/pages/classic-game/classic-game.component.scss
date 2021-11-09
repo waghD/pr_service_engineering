@@ -1,0 +1,44 @@
+@import "apps/sudoku-frontend/src/colors";
+
+.classic-game-container {
+  margin-top: 5em;
+
+  .game-grid {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+    .grid-table {
+      border: 3px solid $light-grey;
+      border-collapse: collapse;
+
+      .grid-row {
+        .grid-cell {
+          text-align: center;
+          border: 1px solid $light-grey;
+          width: 3em;
+          height: 3em;
+
+          span {
+            input {
+              width: 1em;
+              height: 1em;
+              font-size: 2em;
+              border: none;
+              text-align: center;
+            }
+          }
+        }
+
+        .grid-cell.right-line-cell {
+          border-right: 2px solid $light-grey;
+        }
+
+        .grid-cell.bottom-line-cell {
+          border-bottom: 2px solid $light-grey;
+        }
+      }
+    }
+
+  }
+}
