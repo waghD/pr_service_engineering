@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit } from '@angular/core';
 import { ClassicGameService } from './classic-game.service';
 import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -9,7 +9,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   templateUrl: './classic-game.component.html',
   styleUrls: ['./classic-game.component.scss']
 })
-export class ClassicGameComponent implements OnInit {
+export class ClassicGameComponent implements OnInit, AfterViewChecked {
 
   // 0  = white
   // 1  = restOfColumnRow
@@ -20,8 +20,9 @@ export class ClassicGameComponent implements OnInit {
   cacheGrid: number[][];
   highlightGrid: number[][];
   gridForm: FormGroup;
+  isCleared: number;
 
-  constructor(private classicGameService: ClassicGameService) {
+  constructor(private classicGameService: ClassicGameService, private elem: ElementRef) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', []); //dummy data for variable instance
 
     this.sudokuGrid = [
@@ -140,6 +141,8 @@ export class ClassicGameComponent implements OnInit {
       cell87: new FormControl(''),
       cell88: new FormControl('')
     });
+
+    this.isCleared = 0;
   }
 
   ngOnInit(): void {
@@ -151,8 +154,10 @@ export class ClassicGameComponent implements OnInit {
     const fillGridWithData = (gridData: SudokuEntity) => {
       for (const field of gridData.fields) {
         this.sudokuGrid[field.y][field.x] = field.value;
-        this.cacheGrid[field.y][field.x] = field.value;
+        // this.cacheGrid[field.y][field.x] = field.value;
+
       }
+      console.log(this.sudokuGrid);
     };
 
     // gets a new sudoku
@@ -160,6 +165,19 @@ export class ClassicGameComponent implements OnInit {
       this.sudokuAPIData = gridData;
       fillGridWithData(gridData);
     });
+
+  }
+
+  ngAfterViewChecked() {
+    // TODO: workaround to clear non-empty cells
+    if (this.isCleared < 3) {
+      const elements = this.elem.nativeElement.querySelectorAll('.should-be-empty-cell');
+      for (let i = 0; i < elements.length; i++) {
+        elements[i].value = '';
+      }
+      this.isCleared++;
+      console.log('cleared non-empty cells!');
+    }
   }
 
   saveGrid() {
