@@ -185,7 +185,7 @@ export class ClassicGameComponent implements OnInit, AfterViewChecked {
     console.log(this.gridForm.value);
   }
 
-  focusOutFunction() {
+  focusOutFunction(): void {
     Object.entries(this.gridForm.value).forEach(([key, value]) => {
       if (value) {
         //get cell idx of 'cellXY'
@@ -195,17 +195,22 @@ export class ClassicGameComponent implements OnInit, AfterViewChecked {
         let val = -1;
         if (typeof value === 'string') {
           val = parseInt(value);
+        } else if (typeof value === 'number') {
+          val = value;
         }
 
         if (val !== -1) {
+          console.log('Found value at');
+          console.log('[' + x + ']' + '[' + y + ']' + '=' + val);
           this.cacheGrid[y][x] = val;
+
         } else {
-          console.error('Something wrong happened with the user input!');
+          console.error('Something wrong happened with the user input: ' + typeof val);
         }
       }
     });
 
-
+    // TODO: check validity
     // function hasDuplicates(arr: any[]) {
     //   return arr.some(function(item) {
     //     return arr.indexOf(item) !== arr.lastIndexOf(item);
@@ -221,7 +226,23 @@ export class ClassicGameComponent implements OnInit, AfterViewChecked {
     //
     //   }
     // }
+    console.log(this.cacheGrid);
 
-    // TODO: check validity
+  }
+
+  focusInFunction(): void {
+    // get active cell
+    if (document.activeElement) {
+      const currCell = document.activeElement.getAttribute('ng-reflect-name');
+      if (currCell && currCell.startsWith('cell')) {
+        //get cell idx of 'cellXY'
+        const x: number = parseInt(currCell.charAt(4));
+        const y: number = parseInt(currCell.charAt(5));
+
+        //set highlight
+        console.log('x=' + x);
+        console.log('y=' + y);
+      }
+    }
   }
 }

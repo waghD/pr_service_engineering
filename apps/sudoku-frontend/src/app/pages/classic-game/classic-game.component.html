@@ -11,12 +11,14 @@
               <span *ngIf='sudokuGrid[rowIdx][colIdx]!==0; else elseblock'>
                   <input [formControlName]='"cell" + colIdx  + "" + rowIdx'
                          (focusout)='focusOutFunction()'
+                         (focusin)='focusInFunction()'
                          [(ngModel)]='sudokuGrid[rowIdx][colIdx]'>
               </span>
               <ng-template #elseblock>
               <span>
                   <input
                     [formControlName]='"cell" + colIdx  + "" + rowIdx'
+                    (focusin)='focusInFunction()'
                     (focusout)='focusOutFunction()'
                     class='should-be-empty-cell'>
               </span>
