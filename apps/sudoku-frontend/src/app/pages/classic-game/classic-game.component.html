@@ -9,11 +9,11 @@
             <td class='grid-cell' *ngFor='let value of row; let colIdx = index'
                 [ngClass]="{'bottom-line-cell': (rowIdx + 1) % 3 === 0  && rowIdx < 8, 'right-line-cell': (colIdx + 1) % 3 === 0 && colIdx < 8}">
               <span *ngIf='value!==0; else elseBlock'>
-                <input formControlName='cell{{colIdx}}{{rowIdx}}' ngModel='{{value}}'>
+                <input formControlName='cell{{colIdx}}{{rowIdx}}' ngModel='{{value}}' (focusout)='focusOutFunction()'>
               </span>
               <ng-template #elseBlock>
                 <span>
-                  <input formControlName='cell{{colIdx}}{{rowIdx}}'>
+                  <input formControlName='cell{{colIdx}}{{rowIdx}}' (focusout)='focusOutFunction()'>
                 </span>
               </ng-template>
             </td>

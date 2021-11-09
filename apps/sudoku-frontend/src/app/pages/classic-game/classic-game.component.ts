@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassicGameService } from './classic-game.service';
 import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -11,17 +11,42 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class ClassicGameComponent implements OnInit {
 
-  // 0  = empty
+  // 0  = white
+  // 1  = restOfColumnRow
   // -1 = error
 
   sudokuAPIData: SudokuEntity;
   sudokuGrid: number[][];
+  cacheGrid: number[][];
+  highlightGrid: number[][];
   gridForm: FormGroup;
 
   constructor(private classicGameService: ClassicGameService) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', []); //dummy data for variable instance
 
     this.sudokuGrid = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+
+    this.highlightGrid = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+
+    this.cacheGrid = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -126,6 +151,7 @@ export class ClassicGameComponent implements OnInit {
     const fillGridWithData = (gridData: SudokuEntity) => {
       for (const field of gridData.fields) {
         this.sudokuGrid[field.y][field.x] = field.value;
+        this.cacheGrid[field.y][field.x] = field.value;
       }
     };
 
@@ -139,5 +165,45 @@ export class ClassicGameComponent implements OnInit {
   saveGrid() {
     // do stuff
     console.log(this.gridForm.value);
+  }
+
+  focusOutFunction() {
+    Object.entries(this.gridForm.value).forEach(([key, value]) => {
+      if (value) {
+        //get cell idx of 'cellXY'
+        const x: number = parseInt(key.charAt(4));
+        const y: number = parseInt(key.charAt(5));
+
+        let val = -1;
+        if (typeof value === 'string') {
+          val = parseInt(value);
+        }
+
+        if (val !== -1) {
+          this.cacheGrid[y][x] = val;
+        } else {
+          console.error('Something wrong happened with the user input!');
+        }
+      }
+    });
+
+
+    // function hasDuplicates(arr: any[]) {
+    //   return arr.some(function(item) {
+    //     return arr.indexOf(item) !== arr.lastIndexOf(item);
+    //   });
+    // }
+    //
+    // //validate grid
+    // for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
+    //   if (hasDuplicates(this.cacheGrid[rowIdx])) {
+    //
+    //   }
+    //   for (let col = 0; col < this.cacheGrid[rowIdx].length; col++) {
+    //
+    //   }
+    // }
+
+    // TODO: check validity
   }
 }
