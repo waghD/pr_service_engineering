@@ -98,11 +98,12 @@ export class ClassicGameComponent implements OnInit {
   focusOutFunction(): void {
     // parses all filled fields and caches them in the cacheGrid variable
     Object.entries(this.gridForm.value).forEach(([key, value]) => {
-      if (value) {
-        //get cell idx of 'cellXY'
-        const x: number = parseInt(key.charAt(4));
-        const y: number = parseInt(key.charAt(5));
+      //get cell idx of 'cellXY'
+      const x: number = parseInt(key.charAt(4));
+      const y: number = parseInt(key.charAt(5));
 
+      //check if cell contains value
+      if (value) {
         let val = -1;
         if (typeof value === 'string') {
           val = parseInt(value);
@@ -116,8 +117,12 @@ export class ClassicGameComponent implements OnInit {
         } else {
           console.error('Something wrong happened with the user input: ' + typeof val);
         }
+      } else {
+        // cell contains no (longer a) value, update the cache
+        this.cacheGrid[y][x] = 0;
       }
     });
+
 
     // check validity
 
@@ -135,20 +140,45 @@ export class ClassicGameComponent implements OnInit {
       return false;
     }
 
-    console.log(this.cacheGrid);
-
-    // check duplicates in rows
+    // check and highlight duplicates in rows
     for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
       const rowDomElement = document.getElementsByClassName('row-nr-' + rowIdx);
 
       if (hasDuplicates(this.cacheGrid[rowIdx])) {
         //found a duplicate in the row, add error class
-        const errorMsg = 'Duplicate in row ' + (rowIdx + 1) + '!';
-        console.error(errorMsg);
+        console.warn('Duplicate in row ' + (rowIdx + 1) + '!');
         rowDomElement[0].classList.add('error-background');
       } else {
         // if no error, remove (previous) error class
         rowDomElement[0].classList.remove('error-background');
+      }
+    }
+
+    // check and highlight duplicates in columns
+    for (let x = 0; x < this.cacheGrid.length; x++) {
+      const colArr = [];
+      for (let y = 0; y < this.cacheGrid.length; y++) {
+        colArr.push(this.cacheGrid[y][x]);
+      }
+
+      // row selector
+      const rowsDomElements = document.getElementsByClassName('grid-row');
+
+      //check if array has duplicates
+      if (hasDuplicates(colArr)) {
+        console.warn('Duplicate in column ' + (x + 1) + '!');
+        for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
+          const cellNodes = rowsDomElements[rowIdx].childNodes;
+          const currentCellDom = cellNodes[x] as HTMLElement;
+          currentCellDom.classList.add('error-background');
+        }
+      } else {
+        // no duplicates, but value could have been deleted, revalidate to no error
+        for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
+          const cellNodes = rowsDomElements[rowIdx].childNodes;
+          const currentCellDom = cellNodes[x] as HTMLElement;
+          currentCellDom.classList.remove('error-background');
+        }
       }
     }
   }
@@ -161,7 +191,7 @@ export class ClassicGameComponent implements OnInit {
         // //get cell idx of 'cellXY'
         const x: number = parseInt(currCell.charAt(4));
         const y: number = parseInt(currCell.charAt(5));
-        //set highlight
+        //TODO: set highlight in column and row and cell
       }
     }
   }
