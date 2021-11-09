@@ -96,6 +96,7 @@ export class ClassicGameComponent implements OnInit {
   }
 
   focusOutFunction(): void {
+    // parses all filled fields and caches them in the cacheGrid variable
     Object.entries(this.gridForm.value).forEach(([key, value]) => {
       if (value) {
         //get cell idx of 'cellXY'
@@ -118,8 +119,38 @@ export class ClassicGameComponent implements OnInit {
       }
     });
 
-    // TODO: check validity
+    // check validity
 
+    /***
+     * Checks whether a given array has duplicates
+     * @param array the number[] which should be checked
+     */
+    function hasDuplicates(array: number[]) {
+      const map = array.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
+      for (const [key, value] of map.entries()) {
+        if (key !== 0 && value > 1) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    console.log(this.cacheGrid);
+
+    // check duplicates in rows
+    for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
+      const rowDomElement = document.getElementsByClassName('row-nr-' + rowIdx);
+
+      if (hasDuplicates(this.cacheGrid[rowIdx])) {
+        //found a duplicate in the row, add error class
+        const errorMsg = 'Duplicate in row ' + (rowIdx + 1) + '!';
+        console.error(errorMsg);
+        rowDomElement[0].classList.add('error-background');
+      } else {
+        // if no error, remove (previous) error class
+        rowDomElement[0].classList.remove('error-background');
+      }
+    }
   }
 
   focusInFunction(): void {
