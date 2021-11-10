@@ -27,9 +27,8 @@ export class SudokuService {
     const generatedSudoku: SudokuEntity = new SudokuEntity();
     generatedSudoku.name= 'sudoku';
     generatedSudoku.difficulty='easy';
-    const sudoku:Promise<SudokuEntity> = this.sudokuRepository.save(generatedSudoku);
-    const id = sudoku.then(value => id);
-    this.sudokuFieldService.generateSudokuFields(id);
+    const sudoku = await this.sudokuRepository.save(generatedSudoku);
+    sudoku.fields = await this.sudokuFieldService.generateSudokuFields(sudoku.id);
     return sudoku;
   }
 
