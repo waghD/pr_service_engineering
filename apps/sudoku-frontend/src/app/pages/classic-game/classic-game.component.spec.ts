@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ClassicGameComponent } from './classic-game.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ClassicGameService } from './classic-game.service';
 
 describe('ClassicGameComponent', () => {
   let component: ClassicGameComponent;
@@ -8,7 +10,9 @@ describe('ClassicGameComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ClassicGameComponent]
+      imports: [HttpClientTestingModule],
+      declarations: [ClassicGameComponent],
+      providers: [ClassicGameService]
     })
       .compileComponents();
   });
