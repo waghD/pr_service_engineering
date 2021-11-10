@@ -17,7 +17,6 @@ export class ClassicGameService {
 
   getNewRandomSudoku(): Observable<SudokuEntity> {
     return this.http
-      // TODO: currently hardcoded id number 1, later get here a new genereated sudoku when generator and API is rdy
-      .get<SudokuEntity>(this.baseApiURL + '/sudokus/13');
+      .post<SudokuEntity>(this.baseApiURL + '/sudokus/generate', {});
   }
 }

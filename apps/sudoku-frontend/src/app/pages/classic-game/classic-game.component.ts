@@ -77,7 +77,7 @@ export class ClassicGameComponent implements OnInit {
         // necessary due to inconvenience, maybe there is a better solution...?
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        newVal[`cell${field.x}${field.y}`] = field.value;
+        newVal[`cell${field.x}${field.y}`] = field.value > 0 ? field.value : '';
         this.gridForm.patchValue(newVal);
       }
     };

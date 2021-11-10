@@ -39,11 +39,12 @@ export class SudokuFieldService {
         emptySudoku[x] = 0;
       }
       const solved = solveSudoku(emptySudoku);
-      console.log('solved: ', solved);
 
       const solved2D = sudokuArrayTo2DArray(solved);
 
-      const fields = removeSolution(solved, 10);
+      console.log('solved2D', solved2D);
+
+      const fields = removeSolution(solved, 55);
       const fields2D = sudokuArrayTo2DArray(fields);
       const fieldEntities: SudokuFieldEntity[] = [];
       for(let i = 0; i<9;i++) {
