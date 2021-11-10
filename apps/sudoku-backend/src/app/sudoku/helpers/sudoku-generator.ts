@@ -30,7 +30,7 @@ export class SudokuGenerator {
 
   fillDiagonal(){
 
-    for(let i = 0;i<this.size; i++){
+    for(let i = 0;i<this.size; i=i+this.sizeMatrix){
       this.fillMatrix(i,i);
 
     }
@@ -99,7 +99,7 @@ export class SudokuGenerator {
     check if we have reached the end of the row but not the end of the sudoku
     increase row by one so we can fill the last row
      */
-     if(x>=this.size&&y<this.size-1){
+     if(x>=this.size&&y<(this.size-1)){
        y=y+1;
        x=0;
      }
@@ -123,7 +123,7 @@ export class SudokuGenerator {
         check if we hit a diagonal matrix
         if so increase column by size matrix
          */
-        if (x ==(y/this.sizeMatrix)*this.sizeMatrix)
+        if (x ==Math.round((y/this.sizeMatrix)*this.sizeMatrix))
           x =  x + this.sizeMatrix;
       } else
       {
