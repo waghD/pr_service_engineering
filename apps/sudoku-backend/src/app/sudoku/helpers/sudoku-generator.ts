@@ -51,7 +51,8 @@ export class SudokuGenerator {
   }
 
   rNG(num:number):number{
-    return Math.floor((Math.random()*num+1));
+    const test =(Math.random()*this.size);
+    return Math.round(test);
   }
 
   unUsedInMatrix(y:number,x:number,num:number):boolean{
