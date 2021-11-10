@@ -42,7 +42,7 @@ export class SudokuGenerator {
     for(let i= 0; i<this.sizeMatrix;i++){
       for(let j=0;j<this.sizeMatrix;j++) {
           while(!this.unUsedInMatrix(y,x,num)){
-              num = this.rNG(num);
+              num = this.rNG();
           }
           this.sudoku[x+i][y+j] = num;
       }
@@ -50,9 +50,9 @@ export class SudokuGenerator {
 
   }
 
-  rNG(num:number):number{
-    const test =(Math.random()*this.size);
-    return Math.round(test);
+  rNG():number{
+    const num =(Math.random()*this.size);
+    return Math.round(num);
   }
 
   unUsedInMatrix(y:number,x:number,num:number):boolean{
@@ -88,7 +88,9 @@ export class SudokuGenerator {
     }
 
     checkifSafe(y:number,x:number,num:number) {
-      return (this.unUsedinRow(y, num) && this.unUsedinColumn(x, num) && this.unUsedInMatrix(y, x, num))
+      return (this.unUsedinRow(y, num)
+              && this.unUsedinColumn(x, num)
+              && this.unUsedInMatrix(y-y%this.sizeMatrix, x-x%this.sizeMatrix, num))
 
     }
 
@@ -117,7 +119,7 @@ export class SudokuGenerator {
           x = this.sizeMatrix;
       }
       // else check if we are in the middle rows
-      else if (y < this.size-this.sizeMatrix)
+      else if (y < (this.size-this.sizeMatrix))
       {
         /*
         check if we hit a diagonal matrix
@@ -131,7 +133,7 @@ export class SudokuGenerator {
         check if we are in a middle column
         if so reset column and increase row
          */
-        if (x == this.size-this.sizeMatrix)
+        if (x == (this.size-this.sizeMatrix))
         {
           y = y + 1;
           x = 0;
@@ -145,7 +147,7 @@ export class SudokuGenerator {
         if (this.checkifSafe(y, x, num))
         {
           this.sudoku[y][x] = num;
-          if (this.filltheRest(y, x))
+          if (this.filltheRest(y, x+1))
             return true;
           this.sudoku[y][x] = 0;
         }
@@ -157,7 +159,7 @@ export class SudokuGenerator {
     remove_solution():number[][]{
     let count:number = this.empty;
     while(count != 0){
-       const field:number= this.rNG(this.size*this.size) -1;
+       const field:number= this.rNG();
        const i = field/this.size;
        let j:number = field%9;
        if (j != 0)
