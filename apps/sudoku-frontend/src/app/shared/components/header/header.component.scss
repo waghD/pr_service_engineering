@@ -9,11 +9,6 @@ header {
   }
 
 
-  .main-menu-header {
-    background-color: white !important;
-    padding: 0 1em !important;
-  }
-
   .heading-blue-line {
     background: #8ac5d1;
     height: 35px;
@@ -57,6 +52,46 @@ header {
         width: 8em;
         margin: 0 2em;
       }
+    }
+
+    .single-line-heading-black-lines hr {
+      display: none;
+    }
+  }
+}
+
+// overwriting styling
+.main-menu-header {
+  .heading-title {
+    background-color: white !important;
+    padding: 0 1em !important;
+  }
+}
+
+.single-line-heading {
+  .heading-second-row-container {
+    margin-top: -120px;
+
+    .heading-img-container {
+      visibility: hidden;
+      margin: 0 -15px;
+    }
+  }
+
+  .heading-title {
+    background-color: white;
+    padding: 0 30px;
+  }
+
+  .single-line-heading-black-lines {
+
+    hr {
+      display: block !important;
+      margin-top: -40px;
+      height: 3px;
+      width: 45%;
+      border-width: 0;
+      background-color: black;
     }
   }
 }

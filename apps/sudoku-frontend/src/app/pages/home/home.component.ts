@@ -9,7 +9,6 @@ import { HomeStateService } from './home-state.service';
 export class HomeComponent {
 
   constructor(public state: HomeStateService) {
-    this.state.getFoo();
   }
 
 }
