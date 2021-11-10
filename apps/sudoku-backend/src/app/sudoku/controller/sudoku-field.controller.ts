@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { SudokuFieldService } from '../service/sudoku-field.service';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Sudoku')
 @Controller('sudokus/:id/fields')
 export class SudokuFieldController {
   constructor(private readonly service: SudokuFieldService) {}

@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Sudoku')
 @Controller('sudokus')
 export class SudokuController {
 
