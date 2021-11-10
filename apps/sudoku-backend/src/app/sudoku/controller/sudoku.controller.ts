@@ -54,5 +54,15 @@ export class SudokuController {
     }
   }
 
+  @Post('generate')
+   async generateSudoku(){
+    try {
+      return await this.sudokuService.generateSudoku();
+    } catch (err) {
+      console.error(err);
+      throw new HttpException(err, HttpStatus.NOT_FOUND);
+    }
+  }
+
 
 }
