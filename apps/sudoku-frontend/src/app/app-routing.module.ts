@@ -35,6 +35,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'diagonal-game',
+    loadChildren: () => import('./pages/diagonal-game/diagonal-game.module').then(m => m.DiagonalGameModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
   }

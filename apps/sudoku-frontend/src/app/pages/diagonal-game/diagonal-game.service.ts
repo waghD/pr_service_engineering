@@ -6,7 +6,7 @@ import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 @Injectable({
   providedIn: 'root'
 })
-export class ClassicGameService {
+export class DiagonalGameService {
 
   private baseApiURL = 'http://localhost:8080/api';
 
@@ -15,7 +15,6 @@ export class ClassicGameService {
   constructor(private readonly http: HttpClient) {
   }
 
-  // TODO: insert correct api call here when finished
   getNewRandomSudoku(): Observable<SudokuEntity> {
     return this.http
       .post<SudokuEntity>(this.baseApiURL + '/sudokus/generate', {});
