@@ -140,21 +140,29 @@ export class ClassicGameComponent implements OnInit {
       return false;
     }
 
-    // check and highlight duplicates in rows
+    const ERROR_BACKGROUND_CSS_CLASSNAME = 'error-background';
+
+    // ###################################################
+    // ###### check and highlight duplicates in rows #####
+    // ###################################################
+
     for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
       const rowDomElement = document.getElementsByClassName('row-nr-' + rowIdx);
 
       if (hasDuplicates(this.cacheGrid[rowIdx])) {
         //found a duplicate in the row, add error class
         console.warn('Duplicate in row ' + (rowIdx + 1) + '!');
-        rowDomElement[0].classList.add('error-background');
+        rowDomElement[0].classList.add(ERROR_BACKGROUND_CSS_CLASSNAME);
       } else {
         // if no error, remove (previous) error class
-        rowDomElement[0].classList.remove('error-background');
+        rowDomElement[0].classList.remove(ERROR_BACKGROUND_CSS_CLASSNAME);
       }
     }
 
-    // check and highlight duplicates in columns
+    // #################################################################
+    // ########### check and highlight duplicates in columns ###########
+    // #################################################################
+
     for (let x = 0; x < this.cacheGrid.length; x++) {
       const colArr = [];
       for (let y = 0; y < this.cacheGrid.length; y++) {
@@ -170,17 +178,108 @@ export class ClassicGameComponent implements OnInit {
         for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
           const cellNodes = rowsDomElements[rowIdx].childNodes;
           const currentCellDom = cellNodes[x] as HTMLElement;
-          currentCellDom.classList.add('error-background');
+          currentCellDom.classList.add(ERROR_BACKGROUND_CSS_CLASSNAME);
         }
       } else {
         // no duplicates, but value could have been deleted, revalidate to no error
         for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
           const cellNodes = rowsDomElements[rowIdx].childNodes;
           const currentCellDom = cellNodes[x] as HTMLElement;
-          currentCellDom.classList.remove('error-background');
+          currentCellDom.classList.remove(ERROR_BACKGROUND_CSS_CLASSNAME);
         }
       }
     }
+
+    // #################################################################
+    // ########### check and highlight duplicates in 3x3 box ###########
+    // #################################################################
+
+    /***
+     * Returns the 3x3 values of a grid, given the start-indices to count from
+     * @param startIdxRows the row to start getting the indices
+     * @param startIdxCols the column to start getting the indices
+     * @param cacheGrid the grid which has the data
+     */
+    function getBoxValues(startIdxRows: number, startIdxCols: number, cacheGrid: number[][]) {
+      const result = {
+        'values': [-1, -1],
+        'startIdxRows': startIdxRows,
+        'startIdxCols': startIdxCols
+      };
+
+      const valueArray = [];
+
+      for (let i = startIdxRows; i < (startIdxRows + 3); i++) {
+        for (let j = startIdxCols; j < (startIdxCols + 3); j++) {
+          valueArray.push(cacheGrid[i][j]);
+        }
+      }
+
+      result['values'] = valueArray;
+      return result;
+    }
+
+    // get 3x3 boxes as arrays
+    const upperLeftSquare = getBoxValues(0, 0, this.cacheGrid);
+    const upperCenterSquare = getBoxValues(0, 3, this.cacheGrid);
+    const upperRightSquare = getBoxValues(0, 6, this.cacheGrid);
+
+    const middleLeftSquare = getBoxValues(3, 0, this.cacheGrid);
+    const middleCenterSquare = getBoxValues(3, 3, this.cacheGrid);
+    const middleRightSquare = getBoxValues(3, 6, this.cacheGrid);
+
+    const lowerLeftSquare = getBoxValues(6, 0, this.cacheGrid);
+    const lowerCenterSquare = getBoxValues(6, 3, this.cacheGrid);
+    const lowerRightSquare = getBoxValues(6, 6, this.cacheGrid);
+
+    const boxList = [
+      upperLeftSquare, upperCenterSquare, upperRightSquare,
+      middleLeftSquare, middleCenterSquare, middleRightSquare,
+      lowerLeftSquare, lowerCenterSquare, lowerRightSquare
+    ];
+
+    // highlight boxes which have duplicates
+    boxList.forEach(boxArray => {
+      const currentArray = boxArray['values'];
+      const startIdxRow = boxArray['startIdxRows'];
+      const startIdxCol = boxArray['startIdxCols'];
+
+      /***
+       * Highlights a 3x3 box given the start indices of rows and cols
+       * @param startIdxRow the row index from which to highlight the next 3 indices
+       * @param startIdxCol the column index from which to highlight the next 3 indices
+       * @param cssClass the css classname which should be added to the cells, leave empty string to remove error background
+       */
+      function highlightBox(startIdxRow: number, startIdxCol: number, cssClass: string) {
+        for (let i = startIdxRow; i < (startIdxRow + 3); i++) {
+          for (let j = startIdxCol; j < (startIdxCol + 3); j++) {
+            // get classlist of current cell
+            const classNameOfCell = `cell${j}${i}`;
+            // get the parent dom element cell for correct styling
+            const cellParentNode = document.getElementsByClassName(classNameOfCell)[0].parentElement;
+            if (cellParentNode && cellParentNode.parentElement) {
+              const cellNodeClassList = cellParentNode.parentElement.classList;
+              if (cssClass !== '') {
+                cellNodeClassList.add(cssClass);
+              } else {
+                // no additional css class provided, remove error background of cell
+                if (cellNodeClassList.contains(ERROR_BACKGROUND_CSS_CLASSNAME)) {
+                  cellNodeClassList.remove(ERROR_BACKGROUND_CSS_CLASSNAME);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (hasDuplicates(currentArray)) {
+        console.warn('Duplicate in 3x3 ');
+        highlightBox(startIdxRow, startIdxCol, ERROR_BACKGROUND_CSS_CLASSNAME);
+      } else {
+        highlightBox(startIdxRow, startIdxCol, '');
+      }
+    });
+
   }
 
   focusInFunction(): void {

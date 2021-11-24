@@ -11,7 +11,8 @@
               <span>
                   <input [formControlName]='"cell" + colIdx  + "" + rowIdx'
                          (focusout)='focusOutFunction()'
-                         (focusin)='focusInFunction()'>
+                         (focusin)='focusInFunction()'
+                         [ngClass]='"cell" + colIdx  + "" + rowIdx'>
               </span>
             </td>
           </tr>
