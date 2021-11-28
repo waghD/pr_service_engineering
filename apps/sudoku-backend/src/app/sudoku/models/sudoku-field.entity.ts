@@ -5,7 +5,7 @@ import { SudokuEntity } from './sudoku.entity';
 export class SudokuFieldEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id:number;
 
   @Column()
   x: number;

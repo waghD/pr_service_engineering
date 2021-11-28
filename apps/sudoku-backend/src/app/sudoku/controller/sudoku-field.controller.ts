@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, 
 import { SudokuFieldService } from '../service/sudoku-field.service';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
 
 @ApiTags('Sudoku')
 @Controller('sudokus/:id/fields')
@@ -15,21 +16,12 @@ export class SudokuFieldController {
     @Query('take') take: number,
   ) {
     try {
-      return this.service.getSudokuFields(id, page, take);
+      const entity = this.service.getSudokuFields(id, page, take);
+      return plainToClass(SudokuFieldDto,entity);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
   }
-
-  @Get(':id')
-  async getOne(@Param('id') id: number) {
-    try {
-      return await this.service.getOneSudokuField(id);
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.NOT_FOUND);
-    }
-  }
-
 
   async create( id:number, sudokuFieldDto:SudokuFieldDto[]);
   async create( id:number, sudokuFieldDto:SudokuFieldDto);
@@ -41,14 +33,20 @@ export class SudokuFieldController {
     if(Array.isArray(sudokuFieldDto)){
 
       for(const f of sudokuFieldDto){
-        try {
+        const field = this.service.getOneSudokuField(f.x,f.y);
+        if (field) {
+          await this.service.updateSudokuField(id,f.x, f.y,f);
+        } else{
+          try {
           await this.service.createSudokuField(id,f);
         } catch (err) {
           throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
         }
 
-      }
-      return this.service.getSudokuFields(id);
+        }}
+
+      const entity = this.service.getSudokuFields(id);
+      return plainToClass(SudokuFieldDto,entity);
 
     }else{
       try {
@@ -62,19 +60,21 @@ export class SudokuFieldController {
   }
 
 
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() sudokuFieldDto: SudokuFieldDto) {
+  @Put('update')
+  async update(@Param('id') id: number,@Query('x') x:number, @Query('y') y:number, @Body() sudokuFieldDto: SudokuFieldDto) {
     try {
-      return await this.service.updateSudokuField(id,sudokuFieldDto);
+      const entity = await this.service.updateSudokuField(id,x,y,sudokuFieldDto);
+      return plainToClass(SudokuFieldDto,entity);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
     }
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: number) {
+  @Delete()
+  async remove(@Query('x') x:number, @Query('y') y:number) {
     try {
-      return await this.service.removeSudokuField(id);
+      const entity = await this.service.removeSudokuField(x,y);
+      return plainToClass(SudokuFieldDto,entity);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }

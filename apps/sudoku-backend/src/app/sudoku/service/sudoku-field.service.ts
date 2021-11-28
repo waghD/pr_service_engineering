@@ -28,7 +28,7 @@ export class SudokuFieldService {
     field.solution = sudokuFieldDto.solution;
     field.sudoku = sudoku;
     const createdField = await this.sudokufieldRepo.save(field);
-    return this.getOneSudokuField(createdField.id);
+    return this.getOneSudokuField(createdField.x, createdField.y);
   }
 
   async generateSudokuFields(sudokuID:number){
@@ -66,28 +66,27 @@ export class SudokuFieldService {
 
 
   async getSudokuFields(sudokuId: number, page=1, take=25): Promise<SudokuFieldEntity[]> {
-    const sudoku = await this.sudokuService.getOneSudoku(sudokuId);
-    if (sudoku) {
-      return sudoku.fields;
-    }
+    return this.sudokufieldRepo.createQueryBuilder("field").
+    where("field.sudoku = :id", {id:sudokuId}).
+    getMany();
   }
 
-  async getOneSudokuField(id: number) {
-    return this.sudokufieldRepo.findOneOrFail(id, {
-      relations: ['sudoku'],
+  async getOneSudokuField(x:number,y:number) {
+    return await this.sudokufieldRepo.createQueryBuilder("field").where("field.x = :x ",{x:x}).getOne()
+  }
+
+
+  async updateSudokuField(id:number,x:number,y:number, sudokuFieldDto: SudokuFieldDto): Promise<SudokuFieldEntity> {
+    const field = await this.getOneSudokuField(x,y);
+    if(field) {await this.sudokufieldRepo.update(field.id,sudokuFieldDto);}
+
+    return await this.sudokufieldRepo.findOneOrFail(field.id);
+  }
+
+  async removeSudokuField(x: number,y:number): Promise<SudokuFieldEntity> {
+    const field= await this.sudokufieldRepo.findOneOrFail({
+      where:[{x:x,y:y}],
     });
-  }
-
-
-  async updateSudokuField(id: number, sudokuFieldDto: SudokuFieldDto): Promise<SudokuFieldEntity> {
-    const field = await this.sudokufieldRepo.findOneOrFail(id);
-    if(field) {await this.sudokufieldRepo.update(id, sudokuFieldDto);}
-
-    return await this.sudokufieldRepo.findOneOrFail(id);
-  }
-
-  async removeSudokuField(id: number): Promise<SudokuFieldEntity> {
-    const field= await this.sudokufieldRepo.findOneOrFail(id);
     return this.sudokufieldRepo.remove(field);
   }
 
