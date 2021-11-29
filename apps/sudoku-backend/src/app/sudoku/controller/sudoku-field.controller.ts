@@ -33,9 +33,14 @@ export class SudokuFieldController {
     if(Array.isArray(sudokuFieldDto)){
 
       for(const f of sudokuFieldDto){
-        const field = this.service.getOneSudokuField(f.x,f.y);
+        const field = await this.service.getOneSudokuField(id,f.x,f.y);
         if (field) {
-          await this.service.updateSudokuField(id,f.x, f.y,f);
+          try {
+            await this.service.updateSudokuField(id,f.x, f.y,f);}
+          catch (err){
+            throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
+          }
+
         } else{
           try {
           await this.service.createSudokuField(id,f);
@@ -45,7 +50,7 @@ export class SudokuFieldController {
 
         }}
 
-      const entity = this.service.getSudokuFields(id);
+      const entity = await this.service.getSudokuFields(id);
       return plainToClass(SudokuFieldDto,entity);
 
     }else{

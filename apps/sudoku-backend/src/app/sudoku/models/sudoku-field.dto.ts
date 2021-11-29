@@ -1,4 +1,4 @@
-import { Min, Max, IsNumber } from 'class-validator';
+import { Min, Max, IsNumber, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
@@ -32,4 +32,9 @@ export class SudokuFieldDto {
   @Max(9)
   @IsNumber()
      solution:number;
+
+  @Expose()
+  @ApiProperty()
+  readonly editable:boolean;
+
 }

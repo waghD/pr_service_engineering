@@ -19,6 +19,9 @@ export class SudokuFieldEntity {
   @Column()
   solution:number;
 
+  @Column()
+  editable:boolean;
+
   @ManyToOne(type => SudokuEntity, sudoku => sudoku.fields)
   sudoku:SudokuEntity;
 

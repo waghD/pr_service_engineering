@@ -26,9 +26,10 @@ export class SudokuFieldService {
     field.x = sudokuFieldDto.x;
     field.value = sudokuFieldDto.value;
     field.solution = sudokuFieldDto.solution;
+    field.editable = sudokuFieldDto.value == 0;
     field.sudoku = sudoku;
     const createdField = await this.sudokufieldRepo.save(field);
-    return this.getOneSudokuField(createdField.x, createdField.y);
+    return this.getOneSudokuField(sudokuID,createdField.x, createdField.y);
   }
 
   async generateSudokuFields(sudokuID:number){
@@ -55,6 +56,7 @@ export class SudokuFieldService {
           field.x = j;
           field.value = fields2D[i][j];
           field.solution = solved2D[i][j];
+          field.editable = fields2D[i][j] == 0;
           field.sudoku = sudoku;
           const fieldEntity = await this.sudokufieldRepo.save(field);
           fieldEntities.push(fieldEntity);
@@ -71,14 +73,20 @@ export class SudokuFieldService {
     getMany();
   }
 
-  async getOneSudokuField(x:number,y:number) {
-    return await this.sudokufieldRepo.createQueryBuilder("field").where("field.x = :x ",{x:x}).getOne()
+  async getOneSudokuField(id:number,x:number,y:number) {
+    return await this.sudokufieldRepo.createQueryBuilder("field")
+      .where("field.x = :x and field.y = :y and field.sudoku = :id",{x:x,y:y, id:id}).getOne()
   }
 
 
   async updateSudokuField(id:number,x:number,y:number, sudokuFieldDto: SudokuFieldDto): Promise<SudokuFieldEntity> {
-    const field = await this.getOneSudokuField(x,y);
-    if(field) {await this.sudokufieldRepo.update(field.id,sudokuFieldDto);}
+    const field = await this.getOneSudokuField(id,x,y);
+    if(field) {
+              field.value = sudokuFieldDto.value;
+              field.solution = sudokuFieldDto.solution;
+              field.editable = sudokuFieldDto.value == 0;
+               await this.sudokufieldRepo.update(field.id,field);
+    }
 
     return await this.sudokufieldRepo.findOneOrFail(field.id);
   }

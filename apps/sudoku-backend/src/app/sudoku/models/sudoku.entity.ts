@@ -13,6 +13,9 @@ export class SudokuEntity {
   @Column()
   difficulty?:string;
 
+  @Column()
+  edit_time:number;
+
   @OneToMany(type => SudokuFieldEntity,sudokufield => sudokufield.sudoku)
   fields?:SudokuFieldEntity[];
 
