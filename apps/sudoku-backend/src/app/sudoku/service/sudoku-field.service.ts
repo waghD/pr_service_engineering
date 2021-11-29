@@ -82,10 +82,7 @@ export class SudokuFieldService {
   async updateSudokuField(id:number,x:number,y:number, sudokuFieldDto: SudokuFieldDto): Promise<SudokuFieldEntity> {
     const field = await this.getOneSudokuField(id,x,y);
     if(field) {
-              field.value = sudokuFieldDto.value;
-              field.solution = sudokuFieldDto.solution;
-              field.editable = sudokuFieldDto.value == 0;
-               await this.sudokufieldRepo.update(field.id,field);
+               await this.sudokufieldRepo.update(field.id,sudokuFieldDto);
     }
 
     return await this.sudokufieldRepo.findOneOrFail(field.id);
