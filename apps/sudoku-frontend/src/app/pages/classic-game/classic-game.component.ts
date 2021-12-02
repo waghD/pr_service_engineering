@@ -28,6 +28,7 @@ export class ClassicGameComponent implements OnInit {
   ERROR_BACKGROUND_BOX_CSS_CLASSNAME: string;
   SELECTED_CELL_BACKGROUND_CSS_CLASSNAME: string;
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
+  CONCEAL_FIELD_CSS_CLASSNAME: string;
 
   constructor(private classicGameService: ClassicGameService) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', 0, []); //dummy data for variable instance
@@ -82,6 +83,7 @@ export class ClassicGameComponent implements OnInit {
     this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME = 'error-background-box';
     this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME = 'selected-cell-background';
     this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME = 'selected-row-background';
+    this.CONCEAL_FIELD_CSS_CLASSNAME = 'conceal-field';
   }
 
   ngOnInit(): void {
@@ -106,6 +108,7 @@ export class ClassicGameComponent implements OnInit {
       this.sudokuAPIData = gridData;
       fillGridWithData(gridData);
       this.timerCount = gridData.edit_time;
+      this.concealGrid();
     });
 
   }
@@ -370,6 +373,7 @@ export class ClassicGameComponent implements OnInit {
     }
   }
 
+
   toggleTimer() {
 
     /***
@@ -389,12 +393,35 @@ export class ClassicGameComponent implements OnInit {
         this.timeString = secondsToStringTime(this.timerCount);
       }, 1000);
       this.timerIsRunning = true;
+
+      // reveal grid
+      this.revealGrid();
+
     } else {
       //stop timer
       clearInterval(this.interval);
       this.timerIsRunning = false;
+
+      // conceal grid
+      this.concealGrid();
     }
   }
 
 
+  private concealGrid() {
+    for (let i = 0; i < this.highlightGrid.length; i++) {
+      for (let j = 0; j < this.highlightGrid.length; j++) {
+        this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, false);
+      }
+    }
+  }
+
+
+  private revealGrid() {
+    for (let i = 0; i < this.highlightGrid.length; i++) {
+      for (let j = 0; j < this.highlightGrid.length; j++) {
+        this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, true);
+      }
+    }
+  }
 }

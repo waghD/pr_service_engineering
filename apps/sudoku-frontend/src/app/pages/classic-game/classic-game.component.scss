@@ -98,6 +98,13 @@
       .selected-row-background {
         background-color: $lighter-blue;
       }
+
+      .conceal-field {
+        input {
+          color: white;
+          pointer-events: none;
+        }
+      }
     }
 
   }
