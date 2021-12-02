@@ -20,6 +20,8 @@ export class ClassicGameComponent implements OnInit {
   highlightGrid: number[][];
   emptyGrid: number[][];
   gridForm: FormGroup;
+  nonEditableFields: { x: number; y: number; }[];
+  NON_EDITABLE_CSS_CLASSNAME: string;
 
   constructor(private classicGameService: ClassicGameService) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', []); //dummy data for variable instance
@@ -58,11 +60,17 @@ export class ClassicGameComponent implements OnInit {
       [0, 0, 0, 0, 0, 0, 0, 0, 0]];
 
     this.gridForm = new FormGroup({});
+
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         this.gridForm.addControl(`cell${i}${j}`, new FormControl(''));
       }
     }
+
+    this.nonEditableFields = [];
+
+    this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
+
   }
 
   ngOnInit(): void {
@@ -78,16 +86,50 @@ export class ClassicGameComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         newVal[`cell${field.x}${field.y}`] = field.value > 0 ? field.value : '';
+        // add non editable fields to array
+        if (!field.editable) {
+          const temp = { x: field.x, y: field.y };
+          this.nonEditableFields.push(temp);
+        }
         this.gridForm.patchValue(newVal);
       }
     };
 
+
     // gets a new sudoku
     this.classicGameService.getNewRandomSudoku().subscribe((gridData) => {
       this.sudokuAPIData = gridData;
+      // fills the grid
       fillGridWithData(gridData);
+      // make the initial fields non editable
+      this.makeFieldsNotEditable(this.nonEditableFields);
     });
 
+  }
+
+  highlightField(row: number, col: number, cssClassName: string, doRemove: boolean) {
+    // get classlist of current cell
+    const classNameOfCell = `cell${row}${col}`;
+    // get the parent dom element cell for correct styling
+    const cellParentNode = document.getElementsByClassName(classNameOfCell)[0].parentElement;
+    if (cellParentNode && cellParentNode.parentElement) {
+      const cellNodeClassList = cellParentNode.parentElement.classList;
+      if (!doRemove) {
+        cellNodeClassList.add(cssClassName);
+      } else {
+        // remove the css class if flag is given and it exists
+        if (cellNodeClassList.contains(cssClassName)) {
+          cellNodeClassList.remove(cssClassName);
+        }
+      }
+    }
+  }
+
+
+  makeFieldsNotEditable(classList: { x: number; y: number }[]) {
+    for (const cellValues of classList) {
+      this.highlightField(cellValues.x, cellValues.y, this.NON_EDITABLE_CSS_CLASSNAME, false);
+    }
   }
 
   saveGrid() {
