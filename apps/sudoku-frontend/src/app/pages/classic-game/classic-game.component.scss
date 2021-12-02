@@ -39,10 +39,17 @@
         }
       }
 
-      .error-background {
-        background-color: #e35656;
+      .error-background-col, .error-background-row, .error-background-box {
+        background-color: $error-red;
       }
 
+      .selected-cell-background {
+        background-color: $light-blue;
+      }
+
+      .selected-row-background {
+        background-color: $lighter-blue;
+      }
     }
 
   }

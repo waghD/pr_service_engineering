@@ -20,6 +20,11 @@ export class ClassicGameComponent implements OnInit {
   highlightGrid: number[][];
   emptyGrid: number[][];
   gridForm: FormGroup;
+  ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
+  ERROR_BACKGROUND_COL_CSS_CLASSNAME: string;
+  ERROR_BACKGROUND_BOX_CSS_CLASSNAME: string;
+  SELECTED_CELL_BACKGROUND_CSS_CLASSNAME: string;
+  SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
 
   constructor(private classicGameService: ClassicGameService) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', []); //dummy data for variable instance
@@ -63,6 +68,12 @@ export class ClassicGameComponent implements OnInit {
         this.gridForm.addControl(`cell${i}${j}`, new FormControl(''));
       }
     }
+
+    this.ERROR_BACKGROUND_COL_CSS_CLASSNAME = 'error-background-col';
+    this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME = 'error-background-row';
+    this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME = 'error-background-box';
+    this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME = 'selected-cell-background';
+    this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME = 'selected-row-background';
   }
 
   ngOnInit(): void {
@@ -123,6 +134,14 @@ export class ClassicGameComponent implements OnInit {
       }
     });
 
+    //remove all other helper highlights
+    for (let i = 0; i < this.cacheGrid.length; i++) {
+      for (let j = 0; j < this.cacheGrid.length; j++) {
+        this.highlightField(i, j, this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME, true);
+        this.highlightField(i, j, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, true);
+      }
+    }
+
 
     // check validity
 
@@ -140,7 +159,6 @@ export class ClassicGameComponent implements OnInit {
       return false;
     }
 
-    const ERROR_BACKGROUND_CSS_CLASSNAME = 'error-background';
 
     // ###################################################
     // ###### check and highlight duplicates in rows #####
@@ -152,10 +170,10 @@ export class ClassicGameComponent implements OnInit {
       if (hasDuplicates(this.cacheGrid[rowIdx])) {
         //found a duplicate in the row, add error class
         console.warn('Duplicate in row ' + (rowIdx + 1) + '!');
-        rowDomElement[0].classList.add(ERROR_BACKGROUND_CSS_CLASSNAME);
+        rowDomElement[0].classList.add(this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME);
       } else {
         // if no error, remove (previous) error class
-        rowDomElement[0].classList.remove(ERROR_BACKGROUND_CSS_CLASSNAME);
+        rowDomElement[0].classList.remove(this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME);
       }
     }
 
@@ -169,23 +187,16 @@ export class ClassicGameComponent implements OnInit {
         colArr.push(this.cacheGrid[y][x]);
       }
 
-      // row selector
-      const rowsDomElements = document.getElementsByClassName('grid-row');
-
       //check if array has duplicates
       if (hasDuplicates(colArr)) {
-        console.warn('Duplicate in column ' + (x + 1) + '!');
+        console.warn('Duplicate in column ' + (x) + '!');
         for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
-          const cellNodes = rowsDomElements[rowIdx].childNodes;
-          const currentCellDom = cellNodes[x] as HTMLElement;
-          currentCellDom.classList.add(ERROR_BACKGROUND_CSS_CLASSNAME);
+          this.highlightField(x, rowIdx, this.ERROR_BACKGROUND_COL_CSS_CLASSNAME, false);
         }
       } else {
         // no duplicates, but value could have been deleted, revalidate to no error
         for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
-          const cellNodes = rowsDomElements[rowIdx].childNodes;
-          const currentCellDom = cellNodes[x] as HTMLElement;
-          currentCellDom.classList.remove(ERROR_BACKGROUND_CSS_CLASSNAME);
+          this.highlightField(x, rowIdx, this.ERROR_BACKGROUND_COL_CSS_CLASSNAME, true);
         }
       }
     }
@@ -238,59 +249,114 @@ export class ClassicGameComponent implements OnInit {
       lowerLeftSquare, lowerCenterSquare, lowerRightSquare
     ];
 
-    // highlight boxes which have duplicates
-    boxList.forEach(boxArray => {
+    for (let i = 0; i < boxList.length; i++) {
+
+      const boxArray = boxList[i];
+      // highlight boxes which have duplicates
       const currentArray = boxArray['values'];
       const startIdxRow = boxArray['startIdxRows'];
       const startIdxCol = boxArray['startIdxCols'];
 
-      /***
-       * Highlights a 3x3 box given the start indices of rows and cols
-       * @param startIdxRow the row index from which to highlight the next 3 indices
-       * @param startIdxCol the column index from which to highlight the next 3 indices
-       * @param cssClass the css classname which should be added to the cells, leave empty string to remove error background
-       */
-      function highlightBox(startIdxRow: number, startIdxCol: number, cssClass: string) {
-        for (let i = startIdxRow; i < (startIdxRow + 3); i++) {
-          for (let j = startIdxCol; j < (startIdxCol + 3); j++) {
-            // get classlist of current cell
-            const classNameOfCell = `cell${j}${i}`;
-            // get the parent dom element cell for correct styling
-            const cellParentNode = document.getElementsByClassName(classNameOfCell)[0].parentElement;
-            if (cellParentNode && cellParentNode.parentElement) {
-              const cellNodeClassList = cellParentNode.parentElement.classList;
-              if (cssClass !== '') {
-                cellNodeClassList.add(cssClass);
-              } else {
-                // no additional css class provided, remove error background of cell
-                if (cellNodeClassList.contains(ERROR_BACKGROUND_CSS_CLASSNAME)) {
-                  cellNodeClassList.remove(ERROR_BACKGROUND_CSS_CLASSNAME);
-                }
-              }
-            }
-          }
-        }
-      }
-
       if (hasDuplicates(currentArray)) {
         console.warn('Duplicate in 3x3 ');
-        highlightBox(startIdxRow, startIdxCol, ERROR_BACKGROUND_CSS_CLASSNAME);
+        this.highlightBox(startIdxRow, startIdxCol, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, false);
       } else {
-        highlightBox(startIdxRow, startIdxCol, '');
+        this.highlightBox(startIdxRow, startIdxCol, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, true);
       }
-    });
+    }
+
 
   }
 
+  /***
+   * Highlights a 3x3 box given the start indices of rows and cols
+   * @param startIdxRow the row index from which to highlight the next 3 indices
+   * @param startIdxCol the column index from which to highlight the next 3 indices
+   * @param cssClass the css classname which should be added to the cells, leave empty string to remove error background
+   * @param doRemove boolean value that indicates whether the css class should be added or removed
+   */
+  highlightBox(startIdxRow: number, startIdxCol: number, cssClass: string, doRemove: boolean) {
+    for (let i = startIdxRow; i < (startIdxRow + 3); i++) {
+      for (let j = startIdxCol; j < (startIdxCol + 3); j++) {
+        this.highlightField(j, i, cssClass, doRemove);
+      }
+    }
+  }
+
+  /***
+   * Adds/removes a classname to a single cell
+   * @param row the row index of the cell
+   * @param col the column index of the cell
+   * @param cssClassName the css classname that gets added/removed to the cell
+   * @param doRemove boolean whether the classname should be added or removed ('true' means removing of the classes)
+   */
+  highlightField(row: number, col: number, cssClassName: string, doRemove: boolean) {
+    // get classlist of current cell
+    const classNameOfCell = `cell${row}${col}`;
+    // get the parent dom element cell for correct styling
+    const cellParentNode = document.getElementsByClassName(classNameOfCell)[0].parentElement;
+    if (cellParentNode && cellParentNode.parentElement) {
+      const cellNodeClassList = cellParentNode.parentElement.classList;
+      if (!doRemove) {
+        cellNodeClassList.add(cssClassName);
+      } else {
+        // remove the css class if flag is given and it exists
+        if (cellNodeClassList.contains(cssClassName)) {
+          cellNodeClassList.remove(cssClassName);
+        }
+      }
+    }
+  }
+
   focusInFunction(): void {
+    /***
+     * Returns the start indices (col and row) of the surrounding box for a given row and col idx
+     * @param colIdx the col index of the cell
+     * @param rowIdx the row index of the cell
+     */
+    function getBoxIndices(colIdx: number, rowIdx: number) {
+      let startRowIdxBox = rowIdx;
+      let startColIdxBox = colIdx;
+
+      // count down to start indices
+      while (startRowIdxBox % 3 !== 0) {
+        startRowIdxBox -= 1;
+      }
+      while (startColIdxBox % 3 !== 0) {
+        startColIdxBox -= 1;
+      }
+      return { 'startRowIdxBox': startRowIdxBox, 'startColIdxBox': startColIdxBox };
+    }
+
     // get active cell
     if (document.activeElement) {
-      const currCell = document.activeElement.getAttribute('ng-reflect-name');
-      if (currCell && currCell.startsWith('cell')) {
-        // //get cell idx of 'cellXY'
-        const x: number = parseInt(currCell.charAt(4));
-        const y: number = parseInt(currCell.charAt(5));
-        //TODO: set highlight in column and row and cell
+
+      const currCellClassList = document.activeElement.classList;
+
+      for (let i = 0; i < currCellClassList.length; i++) {
+
+        const currCell: string = currCellClassList[i];
+
+        if (currCell.startsWith('cell')) {
+          const x: number = parseInt(currCell.charAt(4));
+          const y: number = parseInt(currCell.charAt(5));
+
+          // highlight row/column/box except for active cell
+          for (let index = 0; index < this.cacheGrid.length; index++) {
+            this.highlightField(index, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
+            this.highlightField(x, index, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
+          }
+
+          // highlight box
+          const boxIndices = getBoxIndices(x, y);
+          this.highlightBox(boxIndices['startRowIdxBox'], boxIndices['startColIdxBox'], this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
+
+
+          // remove 'standard' highlight cell
+          this.highlightField(x, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, true);
+          // highlight cell little darker
+          this.highlightField(x, y, this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME, false);
+        }
       }
     }
   }
