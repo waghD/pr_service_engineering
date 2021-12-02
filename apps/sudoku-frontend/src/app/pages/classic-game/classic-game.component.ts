@@ -11,15 +11,18 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class ClassicGameComponent implements OnInit {
 
-  // 0  = white
-  // 1  = restOfColumnRow
-  // -1 = error
-
+  // vars
   sudokuAPIData: SudokuEntity;
   cacheGrid: number[][];
   highlightGrid: number[][];
   emptyGrid: number[][];
   gridForm: FormGroup;
+  timerCount: number;
+  interval: any;
+  timeString: string;
+  timerIsRunning: boolean;
+
+  // css constant classes
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_COL_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_BOX_CSS_CLASSNAME: string;
@@ -27,7 +30,7 @@ export class ClassicGameComponent implements OnInit {
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
 
   constructor(private classicGameService: ClassicGameService) {
-    this.sudokuAPIData = new SudokuEntity(-1, '', '', []); //dummy data for variable instance
+    this.sudokuAPIData = new SudokuEntity(-1, '', '', 0, []); //dummy data for variable instance
 
     this.highlightGrid = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -69,6 +72,11 @@ export class ClassicGameComponent implements OnInit {
       }
     }
 
+    this.timerCount = 0;
+    this.interval = null;
+    this.timeString = '00:00:00';
+    this.timerIsRunning = false;
+
     this.ERROR_BACKGROUND_COL_CSS_CLASSNAME = 'error-background-col';
     this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME = 'error-background-row';
     this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME = 'error-background-box';
@@ -97,6 +105,7 @@ export class ClassicGameComponent implements OnInit {
     this.classicGameService.getNewRandomSudoku().subscribe((gridData) => {
       this.sudokuAPIData = gridData;
       fillGridWithData(gridData);
+      this.timerCount = gridData.edit_time;
     });
 
   }
@@ -360,4 +369,32 @@ export class ClassicGameComponent implements OnInit {
       }
     }
   }
+
+  toggleTimer() {
+
+    /***
+     * Converts a number of seconds to a string in the format hh:mm:ss
+     * @param seconds the seconds that should be transformed
+     */
+    function secondsToStringTime(seconds: number) {
+      const date = new Date(0);
+      date.setSeconds(seconds);
+      return date.toISOString().substr(11, 8);
+    }
+
+    if (!this.timerIsRunning) {
+      // start timer
+      this.interval = setInterval(() => {
+        this.timerCount += 1;
+        this.timeString = secondsToStringTime(this.timerCount);
+      }, 1000);
+      this.timerIsRunning = true;
+    } else {
+      //stop timer
+      clearInterval(this.interval);
+      this.timerIsRunning = false;
+    }
+  }
+
+
 }

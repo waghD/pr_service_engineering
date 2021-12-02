@@ -1,6 +1,22 @@
 <se-sudoku-header additionalClass='single-line-heading' pageHeading='Classic'></se-sudoku-header>
 <div class='main-content'>
   <div class='classic-game-container'>
+    <div class='left-control-container'>
+      <div class='row-control-grid'>
+        <h1 class='time-heading text-align-heading'>Time</h1>
+      </div>
+      <div class='row-control-grid'>
+        <button class='toggle-button' (click)='toggleTimer()'><img
+          src="{{this.timerIsRunning ?'assets/img/pause_button.png'  : 'assets/img/play_button.png'}}"
+          alt='toggle button' /></button>
+        <div class='line-container'>
+          <hr>
+        </div>
+      </div>
+      <div class='row-control-grid'>
+        <h1 class='time-string text-align-heading'>{{timeString}}</h1>
+      </div>
+    </div>
     <form [formGroup]='gridForm' (ngSubmit)='saveGrid()'>
       <div class='game-grid'>
         <table class='grid-table'>
@@ -18,8 +34,11 @@
           </tr>
         </table>
       </div>
-<!--      <button class='button' type='submit'>Save</button>-->
+      <!--      <button class='button' type='submit'>Save</button>-->
     </form>
+    <div class='right-control-container'>
+
+    </div>
   </div>
 </div>
 <se-sudoku-footer></se-sudoku-footer>
