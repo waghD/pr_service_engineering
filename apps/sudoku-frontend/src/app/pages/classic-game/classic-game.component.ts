@@ -311,8 +311,6 @@ export class ClassicGameComponent implements OnInit {
         this.highlightBox(startIdxRow, startIdxCol, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, true);
       }
     }
-
-
   }
 
   /***
