@@ -21,8 +21,14 @@ export class ClassicGameService {
       .post<SudokuEntity>(this.baseApiURL + '/sudokus/generate', {});
   }
 
-  saveSudoku(sudokuId: number, gridData: { x: number, y: number, value: number }[]): Observable<SudokuFieldEntity[]> {
+  saveSudokuFields(sudokuId: number, gridData: { x: number, y: number, value: number }[]): Observable<SudokuFieldEntity[]> {
+    console.log(`SudokuID=${sudokuId}`);
     return this.http
       .post<SudokuFieldEntity[]>(this.baseApiURL + '/sudokus/' + sudokuId + '/fields', gridData);
+  }
+
+  saveSudokuParams(sudokuId: number, secondsOfTimer: { edit_time: number }) {
+    return this.http
+      .put<any>(this.baseApiURL + '/sudokus/' + sudokuId, secondsOfTimer);
   }
 }

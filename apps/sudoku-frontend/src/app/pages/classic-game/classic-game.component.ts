@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClassicGameService } from './classic-game.service';
 import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class ClassicGameComponent implements OnInit {
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
-  constructor(private classicGameService: ClassicGameService) {
+  constructor(private classicGameService: ClassicGameService, private router: Router) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', 0, []); //dummy data for variable instance
 
     this.highlightGrid = [
@@ -136,7 +137,14 @@ export class ClassicGameComponent implements OnInit {
 
     const gridValues = gridFormToApiJson(this.gridForm.value);
 
-    this.classicGameService.saveSudoku(this.sudokuAPIData.id, gridValues).subscribe(() => {
+    const id = this.sudokuAPIData.id;
+
+    this.classicGameService.saveSudokuParams(id, { 'edit_time': this.timerCount }).subscribe(() => {
+      console.log('saved time');
+    });
+
+    this.classicGameService.saveSudokuFields(id, gridValues).subscribe(() => {
+      console.log('saved fields');
       alert('Successfully saved Sudoku!');
     });
   }
@@ -478,5 +486,19 @@ export class ClassicGameComponent implements OnInit {
   helperSwitched() {
     // switch mode
     this.isInHelperMode = !this.isInHelperMode;
+  }
+
+
+  /***
+   * Called when clicking on back to menu button
+   */
+  backToMenuButtonClicked() {
+    const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
+    if (isRedirectOk) {
+      // player confirmation -> go to main menu
+      this.router.navigate(['/home']).then(r => {
+        console.log('redirected=' + r);
+      });
+    }
   }
 }

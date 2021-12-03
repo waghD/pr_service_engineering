@@ -42,8 +42,15 @@
           <img src='assets/img/download-icon.png'
                alt='download icon' /></span>
       </button>
-      <mat-slide-toggle class='slide-toggle-button' checked='true' color='primary' (toggleChange)='helperSwitched()'>Helper Mode</mat-slide-toggle>
-      <!--TODO: back to menu-->
+      <mat-slide-toggle class='slide-toggle-button' checked='true' color='primary' (toggleChange)='helperSwitched()'>
+        Helper Mode
+      </mat-slide-toggle>
+      <button class='default-button back-to-menu-button' (click)='backToMenuButtonClicked()'>
+          <span class='inner-button'>
+          <span class='button-text'>Back to Menu</span>
+          <img src='assets/svg/mono-tab-duplicate.svg'
+               alt='back arrow' /></span>
+      </button>
     </div>
   </div>
 </div>
