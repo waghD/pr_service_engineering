@@ -33,7 +33,7 @@
       <input autocomplete='current-password' [ngClass]="{error: !!this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched}" formControlName='password' type='password' placeholder='**************'>
       <span *ngIf="this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched">Passwort benötigt</span>
     </div>
-    <button type='submit'>Login</button>
+    <button class='default-button' type='submit'>Login</button>
     <span class='signup'>New User? - <a><b>Create an account!</b></a></span>
   </form>
 
