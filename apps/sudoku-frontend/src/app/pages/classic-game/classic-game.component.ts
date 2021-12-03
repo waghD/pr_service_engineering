@@ -104,18 +104,36 @@ export class ClassicGameComponent implements OnInit {
     };
 
     // gets a new sudoku
-    this.classicGameService.getNewRandomSudoku().subscribe((gridData) => {
-      this.sudokuAPIData = gridData;
-      fillGridWithData(gridData);
-      this.timerCount = gridData.edit_time;
+    this.classicGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
+      this.sudokuAPIData = generatedSudokuData;
+      fillGridWithData(generatedSudokuData);
+      this.timerCount = generatedSudokuData.edit_time;
       this.concealGrid();
     });
 
   }
 
   saveGrid() {
-    // do stuff
-    console.log(this.gridForm.value);
+
+    /***
+     * Transforms the html-form data into adequate json-form for api
+     * @param formValues the values of the form to be transformed
+     */
+    function gridFormToApiJson(formValues: { [s: string]: number }) {
+      const result: { x: number, y: number, value: number }[] = [];
+      for (const [cellName, value] of Object.entries(formValues)) {
+        if (value && cellName && value > 0 && cellName.startsWith('cell')) {
+          result.push({ 'x': parseInt(cellName.charAt(4)), 'y': parseInt(cellName.charAt(5)), 'value': value });
+        }
+      }
+      return result;
+    }
+
+    const gridValues = gridFormToApiJson(this.gridForm.value);
+
+    this.classicGameService.saveSudoku(this.sudokuAPIData.id, gridValues).subscribe(() => {
+      alert('Successfully saved Sudoku!');
+    });
   }
 
   focusOutFunction(): void {
