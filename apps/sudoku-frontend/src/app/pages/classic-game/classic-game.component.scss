@@ -1,5 +1,6 @@
 @import "apps/sudoku-frontend/src/colors";
 
+
 .classic-game-container {
   margin-top: 5em;
   display: flex;
@@ -7,23 +8,41 @@
 
   .left-control-container, .right-control-container {
     width: 15em;
-  }
-
-  .left-control-container {
     margin: auto 0 auto 0;
 
     .row-control-grid {
       display: flex;
+
+      .line-container {
+        width: 10em;
+        margin: auto 0 auto 0;
+      }
+    }
+  }
+
+  .right-control-container {
+    .slide-toggle-button-text {
+      font-size: 1.25em;
+    }
+
+    .row-control-grid {
+      justify-content: flex-start;
+      margin: 1em 0;
+
+      .line-container {
+        width: 2em;
+      }
+    }
+  }
+
+  .left-control-container {
+
+    .row-control-grid {
       justify-content: flex-end;
 
       .time-string {
         font-weight: 200;
         margin-top: -15px;
-      }
-
-      .line-container {
-        width: 10em;
-        margin: auto 0 auto 0;
       }
 
       .time-heading {
@@ -36,7 +55,7 @@
       }
     }
 
-    .toggle-button {
+    .toggle-time-button {
       background-color: transparent;
       border: none;
       padding: unset;

@@ -151,7 +151,7 @@ export class ClassicGameComponent implements OnInit {
 
 
   /***
-   * Called when clicking outside of the current selected cell
+   * Called when clicking outside the current selected cell
    */
   focusOutFunction(): void {
     // parses all filled fields and caches them in the cacheGrid variable
