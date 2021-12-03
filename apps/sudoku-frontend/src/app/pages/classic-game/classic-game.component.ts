@@ -21,6 +21,7 @@ export class ClassicGameComponent implements OnInit {
   interval: any;
   timeString: string;
   timerIsRunning: boolean;
+  isInHelperMode: boolean;
 
   // css constant classes
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
@@ -77,6 +78,7 @@ export class ClassicGameComponent implements OnInit {
     this.interval = null;
     this.timeString = '00:00:00';
     this.timerIsRunning = false;
+    this.isInHelperMode = true;
 
     this.ERROR_BACKGROUND_COL_CSS_CLASSNAME = 'error-background-col';
     this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME = 'error-background-row';
@@ -113,6 +115,9 @@ export class ClassicGameComponent implements OnInit {
 
   }
 
+  /***
+   * Called when save button is clicked
+   */
   saveGrid() {
 
     /***
@@ -136,6 +141,10 @@ export class ClassicGameComponent implements OnInit {
     });
   }
 
+
+  /***
+   * Called when clicking outside of the current selected cell
+   */
   focusOutFunction(): void {
     // parses all filled fields and caches them in the cacheGrid variable
     Object.entries(this.gridForm.value).forEach(([key, value]) => {
@@ -338,7 +347,12 @@ export class ClassicGameComponent implements OnInit {
     }
   }
 
+
+  /***
+   * Gets called when clicking in a cell -> highlights the cell, col and row to help to solve
+   */
   focusInFunction(): void {
+
     /***
      * Returns the start indices (col and row) of the surrounding box for a given row and col idx
      * @param colIdx the col index of the cell
@@ -358,40 +372,47 @@ export class ClassicGameComponent implements OnInit {
       return { 'startRowIdxBox': startRowIdxBox, 'startColIdxBox': startColIdxBox };
     }
 
-    // get active cell
-    if (document.activeElement) {
+    // only highlight if in helper mode
+    if (this.isInHelperMode) {
 
-      const currCellClassList = document.activeElement.classList;
+      // get active cell
+      if (document.activeElement) {
 
-      for (let i = 0; i < currCellClassList.length; i++) {
+        const currCellClassList = document.activeElement.classList;
 
-        const currCell: string = currCellClassList[i];
+        for (let i = 0; i < currCellClassList.length; i++) {
 
-        if (currCell.startsWith('cell')) {
-          const x: number = parseInt(currCell.charAt(4));
-          const y: number = parseInt(currCell.charAt(5));
+          const currCell: string = currCellClassList[i];
 
-          // highlight row/column/box except for active cell
-          for (let index = 0; index < this.cacheGrid.length; index++) {
-            this.highlightField(index, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
-            this.highlightField(x, index, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
+          if (currCell.startsWith('cell')) {
+            const x: number = parseInt(currCell.charAt(4));
+            const y: number = parseInt(currCell.charAt(5));
+
+            // highlight row/column/box except for active cell
+            for (let index = 0; index < this.cacheGrid.length; index++) {
+              this.highlightField(index, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
+              this.highlightField(x, index, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
+            }
+
+            // highlight box
+            const boxIndices = getBoxIndices(x, y);
+            this.highlightBox(boxIndices['startRowIdxBox'], boxIndices['startColIdxBox'], this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
+
+
+            // remove 'standard' highlight cell
+            this.highlightField(x, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, true);
+            // highlight cell little darker
+            this.highlightField(x, y, this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME, false);
           }
-
-          // highlight box
-          const boxIndices = getBoxIndices(x, y);
-          this.highlightBox(boxIndices['startRowIdxBox'], boxIndices['startColIdxBox'], this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
-
-
-          // remove 'standard' highlight cell
-          this.highlightField(x, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, true);
-          // highlight cell little darker
-          this.highlightField(x, y, this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME, false);
         }
       }
     }
   }
 
 
+  /***
+   * Called when the timer buttons are clicked
+   */
   toggleTimer() {
 
     /***
@@ -426,6 +447,10 @@ export class ClassicGameComponent implements OnInit {
   }
 
 
+  /***
+   * Conceals the grid to make it non-visible to the player during paused timer
+   * @private
+   */
   private concealGrid() {
     for (let i = 0; i < this.highlightGrid.length; i++) {
       for (let j = 0; j < this.highlightGrid.length; j++) {
@@ -435,11 +460,23 @@ export class ClassicGameComponent implements OnInit {
   }
 
 
+  /***
+   * Makes the grid visible
+   * @private
+   */
   private revealGrid() {
     for (let i = 0; i < this.highlightGrid.length; i++) {
       for (let j = 0; j < this.highlightGrid.length; j++) {
         this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, true);
       }
     }
+  }
+
+  /***
+   * Gets called when the switch toggle button is clicked
+   */
+  helperSwitched() {
+    // switch mode
+    this.isInHelperMode = !this.isInHelperMode;
   }
 }
