@@ -4,6 +4,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SudokuModule } from './sudoku/sudoku.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { SudokuModule } from './sudoku/sudoku.module';
       synchronize:true
 
     }),
-    SudokuModule
+    SudokuModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
