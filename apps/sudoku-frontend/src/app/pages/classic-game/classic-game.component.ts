@@ -23,6 +23,8 @@ export class ClassicGameComponent implements OnInit {
   timeString: string;
   timerIsRunning: boolean;
   isInHelperMode: boolean;
+  nonEditableFields: { x: number; y: number; }[];
+  NON_EDITABLE_CSS_CLASSNAME: string;
 
   // css constant classes
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
@@ -69,6 +71,7 @@ export class ClassicGameComponent implements OnInit {
       [0, 0, 0, 0, 0, 0, 0, 0, 0]];
 
     this.gridForm = new FormGroup({});
+
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
         this.gridForm.addControl(`cell${i}${j}`, new FormControl(''));
@@ -87,6 +90,11 @@ export class ClassicGameComponent implements OnInit {
     this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME = 'selected-cell-background';
     this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME = 'selected-row-background';
     this.CONCEAL_FIELD_CSS_CLASSNAME = 'conceal-field';
+
+    this.nonEditableFields = [];
+
+    this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
+
   }
 
   ngOnInit(): void {
@@ -102,6 +110,11 @@ export class ClassicGameComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         newVal[`cell${field.x}${field.y}`] = field.value > 0 ? field.value : '';
+        // add non editable fields to array
+        if (!field.editable) {
+          const temp = { x: field.x, y: field.y };
+          this.nonEditableFields.push(temp);
+        }
         this.gridForm.patchValue(newVal);
       }
     };
@@ -112,8 +125,16 @@ export class ClassicGameComponent implements OnInit {
       fillGridWithData(generatedSudokuData);
       this.timerCount = generatedSudokuData.edit_time;
       this.concealGrid();
+      // make the initial fields non editable
+      this.makeFieldsNotEditable(this.nonEditableFields);
     });
 
+  }
+
+  makeFieldsNotEditable(classList: { x: number; y: number }[]) {
+    for (const cellValues of classList) {
+      this.highlightField(cellValues.x, cellValues.y, this.NON_EDITABLE_CSS_CLASSNAME, false);
+    }
   }
 
   /***
@@ -206,6 +227,7 @@ export class ClassicGameComponent implements OnInit {
       return false;
     }
 
+    const ERROR_BACKGROUND_CSS_CLASSNAME = 'error-background';
 
     // ###################################################
     // ###### check and highlight duplicates in rows #####

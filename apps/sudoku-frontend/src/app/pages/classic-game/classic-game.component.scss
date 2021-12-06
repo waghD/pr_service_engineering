@@ -124,6 +124,13 @@
           pointer-events: none;
         }
       }
+      .non-editable-field {
+        input {
+          color: $light-grey;
+          pointer-events: none;
+        }
+      }
+
     }
 
   }
