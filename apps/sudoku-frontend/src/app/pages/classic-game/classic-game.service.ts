@@ -31,6 +31,6 @@ export class ClassicGameService {
   //TODO: if login is implemented, pass additionally the user id
   saveSudokuParams(sudokuId: number, secondsOfTimer: { edit_time: number }) {
     return this.http
-      .put<any>(this.baseApiURL + '/sudokus/' + sudokuId, secondsOfTimer);
+      .put<SudokuEntity>(this.baseApiURL + '/sudokus/' + sudokuId, secondsOfTimer);
   }
 }
