@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class SudokuDto {
@@ -16,4 +16,10 @@ export class SudokuDto {
    @IsNotEmpty()
    @ApiProperty()
    edit_time:number;
+
+   @IsBoolean()
+   @ApiProperty()
+   diagonal:boolean;
+
+
 }

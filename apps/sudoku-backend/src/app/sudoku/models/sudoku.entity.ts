@@ -16,6 +16,9 @@ export class SudokuEntity {
   @Column()
   edit_time:number;
 
+  @Column()
+  diagonal:boolean;
+
   @OneToMany(type => SudokuFieldEntity,sudokufield => sudokufield.sudoku)
   fields?:SudokuFieldEntity[];
 

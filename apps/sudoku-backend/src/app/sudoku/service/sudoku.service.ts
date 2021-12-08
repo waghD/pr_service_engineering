@@ -15,8 +15,18 @@ export class SudokuService {
     private readonly sudokuFieldService: SudokuFieldService
   ) {}
 
-  getSudokus(page = 1, take = 25): Promise<SudokuEntity[]> {
+  getSudokus(page = 1, take = 25, diagonal=false, all=true): Promise<SudokuEntity[]> {
+    if(all){
+      return this.sudokuRepository.find({
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+
+
+    }
     return this.sudokuRepository.find({
+      where:{diagonal:diagonal},
       relations: ['fields'],
       skip: take * (page - 1),
       take,
@@ -28,6 +38,7 @@ export class SudokuService {
     generatedSudoku.name= 'sudoku';
     generatedSudoku.difficulty='easy';
     generatedSudoku.edit_time = 0;
+    generatedSudoku.diagonal= diagonal;
     const sudoku = await this.sudokuRepository.save(generatedSudoku);
     sudoku.fields = await this.sudokuFieldService.generateSudokuFields(sudoku.id, diagonal);
     return sudoku;

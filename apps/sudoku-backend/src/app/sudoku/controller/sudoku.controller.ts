@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller, DefaultValuePipe,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  ParseBoolPipe,
+  Post,
+  Put,
+  Query
+} from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -10,9 +22,12 @@ export class SudokuController {
   constructor(private sudokuService:SudokuService) {}
 
   @Get()
-  getAll(@Query('page') page: number, @Query('take') take: number) {
+  getAll(@Query('page') page: number, @Query('take') take: number,
+         @Query('diagonal',new DefaultValuePipe(false),ParseBoolPipe)diagonal: boolean,
+         @Query('all',new DefaultValuePipe(true),ParseBoolPipe)all: boolean
+         ) {
     try {
-      return this.sudokuService.getSudokus(page,take);
+      return this.sudokuService.getSudokus(page,take,diagonal,all);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
@@ -55,7 +70,7 @@ export class SudokuController {
   }
 
   @Post('generate')
-   async generateSudoku(@Query('diagonal') diagonal: boolean,){
+   async generateSudoku(@Query('diagonal',new DefaultValuePipe(false),ParseBoolPipe) diagonal: boolean,){
     try {
       return await this.sudokuService.generateSudoku(diagonal);
     } catch (err) {
