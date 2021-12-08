@@ -23,11 +23,10 @@ export class SudokuController {
 
   @Get()
   getAll(@Query('page') page: number, @Query('take') take: number,
-         @Query('diagonal',new DefaultValuePipe(false),ParseBoolPipe)diagonal: boolean,
-         @Query('all',new DefaultValuePipe(true),ParseBoolPipe)all: boolean
+         @Query('type')type: string,
          ) {
     try {
-      return this.sudokuService.getSudokus(page,take,diagonal,all);
+      return this.sudokuService.getSudokus(page,take,type);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }

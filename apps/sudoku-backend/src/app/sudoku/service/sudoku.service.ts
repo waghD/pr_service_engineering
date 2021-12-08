@@ -15,22 +15,32 @@ export class SudokuService {
     private readonly sudokuFieldService: SudokuFieldService
   ) {}
 
-  getSudokus(page = 1, take = 25, diagonal=false, all=true): Promise<SudokuEntity[]> {
-    if(all){
+  getSudokus(page = 1, take = 25, type:string): Promise<SudokuEntity[]> {
+    if(type=='classic'){
       return this.sudokuRepository.find({
+        where: {diagonal:false},
         relations: ['fields'],
         skip: take * (page - 1),
         take,
       });
 
 
+    }else if(type=='diagonal'){
+      return this.sudokuRepository.find({
+        where:{diagonal:true},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+    } else {
+      return this.sudokuRepository.find({
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+
     }
-    return this.sudokuRepository.find({
-      where:{diagonal:diagonal},
-      relations: ['fields'],
-      skip: take * (page - 1),
-      take,
-    });
+
   }
 
   async generateSudoku(diagonal= false):Promise<SudokuEntity>{
