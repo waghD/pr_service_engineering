@@ -55,9 +55,9 @@ export class SudokuController {
   }
 
   @Post('generate')
-   async generateSudoku(){
+   async generateSudoku(@Query('diagonal') diagonal: boolean,){
     try {
-      return await this.sudokuService.generateSudoku();
+      return await this.sudokuService.generateSudoku(diagonal);
     } catch (err) {
       console.error(err);
       throw new HttpException(err, HttpStatus.NOT_FOUND);

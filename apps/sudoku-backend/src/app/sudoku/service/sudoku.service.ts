@@ -23,13 +23,13 @@ export class SudokuService {
     });
   }
 
-  async generateSudoku():Promise<SudokuEntity>{
+  async generateSudoku(diagonal= false):Promise<SudokuEntity>{
     const generatedSudoku: SudokuEntity = new SudokuEntity();
     generatedSudoku.name= 'sudoku';
     generatedSudoku.difficulty='easy';
     generatedSudoku.edit_time = 0;
     const sudoku = await this.sudokuRepository.save(generatedSudoku);
-    sudoku.fields = await this.sudokuFieldService.generateSudokuFields(sudoku.id);
+    sudoku.fields = await this.sudokuFieldService.generateSudokuFields(sudoku.id, diagonal);
     return sudoku;
   }
 
