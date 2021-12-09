@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SudokuEntity } from '../models/sudoku.entity';
 import { Repository } from 'typeorm';
@@ -44,14 +44,19 @@ export class SudokuService {
   }
 
   async generateSudoku(type:string):Promise<SudokuEntity>{
-    const generatedSudoku: SudokuEntity = new SudokuEntity();
-    generatedSudoku.name= 'sudoku';
-    generatedSudoku.difficulty='easy';
-    generatedSudoku.edit_time = 0;
-    generatedSudoku.type= type;
-    const sudoku = await this.sudokuRepository.save(generatedSudoku);
-    sudoku.fields = await this.sudokuFieldService.generateSudokuFields(sudoku.id, type);
-    return sudoku;
+    if(type == 'classic' || type == 'diagonal'){
+      const generatedSudoku: SudokuEntity = new SudokuEntity();
+      generatedSudoku.name= 'sudoku';
+      generatedSudoku.difficulty='easy';
+      generatedSudoku.edit_time = 0;
+      generatedSudoku.type= type;
+      const sudoku = await this.sudokuRepository.save(generatedSudoku);
+      sudoku.fields = await this.sudokuFieldService.generateSudokuFields(sudoku.id, type);
+      return sudoku;
+    } else{
+      throw new HttpException('Not Acceptable',HttpStatus.NOT_ACCEPTABLE);
+    }
+
   }
 
   getOneSudoku(id: number): Promise<SudokuEntity> {

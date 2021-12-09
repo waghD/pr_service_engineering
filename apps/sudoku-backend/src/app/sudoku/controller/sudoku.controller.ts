@@ -73,7 +73,7 @@ export class SudokuController {
       return await this.sudokuService.generateSudoku(type);
     } catch (err) {
       console.error(err);
-      throw new HttpException(err, HttpStatus.NOT_FOUND);
+      throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
     }
   }
 
