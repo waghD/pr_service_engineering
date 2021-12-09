@@ -36,6 +36,7 @@
     "@nestjs/typeorm": "^8.0.2",
     "@nrwl/angular": "12.10.0",
     "@nrwl/nest": "^12.10.0",
+    "argon2": "^0.28.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.1",
     "passport": "^0.4.1",

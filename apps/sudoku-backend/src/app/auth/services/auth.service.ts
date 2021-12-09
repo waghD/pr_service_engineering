@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { timingSafeEqual } from 'crypto';
 import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserData } from '../models/user.dto';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const argon2 = require('argon2');
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,12 @@ export class AuthService {
     }
   }
 
+  async signup(username: string, password: string) {
+    const passwordHash = await argon2.hash(password);
+    const newUser = await this.userService.createUser(username, passwordHash);
+    return this.login(newUser);
+  }
+
   async validateUser(username: string, password: string): Promise<UserData | null> {
     try {
       const user = await this.userService.findUserByName(username);
@@ -28,7 +35,8 @@ export class AuthService {
       if (username !== user.username) {
         return null;
       }
-      const passwordValid = this.comparePasswordHashes(password, user.passwordHash);
+
+      const passwordValid = await argon2.verify(user.passwordHash, password);
       if(passwordValid) {
         const {passwordHash, ...userData} = user;
         return userData;
@@ -38,15 +46,5 @@ export class AuthService {
       return null;
     }
     return null;
-  }
-
-  comparePasswordHashes(hash1: string, hash2: string): boolean {
-    if(!hash1 || !hash2) {
-      return false;
-    }
-    const hash1Buf = Buffer.from(hash1, 'utf8');
-    const hash2Buf = Buffer.from(hash2, 'utf8');
-
-    return timingSafeEqual(hash1Buf, hash2Buf);
   }
 }
