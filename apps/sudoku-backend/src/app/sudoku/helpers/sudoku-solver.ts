@@ -70,11 +70,11 @@ function isPossibleDiag(number:number, cell:number, sudoku:number[]) {
 
 
 // given a cell, a number and a sudoku, returns true if the number can be placed in the cell
-function isPossibleNumber(cell: number, number: number, sudoku: number[], diagonal:boolean) {
+function isPossibleNumber(cell: number, number: number, sudoku: number[], type:string) {
   const row = returnRow(cell);
   const col = returnCol(cell);
   const block = returnBlock(cell);
-  if(diagonal) return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
+  if(type =='diagonal') return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
     && isPossibleBlock(number,block,sudoku) && isPossibleDiag(number,cell,sudoku);
 
   return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
@@ -127,10 +127,10 @@ function isSolvedSudoku(sudoku: number[]) {
 }
 
 // given a cell and a sudoku, returns an array with all possible values we can write in the cell
-function determinePossibleValues(cell: number, sudoku: number[], diagonal:boolean) {
+function determinePossibleValues(cell: number, sudoku: number[], type:string) {
   const possible = new Array<number>();
   for (let i=1; i<=9; i++) {
-    if (isPossibleNumber(cell,i,sudoku, diagonal)) {
+    if (isPossibleNumber(cell,i,sudoku, type)) {
       possible.unshift(i);
     }
   }
@@ -144,12 +144,12 @@ function determineRandomPossibleValue(possible: number[][], cell: number) {
 }
 
 // given a sudoku, returns a two dimension array with all possible values
-function scanSudokuForUnique(sudoku: number[], diagonal:boolean): number[][] {
+function scanSudokuForUnique(sudoku: number[], type:string): number[][] {
   const possible = new Array<Array<number>>();
   for (let i=0; i<=80; i++) {
     if (sudoku[i] == 0) {
       possible[i] = new Array<number>();
-      possible[i] = determinePossibleValues(i,sudoku, diagonal);
+      possible[i] = determinePossibleValues(i,sudoku, type);
       if (possible[i].length==0) {
         return null;
       }
@@ -195,14 +195,14 @@ export function sudokuArrayTo2DArray(sudoku: number[]): number[][] {
   return sudoku2D;
 }
 
-export function solveSudoku(sudoku: number[], diagonal:boolean) {
+export function solveSudoku(sudoku: number[], type:string) {
   const saved = new Array<Array<Array<number>>>();
   const savedSudoku = new Array<Array<number>>();
   let nextMove: number[][];
   let whatToTry: number;
   let attempt: number;
   while(!isSolvedSudoku(sudoku)) {
-    nextMove = scanSudokuForUnique(sudoku, diagonal);
+    nextMove = scanSudokuForUnique(sudoku, type);
     if(!nextMove) {
       nextMove = saved.pop();
       sudoku = savedSudoku.pop();

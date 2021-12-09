@@ -6,10 +6,9 @@ import {
   HttpException,
   HttpStatus,
   Param,
-  ParseBoolPipe,
   Post,
   Put,
-  Query
+  Query, ValidationPipe
 } from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
@@ -69,14 +68,15 @@ export class SudokuController {
   }
 
   @Post('generate')
-   async generateSudoku(@Query('diagonal',new DefaultValuePipe(false),ParseBoolPipe) diagonal: boolean,){
+   async generateSudoku(@Query('type') type:string,){
     try {
-      return await this.sudokuService.generateSudoku(diagonal);
+      return await this.sudokuService.generateSudoku(type);
     } catch (err) {
       console.error(err);
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
   }
+
 
 
 }

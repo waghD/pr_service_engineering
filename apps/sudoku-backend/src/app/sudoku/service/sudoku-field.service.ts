@@ -32,14 +32,14 @@ export class SudokuFieldService {
     return this.getOneSudokuField(sudokuID,createdField.x, createdField.y);
   }
 
-  async generateSudokuFields(sudokuID:number, diagonal:boolean){
+  async generateSudokuFields(sudokuID:number, type:string){
     const sudoku = await this.sudokuService.getOneSudoku(sudokuID);
     if(sudoku){
       const emptySudoku = new Array<number>();
       for(let x = 0; x < 81; x++) {
         emptySudoku[x] = 0;
       }
-      const solved = solveSudoku(emptySudoku, diagonal);
+      const solved = solveSudoku(emptySudoku,type);
 
       const solved2D = sudokuArrayTo2DArray(solved);
 
