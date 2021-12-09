@@ -23,7 +23,7 @@ function generateSecret() {
     PassportModule,
     JwtModule.register({
       secret: generateSecret(),
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '3600s' },
     })
   ],
   providers: [
