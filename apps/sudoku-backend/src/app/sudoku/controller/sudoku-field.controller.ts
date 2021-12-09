@@ -76,9 +76,9 @@ export class SudokuFieldController {
   }
 
   @Delete()
-  async remove(@Query('x') x:number, @Query('y') y:number) {
+  async remove(@Param('id')id:number,@Query('x') x:number, @Query('y') y:number) {
     try {
-      const entity = await this.service.removeSudokuField(x,y);
+      const entity = await this.service.removeSudokuField(id,x,y);
       return plainToClass(SudokuFieldDto,entity);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
