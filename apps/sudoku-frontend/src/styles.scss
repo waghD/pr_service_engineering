@@ -2,7 +2,11 @@
 
 // General
 * {
-  font-family: museo-sans, serif;
+  font-family: museo-sans, serif !important;
+}
+
+html {
+  height: 100%;
 }
 
 body {
@@ -22,7 +26,38 @@ p {
   margin: 1em 7vw 1em 7vw;
 }
 
+.default-button {
+  padding: 6.7px 10px;
+  border-radius: 12px;
+  border: solid 1px #000;
+  background-color: $light-blue;
+  line-height: 1.22;
+  font-size: 18px;
+
+  .inner-button {
+    display: flex;
+    align-items: center;
+
+    .button-text {
+      margin-right: 10px;
+    }
+
+    img {
+      height: 1.5em;
+    }
+  }
+}
+
 .footnote {
   font-weight: 100;
   font-size: 1em;
+}
+
+// Workaround to customize angular material color
+.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-thumb {
+  background-color: $light-blue;
+}
+
+.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
+  background-color: $light-blue-contrast-background;
 }
