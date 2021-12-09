@@ -8,10 +8,8 @@ export class UserEntity{
   id:number;
 
   @Column()
-  name:string;
+  username:string;
 
-  @Column({select:false})
-  password:string;
-
-
+  @Column()
+  passwordHash:string;
 }
