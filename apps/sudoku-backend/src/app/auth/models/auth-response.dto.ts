@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IAuthResponseDto } from '../../../../../../libs/models/IAuthDto';
 
-export class AuthResponseDto {
-
+export class AuthResponseDto implements IAuthResponseDto {
   @ApiProperty()
   id: number;
 

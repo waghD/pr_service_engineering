@@ -4,6 +4,20 @@ a {
   text-decoration: none;
 }
 
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
 .blue-rectangle {
   position: fixed;
   top: 0;
