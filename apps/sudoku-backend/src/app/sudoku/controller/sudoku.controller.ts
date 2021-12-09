@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller, DefaultValuePipe,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query, ValidationPipe
+} from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -10,9 +21,11 @@ export class SudokuController {
   constructor(private sudokuService:SudokuService) {}
 
   @Get()
-  getAll(@Query('page') page: number, @Query('take') take: number) {
+  getAll(@Query('page') page: number, @Query('take') take: number,
+         @Query('type')type: string,
+         ) {
     try {
-      return this.sudokuService.getSudokus(page,take);
+      return this.sudokuService.getSudokus(page,take,type);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
@@ -55,14 +68,15 @@ export class SudokuController {
   }
 
   @Post('generate')
-   async generateSudoku(){
+   async generateSudoku(@Query('type') type:string,){
     try {
-      return await this.sudokuService.generateSudoku();
+      return await this.sudokuService.generateSudoku(type);
     } catch (err) {
       console.error(err);
-      throw new HttpException(err, HttpStatus.NOT_FOUND);
+      throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
     }
   }
+
 
 
 }
