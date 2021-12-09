@@ -78,7 +78,7 @@ export class SudokuService {
   async removeSudoku(id: number): Promise<any> {
     const sudoku = await this.sudokuRepository.findOneOrFail(id, { relations: ['fields'] });
     for (const f of sudoku.fields) {
-      await this.sudokuFieldService.removeSudokuField(f.x,f.y);
+      await this.sudokuFieldService.removeSudokuField(id,f.x,f.y);
     }
     return this.sudokuRepository.remove(sudoku);
   }

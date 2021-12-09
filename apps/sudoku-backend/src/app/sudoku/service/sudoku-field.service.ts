@@ -86,10 +86,8 @@ export class SudokuFieldService {
     return await this.sudokufieldRepo.findOneOrFail(field.id);
   }
 
-  async removeSudokuField(x: number,y:number): Promise<SudokuFieldEntity> {
-    const field= await this.sudokufieldRepo.findOneOrFail({
-      where:[{x:x,y:y}],
-    });
+  async removeSudokuField(id:number,x:number,y:number): Promise<SudokuFieldEntity> {
+    const field= await this.getOneSudokuField(id,x,y);
     return this.sudokufieldRepo.remove(field);
   }
 
