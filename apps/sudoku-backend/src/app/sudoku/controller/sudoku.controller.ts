@@ -82,7 +82,7 @@ export class SudokuController {
       if(req.user) {
         return await this.sudokuService.generateSudoku(type, req.user.id);
       } else {
-        return await this.sudokuService.generateSudoku(type);
+        return await this.sudokuService.generateSudoku(type,0);
       }
     } catch (err) {
       console.error(err);

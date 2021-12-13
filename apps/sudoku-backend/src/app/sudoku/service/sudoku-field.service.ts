@@ -58,7 +58,13 @@ export class SudokuFieldService {
           field.solution = solved2D[i][j];
           field.editable = fields2D[i][j] == 0;
           field.sudoku = sudoku;
-          const fieldEntity = await this.sudokufieldRepo.save(field);
+          let fieldEntity;
+          if(sudokuID >0){
+             fieldEntity = await this.sudokufieldRepo.save(field);
+          }else{
+            fieldEntity =field;
+          }
+
           fieldEntities.push(fieldEntity);
         }
       }

@@ -7,7 +7,6 @@ import { SudokuDto } from '../models/sudoku.dto';
 import { UserService } from '../../auth/services/user.service';
 
 
-
 @Injectable()
 export class SudokuService {
 
@@ -55,7 +54,14 @@ export class SudokuService {
       generatedSudoku.difficulty='easy';
       generatedSudoku.edit_time = 0;
       generatedSudoku.type= type;
-      const sudoku = await this.sudokuRepository.save(generatedSudoku);
+      let sudoku;
+      if(userId >0){
+        generatedSudoku.user =await this.userService.findUserByID(userId);
+        sudoku = await this.sudokuRepository.save(generatedSudoku);
+      }else{
+        generatedSudoku.id= 0;
+        sudoku = generatedSudoku;
+      }
       sudoku.fields = await this.sudokuFieldService.generateSudokuFields(userId ?? 0, sudoku.id, type);
       return sudoku;
     } else{
