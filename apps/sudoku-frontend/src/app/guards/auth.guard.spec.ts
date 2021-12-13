@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AuthStateService } from '../services/auth-state.service';
 import { Component } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 const loginRouteStateMock = {
   url: [{
@@ -35,6 +36,7 @@ describe('AuthGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           {path: 'login', component: DummyComponent},
           {path: 'home', component: DummyComponent},
@@ -58,7 +60,7 @@ describe('AuthGuard', () => {
   })
 
   it('should allow access for authenticated', () => {
-    authService.login();
+    authService.loginAsGuest();
     const canActivate = guard.canActivate(homeRouteStateMock, {url: '/home'} as RouterStateSnapshot);
     expect(canActivate).toBe(true);
   })
@@ -69,7 +71,7 @@ describe('AuthGuard', () => {
   })
 
   it('should block access to /login for authenticated', () => {
-    authService.login();
+    authService.loginAsGuest();
     const canActivate = guard.canActivate(loginRouteStateMock, {url: '/login'} as RouterStateSnapshot);
     expect(canActivate).toBe(false);
   })

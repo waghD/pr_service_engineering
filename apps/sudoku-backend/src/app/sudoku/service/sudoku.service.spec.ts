@@ -3,6 +3,8 @@ import { SudokuService } from './sudoku.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { SudokuEntity } from '../models/sudoku.entity';
 import { SudokuFieldService } from './sudoku-field.service';
+import { UserService } from '../../auth/services/user.service';
+import { UserEntity } from '../../auth/models/user.entity';
 
 
 describe('SudokuService', () => {
@@ -10,15 +12,18 @@ describe('SudokuService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [SudokuService,
+      providers: [SudokuService, UserService,
         {
           provide: getRepositoryToken(SudokuEntity),
           useValue: {}
         },
         {
+          provide: getRepositoryToken(UserEntity),
+          useValue: {}
+        },
+        {
           provide: SudokuFieldService,
           useValue: {}
-
         }
       ],
 
