@@ -35,5 +35,8 @@ function generateSecret() {
   controllers: [
     AuthController
   ],
+  exports:[
+    UserService
+  ]
 })
 export class AuthModule {}

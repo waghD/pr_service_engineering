@@ -25,10 +25,9 @@ export class SudokuController {
 
   @Get()
   getAll(@Query('page') page: number, @Query('take') take: number, @Request() req: AuthenticatedRequest) {
-    // todo limit query to sudokus belonging to this user
     const userId = req.user.id;
     try {
-      return this.sudokuService.getSudokus(page,take);
+      return this.sudokuService.getSudokus(page,take,userId);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
@@ -36,10 +35,9 @@ export class SudokuController {
 
   @Get(':id')
   async getOne(@Param('id') id: number, @Request() req: AuthenticatedRequest) {
-    // todo limit query to sudokus belonging to this user
     const userId = req.user.id;
     try {
-      return await this.sudokuService.getOneSudoku(id);
+      return await this.sudokuService.getOneSudoku(id,userId);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
@@ -47,10 +45,9 @@ export class SudokuController {
 
   @Post()
   async create(@Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
-    // todo limit query to sudokus belonging to this user
     const userId = req.user.id;
     try {
-      return await this.sudokuService.createSudoku(sudokuDto);
+      return await this.sudokuService.createSudoku(userId,sudokuDto);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
     }
@@ -58,10 +55,9 @@ export class SudokuController {
 
   @Put(':id')
   async update(@Param('id') id: number, @Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
-    // todo limit query to sudokus belonging to this user
     const userId = req.user.id;
     try {
-      return await this.sudokuService.updateSudoku(id, sudokuDto);
+      return await this.sudokuService.updateSudoku(userId,id, sudokuDto);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
     }
@@ -69,10 +65,9 @@ export class SudokuController {
 
   @Delete(':id')
   async remove(@Param('id') id: number, @Request() req: AuthenticatedRequest) {
-    // todo limit query to sudokus belonging to this user
     const userId = req.user.id;
     try {
-      return await this.sudokuService.removeSudoku(id);
+      return await this.sudokuService.removeSudoku(userId,id);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }

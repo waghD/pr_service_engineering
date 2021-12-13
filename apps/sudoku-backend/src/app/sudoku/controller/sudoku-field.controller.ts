@@ -29,8 +29,6 @@ export class SudokuFieldController {
     @Query('take') take: number,
     @Request() req: AuthenticatedRequest
   ) {
-    // todo limit query to sudokus belonging to this user
-    const userId = req.user.id;
     try {
       const entity = this.service.getSudokuFields(id, page, take);
       return plainToClass(SudokuFieldDto,entity);
@@ -47,7 +45,6 @@ export class SudokuFieldController {
     @Body() sudokuFieldDto: SudokuFieldDto | SudokuFieldDto[],
     @Request() req: AuthenticatedRequest
   ) {
-    // todo limit query to sudokus belonging to this user
     const userId = req.user.id;
     if(Array.isArray(sudokuFieldDto)){
 
@@ -62,7 +59,7 @@ export class SudokuFieldController {
 
         } else{
           try {
-          await this.service.createSudokuField(id,f);
+          await this.service.createSudokuField(userId,id,f);
         } catch (err) {
           throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -74,7 +71,7 @@ export class SudokuFieldController {
 
     }else{
       try {
-        return await this.service.createSudokuField(id,sudokuFieldDto);
+        return await this.service.createSudokuField(userId,id,sudokuFieldDto);
       } catch (err) {
         throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
       }
@@ -91,8 +88,6 @@ export class SudokuFieldController {
     @Body() sudokuFieldDto: SudokuFieldDto,
     @Request() req: AuthenticatedRequest
   ) {
-    // todo limit query to sudokus belonging to this user
-    const userId = req.user.id;
     try {
       const entity = await this.service.updateSudokuField(id,x,y,sudokuFieldDto);
       return plainToClass(SudokuFieldDto,entity);
@@ -107,8 +102,7 @@ export class SudokuFieldController {
     @Query('y') y:number,
     @Request() req: AuthenticatedRequest
   ) {
-    // todo limit query to sudokus belonging to this user
-    const userId = req.user.id;
+
     try {
       const entity = await this.service.removeSudokuField(x,y);
       return plainToClass(SudokuFieldDto,entity);

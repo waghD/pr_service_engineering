@@ -6,9 +6,11 @@ import { SudokuEntity } from './models/sudoku.entity';
 import { SudokuFieldService } from './service/sudoku-field.service';
 import { SudokuFieldController } from './controller/sudoku-field.controller';
 import { SudokuFieldEntity } from './models/sudoku-field.entity';
+import { AuthModule } from '../auth/auth.module';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SudokuEntity,SudokuFieldEntity])],
+  imports: [TypeOrmModule.forFeature([SudokuEntity,SudokuFieldEntity]), AuthModule],
   providers: [SudokuService, SudokuFieldService],
   controllers: [SudokuController, SudokuFieldController]
 })
