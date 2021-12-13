@@ -48,7 +48,7 @@ export class SudokuService {
 
   }
 
-  async generateSudoku(type:string):Promise<SudokuEntity>{
+  async generateSudoku(type:string, userId?: number):Promise<SudokuEntity>{
     if(type == 'classic' || type == 'diagonal'){
       const generatedSudoku: SudokuEntity = new SudokuEntity();
       generatedSudoku.name= 'sudoku';
@@ -56,7 +56,7 @@ export class SudokuService {
       generatedSudoku.edit_time = 0;
       generatedSudoku.type= type;
       const sudoku = await this.sudokuRepository.save(generatedSudoku);
-      sudoku.fields = await this.sudokuFieldService.generateSudokuFields(0, sudoku.id, type);
+      sudoku.fields = await this.sudokuFieldService.generateSudokuFields(userId ?? 0, sudoku.id, type);
       return sudoku;
     } else{
       throw new HttpException('Not Acceptable',HttpStatus.NOT_ACCEPTABLE);

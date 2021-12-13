@@ -9,13 +9,14 @@ import {
   Post,
   Put,
   Query,
-  Request
+  Request, UseGuards
 } from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthenticatedRequest } from '../../auth/models/user.dto';
+import { AuthenticatedRequest, OptionalAuthRequest } from '../../auth/models/user.dto';
 import { Public } from '../../auth/public.decorator';
+import { OptionalAuthGuard } from '../../auth/guards/optional-auth.guard';
 
 @ApiTags('Sudoku')
 @Controller('sudokus')
@@ -74,10 +75,15 @@ export class SudokuController {
   }
 
   @Public()
+  @UseGuards(OptionalAuthGuard)
   @Post('generate')
-   async generateSudoku(@Query('type') type:string,){
+   async generateSudoku(@Query('type') type:string, @Request() req: OptionalAuthRequest){
     try {
-      return await this.sudokuService.generateSudoku(type);
+      if(req.user) {
+        return await this.sudokuService.generateSudoku(type, req.user.id);
+      } else {
+        return await this.sudokuService.generateSudoku(type);
+      }
     } catch (err) {
       console.error(err);
       throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);

@@ -22,3 +22,7 @@ export class UserData {
 export interface AuthenticatedRequest {
   user: UserData
 }
+
+export interface OptionalAuthRequest {
+  user: UserData | false;
+}
