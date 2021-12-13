@@ -1,6 +1,22 @@
 <se-sudoku-header additionalClass='single-line-heading' pageHeading='Classic'></se-sudoku-header>
 <div class='main-content'>
   <div class='classic-game-container'>
+    <div class='left-control-container'>
+      <div class='row-control-grid'>
+        <h1 class='time-heading text-align-heading'>Time</h1>
+      </div>
+      <div class='row-control-grid'>
+        <button class='toggle-time-button' (click)='toggleTimer()'><img
+          src="{{this.timerIsRunning ?'assets/img/pause_button.png'  : 'assets/img/play_button.png'}}"
+          alt='toggle button' /></button>
+        <div class='line-container'>
+          <hr>
+        </div>
+      </div>
+      <div class='row-control-grid'>
+        <h1 class='time-string text-align-heading'>{{timeString}}</h1>
+      </div>
+    </div>
     <form [formGroup]='gridForm' (ngSubmit)='saveGrid()'>
       <div class='game-grid'>
         <table class='grid-table'>
@@ -18,8 +34,39 @@
           </tr>
         </table>
       </div>
-<!--      <button class='button' type='submit'>Save</button>-->
     </form>
+    <div class='right-control-container'>
+      <div class='row-control-grid'>
+        <div class='line-container'>
+          <hr>
+        </div>
+        <button class='default-button save-button' (click)='saveGrid()'>
+        <span class='inner-button'>
+          <span class='button-text'>Save</span>
+          <img src='assets/img/download-icon.png'
+               alt='download icon' /></span>
+        </button>
+      </div>
+      <div class='row-control-grid'>
+        <div class='line-container'>
+          <hr>
+        </div>
+        <mat-slide-toggle class='slide-toggle-button' checked='true' color='primary' (toggleChange)='helperSwitched()'>
+          <span class='slide-toggle-button-text'>Helper Mode</span>
+        </mat-slide-toggle>
+      </div>
+      <div class='row-control-grid'>
+        <div class='line-container'>
+          <hr>
+        </div>
+        <button class='default-button back-to-menu-button' (click)='backToMenuButtonClicked()'>
+          <span class='inner-button'>
+          <span class='button-text'>Back to Menu</span>
+          <img src='assets/svg/mono-tab-duplicate.svg'
+               alt='back arrow' /></span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 <se-sudoku-footer></se-sudoku-footer>

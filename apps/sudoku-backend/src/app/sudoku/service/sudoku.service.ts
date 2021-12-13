@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SudokuEntity } from '../models/sudoku.entity';
 import { Repository } from 'typeorm';
@@ -18,25 +18,50 @@ export class SudokuService {
     @Inject(forwardRef( () => UserService )) private readonly userService:UserService
   ) {}
 
-  getSudokus(page = 1, take = 25, userId:number): Promise<SudokuEntity[]> {
+  getSudokus(page = 1, take = 25, type:string, userId: number): Promise<SudokuEntity[]> {
     const user = this.userService.findUserByID(userId);
-    return this.sudokuRepository.find({
-      where:{user:user},
-      relations: ['fields'],
-      skip: take * (page - 1),
-      take,
-    });
+    if(type=='classic'){
+      return this.sudokuRepository.find({
+        where: {type:'classic', user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+
+
+    }else if(type=='diagonal'){
+      return this.sudokuRepository.find({
+        where:{type:'diagonal', user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+    } else {
+      return this.sudokuRepository.find({
+        where:{user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+
+    }
+
   }
 
-  async generateSudoku():Promise<SudokuEntity>{
-    const generatedSudoku: SudokuEntity = new SudokuEntity();
-    generatedSudoku.name= 'sudoku';
-    generatedSudoku.difficulty='easy';
-    generatedSudoku.edit_time = 0;
-    const sudoku = await this.sudokuRepository.save(generatedSudoku);
+  async generateSudoku(type:string):Promise<SudokuEntity>{
+    if(type == 'classic' || type == 'diagonal'){
+      const generatedSudoku: SudokuEntity = new SudokuEntity();
+      generatedSudoku.name= 'sudoku';
+      generatedSudoku.difficulty='easy';
+      generatedSudoku.edit_time = 0;
+      generatedSudoku.type= type;
+      const sudoku = await this.sudokuRepository.save(generatedSudoku);
+      sudoku.fields = await this.sudokuFieldService.generateSudokuFields(0, sudoku.id, type);
+      return sudoku;
+    } else{
+      throw new HttpException('Not Acceptable',HttpStatus.NOT_ACCEPTABLE);
+    }
 
-    sudoku.fields = await this.sudokuFieldService.generateSudokuFields(0,sudoku.id);
-    return sudoku;
   }
 
   getOneSudoku(userId:number,id: number ): Promise<SudokuEntity> {
@@ -75,7 +100,7 @@ export class SudokuService {
       where:{user:user},
       relations: ['fields'] });
     for (const f of sudoku.fields) {
-      await this.sudokuFieldService.removeSudokuField(f.x,f.y);
+      await this.sudokuFieldService.removeSudokuField(id,f.x,f.y);
     }
     return this.sudokuRepository.remove(sudoku);
   }

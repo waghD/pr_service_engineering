@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller,
+  Controller, DefaultValuePipe,
   Delete,
   Get,
   HttpException,
@@ -8,7 +8,7 @@ import {
   Param,
   Post,
   Put,
-  Query,
+  Query, ValidationPipe,
   Request
 } from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
@@ -24,10 +24,10 @@ export class SudokuController {
   constructor(private sudokuService:SudokuService) {}
 
   @Get()
-  getAll(@Query('page') page: number, @Query('take') take: number, @Request() req: AuthenticatedRequest) {
+  getAll(@Query('page') page: number, @Query('take') take: number, @Query('type')type: string, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
     try {
-      return this.sudokuService.getSudokus(page,take,userId);
+      return this.sudokuService.getSudokus(page,take,userId, type);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
@@ -75,12 +75,12 @@ export class SudokuController {
 
   @Public()
   @Post('generate')
-   async generateSudoku(){
+   async generateSudoku(@Query('type') type:string,){
     try {
-      return await this.sudokuService.generateSudoku();
+      return await this.sudokuService.generateSudoku(type);
     } catch (err) {
       console.error(err);
-      throw new HttpException(err, HttpStatus.NOT_FOUND);
+      throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
     }
   }
 }

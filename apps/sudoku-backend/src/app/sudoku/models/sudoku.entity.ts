@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'ty
 import { SudokuFieldEntity } from './sudoku-field.entity';
 import { UserEntity } from '../../auth/models/user.entity';
 
+
 @Entity()
 export class SudokuEntity {
 
@@ -16,6 +17,9 @@ export class SudokuEntity {
 
   @Column()
   edit_time:number;
+
+  @Column({default:'classic'})
+  type:string;
 
   @OneToMany(type => SudokuFieldEntity,sudokufield => sudokufield.sudoku)
   fields?:SudokuFieldEntity[];

@@ -33,7 +33,7 @@ export class SudokuFieldService {
     return this.getOneSudokuField(sudokuID,createdField.x, createdField.y);
   }
 
-  async generateSudokuFields(userId:number,sudokuID:number){
+  async generateSudokuFields(userId:number,sudokuID:number, type:string){
       const sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
 
     if(sudoku){
@@ -41,11 +41,9 @@ export class SudokuFieldService {
       for(let x = 0; x < 81; x++) {
         emptySudoku[x] = 0;
       }
-      const solved = solveSudoku(emptySudoku);
+      const solved = solveSudoku(emptySudoku,type);
 
       const solved2D = sudokuArrayTo2DArray(solved);
-
-      console.log('solved2D', solved2D);
 
       const fields = removeSolution(solved, 55);
       const fields2D = sudokuArrayTo2DArray(fields);
@@ -90,10 +88,8 @@ export class SudokuFieldService {
     return await this.sudokufieldRepo.findOneOrFail(field.id);
   }
 
-  async removeSudokuField(x: number,y:number): Promise<SudokuFieldEntity> {
-    const field= await this.sudokufieldRepo.findOneOrFail({
-      where:[{x:x,y:y}],
-    });
+  async removeSudokuField(id:number,x:number,y:number): Promise<SudokuFieldEntity> {
+    const field= await this.getOneSudokuField(id,x,y);
     return this.sudokufieldRepo.remove(field);
   }
 

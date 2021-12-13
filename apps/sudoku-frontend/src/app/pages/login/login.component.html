@@ -35,11 +35,11 @@
     </div>
     <div class='button-container'>
       <div class='button-row'>
-        <button type='submit'>{{createAccount ? 'Acount erstellen' : 'Login'}}</button>
-        <button type='button' (click)='loginAsGuest()'>Als Gast</button>
+        <button class='default-button' type='submit'>{{createAccount ? 'Acount erstellen' : 'Login'}}</button>
+        <button class='default-button' type='button' (click)='loginAsGuest()'>Als Gast</button>
       </div>
-      <button type='button' *ngIf='!createAccount' (click)='createAccount = true'>Account erstellen</button>
-      <button type='button' *ngIf='createAccount' (click)='createAccount = false'>Zum Login</button>
+      <button class='default-button' type='button' *ngIf='!createAccount' (click)='createAccount = true'>Account erstellen</button>
+      <button class='default-button' type='button' *ngIf='createAccount' (click)='createAccount = false'>Zum Login</button>
     </div>
   </form>
 
