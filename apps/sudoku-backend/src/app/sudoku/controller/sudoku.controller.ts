@@ -1,6 +1,6 @@
 import {
   Body,
-  Controller, DefaultValuePipe,
+  Controller,
   Delete,
   Get,
   HttpException,
@@ -8,7 +8,7 @@ import {
   Param,
   Post,
   Put,
-  Query, ValidationPipe,
+  Query,
   Request
 } from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
@@ -27,7 +27,7 @@ export class SudokuController {
   getAll(@Query('page') page: number, @Query('take') take: number, @Query('type')type: string, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
     try {
-      return this.sudokuService.getSudokus(page,take,userId, type);
+      return this.sudokuService.getSudokus(page,take,type,userId);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
