@@ -4,11 +4,18 @@ import { IAuthDto } from '../../../../../../libs/models/IAuthDto';
 
 export class UserDto implements IAuthDto {
 
-  @ApiProperty()
+  @ApiProperty({
+    type:String,
+    description:"Parameter for the user"})
   @IsNotEmpty()
   username:string;
 
-  @ApiProperty()
+  @ApiProperty(
+    {
+      type:String,
+      description:"Parameter for the user"
+    }
+  )
   @IsNotEmpty()
   password:string;
 
