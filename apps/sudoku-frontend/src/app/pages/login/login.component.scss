@@ -4,6 +4,20 @@ a {
   text-decoration: none;
 }
 
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
 .blue-rectangle {
   position: fixed;
   top: 0;
@@ -133,15 +147,6 @@ a {
       margin-top: 8px;
       color: $red;
     }
-  }
-
-  button {
-    padding: 6.7px 28px 6.7px 22px;
-    border-radius: 12px;
-    border: solid 1px #000;
-    background-color: $light-blue;
-    line-height: 1.22;
-    font-size: 18px;
   }
 
   .signup {

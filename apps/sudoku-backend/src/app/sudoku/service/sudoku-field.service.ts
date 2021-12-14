@@ -13,36 +13,37 @@ export class SudokuFieldService {
       @InjectRepository(SudokuFieldEntity)
       private readonly sudokufieldRepo: Repository<SudokuFieldEntity>,
       @Inject(forwardRef(() => SudokuService))
-      private readonly sudokuService: SudokuService
+      private readonly sudokuService: SudokuService,
     ) {}
 
   async createSudokuField(
+    userId:number,
     sudokuID: number,
     sudokuFieldDto:SudokuFieldDto,
   ): Promise<SudokuFieldEntity> {
-    const sudoku = await this.sudokuService.getOneSudoku(sudokuID);
+    const sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
     const field = new SudokuFieldEntity();
     field.y = sudokuFieldDto.y;
     field.x = sudokuFieldDto.x;
     field.value = sudokuFieldDto.value;
     field.solution = sudokuFieldDto.solution;
+    field.editable = sudokuFieldDto.value == 0;
     field.sudoku = sudoku;
     const createdField = await this.sudokufieldRepo.save(field);
-    return this.getOneSudokuField(createdField.id);
+    return this.getOneSudokuField(sudokuID,createdField.x, createdField.y);
   }
 
-  async generateSudokuFields(sudokuID:number){
-    const sudoku = await this.sudokuService.getOneSudoku(sudokuID);
+  async generateSudokuFields(userId:number,sudokuID:number, type:string){
+      const sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
+
     if(sudoku){
       const emptySudoku = new Array<number>();
       for(let x = 0; x < 81; x++) {
         emptySudoku[x] = 0;
       }
-      const solved = solveSudoku(emptySudoku);
+      const solved = solveSudoku(emptySudoku,type);
 
       const solved2D = sudokuArrayTo2DArray(solved);
-
-      console.log('solved2D', solved2D);
 
       const fields = removeSolution(solved, 55);
       const fields2D = sudokuArrayTo2DArray(fields);
@@ -55,8 +56,15 @@ export class SudokuFieldService {
           field.x = j;
           field.value = fields2D[i][j];
           field.solution = solved2D[i][j];
+          field.editable = fields2D[i][j] == 0;
           field.sudoku = sudoku;
-          const fieldEntity = await this.sudokufieldRepo.save(field);
+          let fieldEntity;
+          if(sudokuID >0){
+             fieldEntity = await this.sudokufieldRepo.save(field);
+          }else{
+            fieldEntity =field;
+          }
+
           fieldEntities.push(fieldEntity);
         }
       }
@@ -66,28 +74,28 @@ export class SudokuFieldService {
 
 
   async getSudokuFields(sudokuId: number, page=1, take=25): Promise<SudokuFieldEntity[]> {
-    const sudoku = await this.sudokuService.getOneSudoku(sudokuId);
-    if (sudoku) {
-      return sudoku.fields;
+    return this.sudokufieldRepo.createQueryBuilder("field").
+    where("field.sudoku = :id", {id:sudokuId}).
+    getMany();
+  }
+
+  async getOneSudokuField(id:number,x:number,y:number) {
+    return await this.sudokufieldRepo.createQueryBuilder("field")
+      .where("field.x = :x and field.y = :y and field.sudoku = :id",{x:x,y:y, id:id}).getOne()
+  }
+
+
+  async updateSudokuField(id:number,x:number,y:number, sudokuFieldDto: SudokuFieldDto): Promise<SudokuFieldEntity> {
+    const field = await this.getOneSudokuField(id,x,y);
+    if(field) {
+               await this.sudokufieldRepo.update(field.id,sudokuFieldDto);
     }
+
+    return await this.sudokufieldRepo.findOneOrFail(field.id);
   }
 
-  async getOneSudokuField(id: number) {
-    return this.sudokufieldRepo.findOneOrFail(id, {
-      relations: ['sudoku'],
-    });
-  }
-
-
-  async updateSudokuField(id: number, sudokuFieldDto: SudokuFieldDto): Promise<SudokuFieldEntity> {
-    const field = await this.sudokufieldRepo.findOneOrFail(id);
-    if(field) {await this.sudokufieldRepo.update(id, sudokuFieldDto);}
-
-    return await this.sudokufieldRepo.findOneOrFail(id);
-  }
-
-  async removeSudokuField(id: number): Promise<SudokuFieldEntity> {
-    const field= await this.sudokufieldRepo.findOneOrFail(id);
+  async removeSudokuField(id:number,x:number,y:number): Promise<SudokuFieldEntity> {
+    const field= await this.getOneSudokuField(id,x,y);
     return this.sudokufieldRepo.remove(field);
   }
 

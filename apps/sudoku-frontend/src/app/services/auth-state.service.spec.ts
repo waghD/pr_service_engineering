@@ -2,13 +2,16 @@ import { TestBed } from '@angular/core/testing';
 
 import { AuthStateService } from './auth-state.service';
 import { Subscription } from 'rxjs';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AuthStateService', () => {
   let service: AuthStateService;
   let subscription: Subscription;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule]
+    });
     service = TestBed.inject(AuthStateService);
   });
 
@@ -27,7 +30,7 @@ describe('AuthStateService', () => {
   })
 
   it('should be authenticated after login', () => {
-    service.login();
+    service.loginAsGuest();
     expect(service.isLoggedIn).toBe(true);
   })
 
@@ -37,7 +40,7 @@ describe('AuthStateService', () => {
       expect(authState).toBe(shouldBeLoggedIn);
       if(!shouldBeLoggedIn) {
         shouldBeLoggedIn = true;
-        service.login();
+        service.loginAsGuest();
       } else {
         done();
       }

@@ -5,7 +5,7 @@ import { SudokuEntity } from './sudoku.entity';
 export class SudokuFieldEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id:number;
 
   @Column()
   x: number;
@@ -18,6 +18,9 @@ export class SudokuFieldEntity {
 
   @Column()
   solution:number;
+
+  @Column()
+  editable:boolean;
 
   @ManyToOne(type => SudokuEntity, sudoku => sudoku.fields)
   sudoku:SudokuEntity;

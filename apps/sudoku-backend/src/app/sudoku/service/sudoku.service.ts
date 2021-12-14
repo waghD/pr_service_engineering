@@ -1,9 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SudokuEntity } from '../models/sudoku.entity';
 import { Repository } from 'typeorm';
 import { SudokuFieldService } from './sudoku-field.service';
 import { SudokuDto } from '../models/sudoku.dto';
+import { UserService } from '../../auth/services/user.service';
 
 
 @Injectable()
@@ -12,46 +13,100 @@ export class SudokuService {
   constructor(
     @InjectRepository(SudokuEntity) private readonly sudokuRepository: Repository<SudokuEntity>,
     @Inject(forwardRef(() => SudokuFieldService))
-    private readonly sudokuFieldService: SudokuFieldService
+    private readonly sudokuFieldService: SudokuFieldService,
+    @Inject(forwardRef( () => UserService )) private readonly userService:UserService
   ) {}
 
-  getSudokus(page = 1, take = 25): Promise<SudokuEntity[]> {
-    return this.sudokuRepository.find({
-      relations: ['fields'],
-      skip: take * (page - 1),
-      take,
-    });
+  getSudokus(page = 1, take = 25, type:string, userId: number): Promise<SudokuEntity[]> {
+    const user = this.userService.findUserByID(userId);
+    if(type=='classic'){
+      return this.sudokuRepository.find({
+        where: {type:'classic', user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+
+
+    }else if(type=='diagonal'){
+      return this.sudokuRepository.find({
+        where:{type:'diagonal', user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+    } else {
+      return this.sudokuRepository.find({
+        where:{user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+
+    }
+
   }
 
-  async generateSudoku():Promise<SudokuEntity>{
-    const generatedSudoku: SudokuEntity = new SudokuEntity();
-    generatedSudoku.name= 'sudoku';
-    generatedSudoku.difficulty='easy';
-    const sudoku = await this.sudokuRepository.save(generatedSudoku);
-    sudoku.fields = await this.sudokuFieldService.generateSudokuFields(sudoku.id);
-    return sudoku;
+  async generateSudoku(type:string, userId?: number):Promise<SudokuEntity>{
+    if(type == 'classic' || type == 'diagonal'){
+      const generatedSudoku: SudokuEntity = new SudokuEntity();
+      generatedSudoku.name= 'sudoku';
+      generatedSudoku.difficulty='easy';
+      generatedSudoku.edit_time = 0;
+      generatedSudoku.type= type;
+      let sudoku;
+      if(userId >0){
+        generatedSudoku.user =await this.userService.findUserByID(userId);
+        sudoku = await this.sudokuRepository.save(generatedSudoku);
+      }else{
+        generatedSudoku.id= 0;
+        sudoku = generatedSudoku;
+      }
+      sudoku.fields = await this.sudokuFieldService.generateSudokuFields(userId ?? 0, sudoku.id, type);
+      return sudoku;
+    } else{
+      throw new HttpException('Not Acceptable',HttpStatus.NOT_ACCEPTABLE);
+    }
+
   }
 
-  getOneSudoku(id: number): Promise<SudokuEntity> {
+  getOneSudoku(userId:number,id: number ): Promise<SudokuEntity> {
+    if(userId == 0){
+      return this.sudokuRepository.findOneOrFail(id, {
+        relations: ['fields']
+      });
+    }
+    const user = this.userService.findUserByID(userId);
     return this.sudokuRepository.findOneOrFail(id, {
+      where:{user:user},
       relations: ['fields']
     });
   }
 
-  async createSudoku(sudokuDto: SudokuDto): Promise<SudokuEntity> {
-    const sudokuToCreate: SudokuEntity = { ...sudokuDto};
+  async createSudoku(userId:number,sudokuDto: SudokuDto): Promise<SudokuEntity> {
+    const user = await this.userService.findUserByID(userId);
+    const sudokuToCreate: SudokuEntity = { ...sudokuDto}
+    sudokuToCreate.user = user;
     return this.sudokuRepository.save(sudokuToCreate);
   }
 
-  async updateSudoku(id: number, sudokuDto: SudokuDto): Promise<any> {
-    await this.sudokuRepository.findOneOrFail(id);
+  async updateSudoku(userId:number,id: number, sudokuDto: SudokuDto): Promise<any> {
+    const user = await this.userService.findUserByID(userId);
+    await this.sudokuRepository.findOneOrFail(id,
+      {
+        where:{user:user}
+      }
+      );
     return await this.sudokuRepository.update(id, sudokuDto);
   }
 
-  async removeSudoku(id: number): Promise<any> {
-    const sudoku = await this.sudokuRepository.findOneOrFail(id, { relations: ['fields'] });
+  async removeSudoku(userId:number,id: number): Promise<any> {
+    const user = await this.userService.findUserByID(userId);
+    const sudoku = await this.sudokuRepository.findOneOrFail(id, {
+      where:{user:user},
+      relations: ['fields'] });
     for (const f of sudoku.fields) {
-      await this.sudokuFieldService.removeSudokuField(f.id);
+      await this.sudokuFieldService.removeSudokuField(id,f.x,f.y);
     }
     return this.sudokuRepository.remove(sudoku);
   }
