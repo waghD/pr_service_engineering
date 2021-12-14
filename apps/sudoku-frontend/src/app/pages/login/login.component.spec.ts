@@ -6,6 +6,7 @@ import { AuthStateService } from '../../services/auth-state.service';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -13,7 +14,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, CommonModule],
+      imports: [ReactiveFormsModule, CommonModule, HttpClientTestingModule],
       providers: [{
         provide: Router,
         useClass: RouterTestingModule

@@ -1,8 +1,21 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Request,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { SudokuFieldService } from '../service/sudoku-field.service';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
 import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
+import { AuthenticatedRequest } from '../../auth/models/user.dto';
 
 @ApiTags('Sudoku')
 @Controller('sudokus/:id/fields')
@@ -30,6 +43,7 @@ export class SudokuFieldController {
     @Param('id') id: number,
     @Query('page') page: number,
     @Query('take') take: number,
+    @Request() req: AuthenticatedRequest
   ) {
     try {
       const entity = this.service.getSudokuFields(id, page, take);
@@ -40,14 +54,17 @@ export class SudokuFieldController {
   }
 
 
-  async create( id:number, sudokuFieldDto:SudokuFieldDto[]);
-  async create( id:number, sudokuFieldDto:SudokuFieldDto);
+
   @ApiBody({type:[SudokuFieldDto]})
+  async create( id:number, sudokuFieldDto:SudokuFieldDto[], req: AuthenticatedRequest);
+  async create( id:number, sudokuFieldDto:SudokuFieldDto, req: AuthenticatedRequest);
   @Post()
   async create(
     @Param('id') id: number,
-    @Body() sudokuFieldDto: any,
+    @Body() sudokuFieldDto: SudokuFieldDto | SudokuFieldDto[],
+    @Request() req: AuthenticatedRequest
   ) {
+    const userId = req.user.id;
     if(Array.isArray(sudokuFieldDto)){
 
       for(const f of sudokuFieldDto){
@@ -61,7 +78,7 @@ export class SudokuFieldController {
 
         } else{
           try {
-          await this.service.createSudokuField(id,f);
+          await this.service.createSudokuField(userId,id,f);
         } catch (err) {
           throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
         }
@@ -73,7 +90,7 @@ export class SudokuFieldController {
 
     }else{
       try {
-        return await this.service.createSudokuField(id,sudokuFieldDto);
+        return await this.service.createSudokuField(userId,id,sudokuFieldDto);
       } catch (err) {
         throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
       }
@@ -99,7 +116,13 @@ export class SudokuFieldController {
     }
   )
   @Put('update')
-  async update(@Param('id') id: number,@Query('x') x:number, @Query('y') y:number, @Body() sudokuFieldDto: SudokuFieldDto) {
+  async update(
+    @Param('id') id: number,
+    @Query('x') x:number,
+    @Query('y') y:number,
+    @Body() sudokuFieldDto: SudokuFieldDto,
+    @Request() req: AuthenticatedRequest
+  ) {
     try {
       const entity = await this.service.updateSudokuField(id,x,y,sudokuFieldDto);
       return plainToClass(SudokuFieldDto,entity);
@@ -126,7 +149,12 @@ export class SudokuFieldController {
     }
   )
   @Delete()
-  async remove(@Param('id')id:number,@Query('x') x:number, @Query('y') y:number) {
+  async remove(
+    @Param('id')id:number,
+    @Query('x') x:number,
+    @Query('y') y:number,
+    @Request() req: AuthenticatedRequest
+  ) {
     try {
       const entity = await this.service.removeSudokuField(id,x,y);
       return plainToClass(SudokuFieldDto,entity);
@@ -134,7 +162,4 @@ export class SudokuFieldController {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
   }
-
-
-
 }

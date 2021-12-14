@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { SudokuFieldEntity } from './sudoku-field.entity';
+import { UserEntity } from '../../auth/models/user.entity';
 
 
 @Entity()
@@ -22,6 +23,9 @@ export class SudokuEntity {
 
   @OneToMany(type => SudokuFieldEntity,sudokufield => sudokufield.sudoku)
   fields?:SudokuFieldEntity[];
+
+  @ManyToOne(type => UserEntity)
+  user?:UserEntity;
 
 
 
