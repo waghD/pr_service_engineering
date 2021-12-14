@@ -1,1 +1,7 @@
-<p>login-banner works!</p>
+<div *ngIf='authService.isLoggedIn' class='login-banner-container'>
+  <div class='login-inner-container'>
+    <div class='prefix-string'>Logged in as</div>
+    <div class='email-string'>{{authService.Username}}</div>
+    <div class='logout-button'></div>
+  </div>
+</div>

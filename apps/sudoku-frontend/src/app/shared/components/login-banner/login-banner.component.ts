@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthStateService } from '../../../services/auth-state.service';
 
 @Component({
   selector: 'se-sudoku-login-banner',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginBannerComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(public authService: AuthStateService) {
+  }
 
   ngOnInit(): void {
+    console.log(this.authService.isLoggedIn);
+    console.log(this.authService.Username);
   }
 
 }
