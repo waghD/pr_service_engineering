@@ -13,14 +13,15 @@ export class SudokuFieldService {
       @InjectRepository(SudokuFieldEntity)
       private readonly sudokufieldRepo: Repository<SudokuFieldEntity>,
       @Inject(forwardRef(() => SudokuService))
-      private readonly sudokuService: SudokuService
+      private readonly sudokuService: SudokuService,
     ) {}
 
   async createSudokuField(
+    userId:number,
     sudokuID: number,
     sudokuFieldDto:SudokuFieldDto,
   ): Promise<SudokuFieldEntity> {
-    const sudoku = await this.sudokuService.getOneSudoku(sudokuID);
+    const sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
     const field = new SudokuFieldEntity();
     field.y = sudokuFieldDto.y;
     field.x = sudokuFieldDto.x;
@@ -32,8 +33,9 @@ export class SudokuFieldService {
     return this.getOneSudokuField(sudokuID,createdField.x, createdField.y);
   }
 
-  async generateSudokuFields(sudokuID:number, type:string){
-    const sudoku = await this.sudokuService.getOneSudoku(sudokuID);
+  async generateSudokuFields(userId:number,sudokuID:number, type:string){
+      const sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
+
     if(sudoku){
       const emptySudoku = new Array<number>();
       for(let x = 0; x < 81; x++) {
@@ -56,7 +58,13 @@ export class SudokuFieldService {
           field.solution = solved2D[i][j];
           field.editable = fields2D[i][j] == 0;
           field.sudoku = sudoku;
-          const fieldEntity = await this.sudokufieldRepo.save(field);
+          let fieldEntity;
+          if(sudokuID >0){
+             fieldEntity = await this.sudokufieldRepo.save(field);
+          }else{
+            fieldEntity =field;
+          }
+
           fieldEntities.push(fieldEntity);
         }
       }
