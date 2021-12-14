@@ -13,7 +13,8 @@ import {
 } from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
-import { ApiTags } from '@nestjs/swagger';
+
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { AuthenticatedRequest, OptionalAuthRequest } from '../../auth/models/user.dto';
 import { Public } from '../../auth/public.decorator';
 import { OptionalAuthGuard } from '../../auth/guards/optional-auth.guard';
@@ -24,6 +25,32 @@ export class SudokuController {
 
   constructor(private sudokuService:SudokuService) {}
 
+
+  @ApiQuery(
+    {
+      name:"page",
+      type:Number,
+      description:"An optional Parameter for paging",
+      required:false
+    }
+  )
+  @ApiQuery(
+    {
+      name:"take",
+      type:Number,
+      description:"An optional Parameter for specifing number of objects to take",
+      required:false
+    }
+  )
+  @ApiQuery(
+    {
+      name:"type",
+      type:String,
+      description:"An optional Parameter for filtering specific types of Sudokus",
+      required:false
+    }
+  )
+  @ApiBearerAuth()
   @Get()
   getAll(@Query('page') page: number, @Query('take') take: number, @Query('type')type: string, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
@@ -34,6 +61,14 @@ export class SudokuController {
     }
   }
 
+  @ApiParam(
+    {
+      name:"id",
+      type:Number,
+      description:"A mandatory Parameter for specifying the id of the sudoku",
+      required:true
+    }
+  )
   @Get(':id')
   async getOne(@Param('id') id: number, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
@@ -44,6 +79,7 @@ export class SudokuController {
     }
   }
 
+  @ApiBearerAuth()
   @Post()
   async create(@Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
@@ -54,6 +90,15 @@ export class SudokuController {
     }
   }
 
+  @ApiParam(
+    {
+      name:"id",
+      type:Number,
+      description:"A mandatory Parameter for specifying the id of the sudoku",
+      required:true
+    }
+  )
+  @ApiBearerAuth()
   @Put(':id')
   async update(@Param('id') id: number, @Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
@@ -64,6 +109,16 @@ export class SudokuController {
     }
   }
 
+
+  @ApiParam(
+    {
+      name:"id",
+      type:Number,
+      description:"A mandatory Parameter for specifying the id of the sudoku",
+      required:true
+    }
+  )
+  @ApiBearerAuth()
   @Delete(':id')
   async remove(@Param('id') id: number, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
@@ -74,6 +129,14 @@ export class SudokuController {
     }
   }
 
+  @ApiQuery(
+    {
+      name:"type",
+      type:String,
+      description:"An mandatory Parameter to specify type of Sudoku",
+      required:true
+    }
+  )
   @Public()
   @UseGuards(OptionalAuthGuard)
   @Post('generate')
