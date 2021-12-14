@@ -14,7 +14,7 @@ import {
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
 
-import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags, ApiBody } from "@nestjs/swagger";
 import { AuthenticatedRequest, OptionalAuthRequest } from '../../auth/models/user.dto';
 import { Public } from '../../auth/public.decorator';
 import { OptionalAuthGuard } from '../../auth/guards/optional-auth.guard';
@@ -155,6 +155,11 @@ export class SudokuController {
     }
   }
 
+  @ApiBody({
+    type: SudokuSolverDto,
+    description: 'The body must contain the type of sudoku to solve and the fields of the sudoku',
+    required: true,
+  })
   @Public()
   @Post('solve')
   async solveSudoku(@Body() body: SudokuSolverDto) {
