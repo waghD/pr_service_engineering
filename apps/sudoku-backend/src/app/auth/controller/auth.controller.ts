@@ -24,6 +24,7 @@ export class AuthController {
   }
 
   @Public()
+  @ApiBody({ type: UserDto })
   @ApiResponse({type: AuthResponseDto})
   @Post('signup')
   async signup(@Body() body: UserDto): Promise<AuthResponseDto> {

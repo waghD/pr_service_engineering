@@ -14,8 +14,7 @@ import {
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
 
-import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { AuthenticatedRequest, OptionalAuthRequest } from '../../auth/models/user.dto';
 import { Public } from '../../auth/public.decorator';
 import { OptionalAuthGuard } from '../../auth/guards/optional-auth.guard';
@@ -51,6 +50,7 @@ export class SudokuController {
       required:false
     }
   )
+  @ApiBearerAuth()
   @Get()
   getAll(@Query('page') page: number, @Query('take') take: number, @Query('type')type: string, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
@@ -79,6 +79,7 @@ export class SudokuController {
     }
   }
 
+  @ApiBearerAuth()
   @Post()
   async create(@Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
@@ -97,6 +98,7 @@ export class SudokuController {
       required:true
     }
   )
+  @ApiBearerAuth()
   @Put(':id')
   async update(@Param('id') id: number, @Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
@@ -116,6 +118,7 @@ export class SudokuController {
       required:true
     }
   )
+  @ApiBearerAuth()
   @Delete(':id')
   async remove(@Param('id') id: number, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;

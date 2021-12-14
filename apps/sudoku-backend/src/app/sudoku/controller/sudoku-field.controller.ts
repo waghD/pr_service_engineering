@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { SudokuFieldService } from '../service/sudoku-field.service';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
-import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { plainToClass } from 'class-transformer';
 import { AuthenticatedRequest } from '../../auth/models/user.dto';
 
@@ -38,6 +38,7 @@ export class SudokuFieldController {
       required:false
     }
   )
+  @ApiBearerAuth()
   @Get()
   getAll(
     @Param('id') id: number,
@@ -55,9 +56,10 @@ export class SudokuFieldController {
 
 
 
-  @ApiBody({type:[SudokuFieldDto]})
   async create( id:number, sudokuFieldDto:SudokuFieldDto[], req: AuthenticatedRequest);
   async create( id:number, sudokuFieldDto:SudokuFieldDto, req: AuthenticatedRequest);
+  @ApiBearerAuth()
+  @ApiBody({type:[SudokuFieldDto]})
   @Post()
   async create(
     @Param('id') id: number,
@@ -115,6 +117,7 @@ export class SudokuFieldController {
       required:true
     }
   )
+  @ApiBearerAuth()
   @Put('update')
   async update(
     @Param('id') id: number,
@@ -148,6 +151,7 @@ export class SudokuFieldController {
       required:true
     }
   )
+  @ApiBearerAuth()
   @Delete()
   async remove(
     @Param('id')id:number,
