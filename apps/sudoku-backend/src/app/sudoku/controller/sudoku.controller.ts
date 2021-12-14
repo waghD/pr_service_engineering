@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { SudokuService } from '../service/sudoku.service';
 import { SudokuDto } from '../models/sudoku.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Sudoku')
 @Controller('sudokus')
@@ -20,6 +20,31 @@ export class SudokuController {
 
   constructor(private sudokuService:SudokuService) {}
 
+
+  @ApiQuery(
+    {
+      name:"page",
+      type:Number,
+      description:"An optional Parameter for paging",
+      required:false
+    }
+  )
+  @ApiQuery(
+    {
+      name:"take",
+      type:Number,
+      description:"An optional Parameter for specifing number of objects to take",
+      required:false
+    }
+  )
+  @ApiQuery(
+    {
+      name:"type",
+      type:String,
+      description:"An optional Parameter for filtering specific types of Sudokus",
+      required:false
+    }
+  )
   @Get()
   getAll(@Query('page') page: number, @Query('take') take: number,
          @Query('type')type: string,
@@ -31,6 +56,14 @@ export class SudokuController {
     }
   }
 
+  @ApiParam(
+    {
+      name:"id",
+      type:Number,
+      description:"A mandatory Parameter for specifying the id of the sudoku",
+      required:true
+    }
+  )
   @Get(':id')
   async getOne(@Param('id') id: number) {
     try {
@@ -49,6 +82,14 @@ export class SudokuController {
     }
   }
 
+  @ApiParam(
+    {
+      name:"id",
+      type:Number,
+      description:"A mandatory Parameter for specifying the id of the sudoku",
+      required:true
+    }
+  )
   @Put(':id')
   async update(@Param('id') id: number, @Body() sudokuDto: SudokuDto) {
     try {
@@ -58,6 +99,15 @@ export class SudokuController {
     }
   }
 
+
+  @ApiParam(
+    {
+      name:"id",
+      type:Number,
+      description:"A mandatory Parameter for specifying the id of the sudoku",
+      required:true
+    }
+  )
   @Delete(':id')
   async remove(@Param('id') id: number) {
     try {
@@ -67,6 +117,14 @@ export class SudokuController {
     }
   }
 
+  @ApiQuery(
+    {
+      name:"type",
+      type:String,
+      description:"An mandatory Parameter to specify type of Sudoku",
+      required:true
+    }
+  )
   @Post('generate')
    async generateSudoku(@Query('type') type:string,){
     try {

@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { SudokuFieldService } from '../service/sudoku-field.service';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { plainToClass } from 'class-transformer';
 
 @ApiTags('Sudoku')
@@ -9,6 +9,22 @@ import { plainToClass } from 'class-transformer';
 export class SudokuFieldController {
   constructor(private readonly service: SudokuFieldService) {}
 
+  @ApiQuery(
+    {
+      name:"page",
+      type:Number,
+      description:"An optional Parameter for paging",
+      required:false
+    }
+  )
+  @ApiQuery(
+    {
+      name:"take",
+      type:Number,
+      description:"An optional Parameter for specifing number of objects to take",
+      required:false
+    }
+  )
   @Get()
   getAll(
     @Param('id') id: number,
@@ -23,8 +39,10 @@ export class SudokuFieldController {
     }
   }
 
+
   async create( id:number, sudokuFieldDto:SudokuFieldDto[]);
   async create( id:number, sudokuFieldDto:SudokuFieldDto);
+  @ApiBody({type:[SudokuFieldDto]})
   @Post()
   async create(
     @Param('id') id: number,
@@ -64,7 +82,22 @@ export class SudokuFieldController {
 
   }
 
-
+  @ApiQuery(
+    {
+      name:"x",
+      type:Number,
+      description:"A mandatory Parameter to specify the fields position on the x-axis",
+      required:true
+    }
+  )
+  @ApiQuery(
+    {
+      name:"y",
+      type:Number,
+      description:"A mandatory Parameter to specify the fields position on the y-axis",
+      required:true
+    }
+  )
   @Put('update')
   async update(@Param('id') id: number,@Query('x') x:number, @Query('y') y:number, @Body() sudokuFieldDto: SudokuFieldDto) {
     try {
@@ -75,6 +108,23 @@ export class SudokuFieldController {
     }
   }
 
+
+  @ApiQuery(
+    {
+      name:"x",
+      type:Number,
+      description:"A mandatory Parameter to specify the fields position on the x-axis",
+      required:true
+    }
+  )
+  @ApiQuery(
+    {
+      name:"y",
+      type:Number,
+      description:"A mandatory Parameter to specify the fields position on the y-axis",
+      required:true
+    }
+  )
   @Delete()
   async remove(@Param('id')id:number,@Query('x') x:number, @Query('y') y:number) {
     try {
