@@ -18,14 +18,13 @@ import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags, ApiBody } from "@nestjs/swa
 import { AuthenticatedRequest, OptionalAuthRequest } from '../../auth/models/user.dto';
 import { Public } from '../../auth/public.decorator';
 import { OptionalAuthGuard } from '../../auth/guards/optional-auth.guard';
-import { SudokuFieldService } from '../service/sudoku-field.service';
 import { SudokuSolverDto } from '../models/sudoku-solver.dto';
 
 @ApiTags('Sudoku')
 @Controller('sudokus')
 export class SudokuController {
 
-  constructor(private sudokuService:SudokuService, private sudokuFieldService: SudokuFieldService) {}
+  constructor(private sudokuService:SudokuService) {}
 
 
   @ApiQuery(
@@ -164,7 +163,7 @@ export class SudokuController {
   @Post('solve')
   async solveSudoku(@Body() body: SudokuSolverDto) {
     try {
-      return await this.sudokuFieldService.solveSudokuField(body.type, body.fields);
+      return await this.sudokuService.solveSudoku(body);
     } catch (err) {
       console.error(err);
       throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
