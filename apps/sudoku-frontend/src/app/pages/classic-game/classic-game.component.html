@@ -36,15 +36,15 @@
       </div>
     </form>
     <div class='right-control-container'>
-      <div *ngIf='authStateService.isLoggedIn && authStateService.Username !== ""' class='row-control-grid'>
+      <div *ngIf='classicGameService.showAuthRequiredButtons$ | async' class='row-control-grid'>
         <div class='line-container'>
           <hr>
         </div>
         <button class='default-button save-button' (click)='saveGrid()'>
         <span class='inner-button'>
           <span class='button-text'>Save</span>
-          <img src='assets/img/download-icon.png'
-               alt='download icon' /></span>
+          <img src='assets/img/download-icon.png' alt='download icon' />
+        </span>
         </button>
       </div>
       <div class='row-control-grid'>

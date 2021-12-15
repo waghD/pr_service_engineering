@@ -36,7 +36,7 @@ export class DiagonalGameComponent implements OnInit {
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
 
-  constructor(private diagonalGameService: DiagonalGameService, private router: Router) {
+  constructor(public diagonalGameService: DiagonalGameService, private router: Router) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', 0, []); //dummy data for variable instance
 
     this.highlightGrid = [
