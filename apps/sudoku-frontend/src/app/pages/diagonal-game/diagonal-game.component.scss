@@ -1,7 +1,75 @@
 @import "apps/sudoku-frontend/src/colors";
 
+
 .diagonal-game-container {
   margin-top: 5em;
+  display: flex;
+  justify-content: center;
+
+  .left-control-container, .right-control-container {
+    width: 15em;
+    margin: auto 0 auto 0;
+
+    .row-control-grid {
+      display: flex;
+
+      .line-container {
+        width: 10em;
+        margin: auto 0 auto 0;
+      }
+    }
+  }
+
+  .right-control-container {
+    .slide-toggle-button-text {
+      font-size: 1.25em;
+    }
+
+    .row-control-grid {
+      justify-content: flex-start;
+      margin: 1em 0;
+
+      .line-container {
+        width: 2em;
+      }
+    }
+  }
+
+  .left-control-container {
+
+    .row-control-grid {
+      justify-content: flex-end;
+
+      .time-string {
+        font-weight: 200;
+        margin-top: -15px;
+      }
+
+      .time-heading {
+        margin-bottom: -15px;
+      }
+
+      .text-align-heading {
+        text-align: center;
+        width: 5em;
+      }
+    }
+
+    .toggle-time-button {
+      background-color: transparent;
+      border: none;
+      padding: unset;
+
+      img {
+        height: 5em;
+        transition: transform 250ms;
+
+        &:hover {
+          transform: translateY(-5px);
+        }
+      }
+    }
+  }
 
   .game-grid {
     justify-content: center;
@@ -16,16 +84,15 @@
         .grid-cell {
           text-align: center;
           border: 1px solid $light-grey;
-          width: 3em;
-          height: 3em;
 
           span {
             input {
-              width: 1em;
-              height: 1em;
+              width: 1.55em;
+              height: 1.55em;
               font-size: 2em;
               border: none;
               text-align: center;
+              margin: 3px;
             }
           }
         }
@@ -39,8 +106,30 @@
         }
       }
 
-      .error-background {
-        background-color: #e35656;
+      .error-background-col, .error-background-row, .error-background-box, .error-background-diagonal {
+        background-color: $error-red;
+      }
+
+      .selected-cell-background {
+        background-color: $light-blue;
+      }
+
+      .selected-row-background {
+        background-color: $lighter-blue;
+      }
+
+      .non-editable-field {
+        input {
+          color: $light-grey;
+          pointer-events: none;
+        }
+      }
+
+      .conceal-field {
+        input {
+          color: white;
+          pointer-events: none;
+        }
       }
 
     }
