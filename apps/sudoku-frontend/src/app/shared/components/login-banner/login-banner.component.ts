@@ -6,7 +6,7 @@ import { AuthStateService } from '../../../services/auth-state.service';
   templateUrl: './login-banner.component.html',
   styleUrls: ['./login-banner.component.scss']
 })
-export class LoginBannerComponent implements OnInit {
+export class LoginBannerComponent {
 
   constructor(public authService: AuthStateService) {
   }
