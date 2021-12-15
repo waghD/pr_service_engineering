@@ -36,7 +36,7 @@
       </div>
     </form>
     <div class='right-control-container'>
-      <div class='row-control-grid'>
+      <div *ngIf='diagonalGameService.showAuthRequiredButtons$ | async' class='row-control-grid'>
         <div class='line-container'>
           <hr>
         </div>

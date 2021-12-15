@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IAuthDto, IAuthResponseDto } from '../../../../../libs/models/IAuthDto';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -29,6 +29,12 @@ export class AuthStateService {
 
   public get Username() {
     return this.username.value;
+  }
+
+  public get isLoggedInWithAccount$() {
+    return this.authToken.asObservable().pipe(
+      map(token => !!token && token !== '')
+    );
   }
 
   constructor(private httpClient: HttpClient, private router: Router) {
