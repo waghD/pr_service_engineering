@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IAuthDto, IAuthResponseDto } from '../../../../../libs/models/IAuthDto';
 import { take } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class AuthStateService {
     return this.username.value;
   }
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private router: Router) {
     this.redirectPage = '';
   }
 
@@ -90,6 +91,8 @@ export class AuthStateService {
     this.authState.next(false);
     this.authToken.next('');
     this.username.next('');
+    this.router.navigateByUrl('/')
+      .catch(e => console.error(e));
   }
 
   public setRedirectPage(url: string) {
