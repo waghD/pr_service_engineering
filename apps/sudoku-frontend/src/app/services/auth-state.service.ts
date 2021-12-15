@@ -98,7 +98,7 @@ export class AuthStateService {
     this.authState.next(false);
     this.authToken.next('');
     this.username.next('');
-    this.router.navigateByUrl('/')
+    this.router.navigateByUrl('/login')
       .catch(e => console.error(e));
   }
 
