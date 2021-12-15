@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrivacyComponent } from './privacy.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('PrivacyComponent', () => {
   let component: PrivacyComponent;
@@ -8,7 +9,8 @@ describe('PrivacyComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrivacyComponent ]
+      declarations: [ PrivacyComponent ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });
