@@ -88,6 +88,8 @@ export class AuthStateService {
 
   public logout() {
     this.authState.next(false);
+    this.authToken.next('');
+    this.username.next('');
   }
 
   public setRedirectPage(url: string) {

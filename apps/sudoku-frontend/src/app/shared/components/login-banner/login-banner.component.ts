@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthStateService } from '../../../services/auth-state.service';
-import { LoginBannerService } from './login-banner.service';
 
 @Component({
   selector: 'se-sudoku-login-banner',
@@ -9,8 +8,7 @@ import { LoginBannerService } from './login-banner.service';
 })
 export class LoginBannerComponent implements OnInit {
 
-
-  constructor(public authService: AuthStateService, private loginBannerService: LoginBannerService) {
+  constructor(public authService: AuthStateService) {
   }
 
   ngOnInit(): void {
@@ -20,8 +18,7 @@ export class LoginBannerComponent implements OnInit {
   }
 
   logoutButtonClicked() {
-    this.loginBannerService.logout();
+    this.authService.logout();
   }
-
 
 }
