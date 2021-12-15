@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginBannerComponent } from './login-banner.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('LoginBannerComponent', () => {
   let component: LoginBannerComponent;
@@ -8,9 +9,10 @@ describe('LoginBannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginBannerComponent ]
+      imports: [HttpClientTestingModule],
+      declarations: [LoginBannerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
