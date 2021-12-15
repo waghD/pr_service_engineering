@@ -3,7 +3,6 @@ import { ClassicGameService } from './classic-game.service';
 import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthStateService } from '../../services/auth-state.service';
 
 
 @Component({
@@ -35,7 +34,7 @@ export class ClassicGameComponent implements OnInit {
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
-  constructor(private classicGameService: ClassicGameService, private router: Router, public authStateService:AuthStateService) {
+  constructor(public classicGameService: ClassicGameService, private router: Router) {
     this.sudokuAPIData = new SudokuEntity(-1, '', '', 0, []); //dummy data for variable instance
 
     this.highlightGrid = [
