@@ -19,17 +19,15 @@ export class ClassicGameService {
   // TODO: insert correct api call here when finished
   getNewRandomSudoku(): Observable<SudokuEntity> {
     return this.http
-      .post<SudokuEntity>(this.baseApiURL + '/sudokus/generate', {});
+      .post<SudokuEntity>(this.baseApiURL + '/sudokus/generate?type=classic', {});
   }
 
-  //TODO: if login is implemented, pass additionally the user id
   saveSudokuFields(sudokuId: number, gridData: { x: number, y: number, value: number }[]): Observable<SudokuFieldEntity[]> {
     console.log(`SudokuID=${sudokuId}`);
     return this.http
       .post<SudokuFieldEntity[]>(this.baseApiURL + '/sudokus/' + sudokuId + '/fields', gridData);
   }
 
-  //TODO: if login is implemented, pass additionally the user id
   saveSudokuParams(sudokuId: number, secondsOfTimer: { edit_time: number }) {
     return this.http
       .put<SudokuEntity>(this.baseApiURL + '/sudokus/' + sudokuId, secondsOfTimer);
