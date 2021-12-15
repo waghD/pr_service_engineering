@@ -228,8 +228,6 @@ export class ClassicGameComponent implements OnInit {
       return false;
     }
 
-    const ERROR_BACKGROUND_CSS_CLASSNAME = 'error-background';
-
     // ###################################################
     // ###### check and highlight duplicates in rows #####
     // ###################################################
