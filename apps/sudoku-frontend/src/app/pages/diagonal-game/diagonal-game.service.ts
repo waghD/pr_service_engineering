@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 import { SudokuFieldEntity } from '../../../../../../libs/models/sudoku-field.entity';
@@ -7,7 +7,7 @@ import { SudokuFieldEntity } from '../../../../../../libs/models/sudoku-field.en
 @Injectable({
   providedIn: 'root'
 })
-export class ClassicGameService {
+export class DiagonalGameService {
 
   private baseApiURL = 'http://localhost:8080/api';
 
@@ -16,10 +16,9 @@ export class ClassicGameService {
   constructor(private readonly http: HttpClient) {
   }
 
-  // TODO: insert correct api call here when finished
   getNewRandomSudoku(): Observable<SudokuEntity> {
     return this.http
-      .post<SudokuEntity>(this.baseApiURL + '/sudokus/generate?type=classic', {});
+      .post<SudokuEntity>(this.baseApiURL + '/sudokus/generate?type=diagonal', {});
   }
 
   saveSudokuFields(sudokuId: number, gridData: { x: number, y: number, value: number }[]): Observable<SudokuFieldEntity[]> {
