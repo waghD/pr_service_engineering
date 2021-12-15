@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 import { SudokuFieldEntity } from '../../../../../../libs/models/sudoku-field.entity';
+import { AuthStateService } from '../../services/auth-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,11 @@ export class DiagonalGameService {
 
   public readonly title = 'service-frontend';
 
-  constructor(private readonly http: HttpClient) {
+  public get showAuthRequiredButtons$() {
+    return this.authStateService.isLoggedInWithAccount$;
+  }
+
+  constructor(private readonly http: HttpClient, private authStateService: AuthStateService) {
   }
 
   getNewRandomSudoku(): Observable<SudokuEntity> {
