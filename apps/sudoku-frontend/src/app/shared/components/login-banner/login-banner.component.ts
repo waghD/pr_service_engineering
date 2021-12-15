@@ -11,12 +11,6 @@ export class LoginBannerComponent implements OnInit {
   constructor(public authService: AuthStateService) {
   }
 
-  ngOnInit(): void {
-    console.log(this.authService);
-    console.log(this.authService.isLoggedIn);
-    console.log(this.authService.Username);
-  }
-
   logoutButtonClicked() {
     this.authService.logout();
   }
