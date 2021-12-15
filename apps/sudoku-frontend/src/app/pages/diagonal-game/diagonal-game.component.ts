@@ -23,9 +23,10 @@ export class DiagonalGameComponent implements OnInit {
   timerIsRunning: boolean;
   isInHelperMode: boolean;
   nonEditableFields: { x: number; y: number; }[];
-  NON_EDITABLE_CSS_CLASSNAME: string;
+  errorInUpLeftFlag: boolean;
 
   // css constant classes
+  NON_EDITABLE_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_COL_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_BOX_CSS_CLASSNAME: string;
@@ -84,6 +85,7 @@ export class DiagonalGameComponent implements OnInit {
     this.timeString = '00:00:00';
     this.timerIsRunning = false;
     this.isInHelperMode = true;
+    this.errorInUpLeftFlag = false;
 
     this.ERROR_BACKGROUND_COL_CSS_CLASSNAME = 'error-background-col';
     this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME = 'error-background-row';
@@ -92,10 +94,9 @@ export class DiagonalGameComponent implements OnInit {
     this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME = 'selected-cell-background';
     this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME = 'selected-row-background';
     this.CONCEAL_FIELD_CSS_CLASSNAME = 'conceal-field';
+    this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
 
     this.nonEditableFields = [];
-
-    this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
   }
 
   ngOnInit(): void {
@@ -365,6 +366,9 @@ export class DiagonalGameComponent implements OnInit {
     for (const key in diagonalArrays) {
       const diagonalValues = diagonalArrays[key];
       if (hasDuplicates(diagonalValues)) {
+        if (key == 'upperLeft') {
+          this.errorInUpLeftFlag = true;
+        }
         this.highlightDiagonals(key, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, this.cacheGrid, false);
       } else {
         this.highlightDiagonals(key, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, this.cacheGrid, true);
@@ -389,8 +393,13 @@ export class DiagonalGameComponent implements OnInit {
     } else if (key === 'bottomLeft') {
       let colIdx = 8;
       for (let i = 0; i < cacheGrid.length; i++) {
-        this.highlightField(i, colIdx, cssClassName, doRemove);
-        colIdx -= 1;
+        if (this.errorInUpLeftFlag && i == colIdx) {
+          this.errorInUpLeftFlag = false;
+          colIdx -= 1;
+        } else {
+          this.highlightField(i, colIdx, cssClassName, doRemove);
+          colIdx -= 1;
+        }
       }
     }
   }
@@ -487,7 +496,6 @@ export class DiagonalGameComponent implements OnInit {
             this.highlightBox(boxIndices['startRowIdxBox'], boxIndices['startColIdxBox'], this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
 
             // highlight diagonals
-
             for (let i = 0; i < this.cacheGrid.length; i++) {
               if (x == i && i == y) {
                 this.highlightDiagonals('upperLeft', this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, this.cacheGrid, false);
