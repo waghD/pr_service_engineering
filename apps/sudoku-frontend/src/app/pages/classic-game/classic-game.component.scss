@@ -60,6 +60,10 @@
       border: none;
       padding: unset;
 
+      &:hover {
+        cursor: pointer;
+      }
+
       img {
         height: 5em;
         transition: transform 250ms;
