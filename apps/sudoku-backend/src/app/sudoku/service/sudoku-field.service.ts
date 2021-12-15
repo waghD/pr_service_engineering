@@ -34,6 +34,34 @@ export class SudokuFieldService {
     return this.getOneSudokuField(sudokuID,createdField.x, createdField.y);
   }
 
+  async solveSudokuField(type: string, sudoku: SudokuFieldDto[]) {
+    const flatSudokuArray: number[] = [];
+    for (let x = 0; x < 81; x++) {
+      flatSudokuArray[x] = 0;
+    }
+    for (const field of sudoku) {
+      flatSudokuArray[field.y * 9 + field.x] = field.value;
+    }
+
+    const solved = solveSudoku(flatSudokuArray, type);
+    const solved2D = sudokuArrayTo2DArray(solved);
+
+    const fieldEntities: SudokuFieldEntity[] = [];
+    for(let y = 0; y<9;y++) {
+      for (let x = 0; x < 9; x++) {
+        const field = new SudokuFieldEntity();
+        field.y = y;
+        field.x = x;
+        field.value = solved2D[y][x];
+        field.solution = solved2D[y][x];
+        field.editable = false
+        fieldEntities.push(field);
+      }
+    }
+
+    return fieldEntities;
+  }
+
   async generateSudokuFields(userId:number,sudokuID:number, type:string){
       let sudoku;
       if(sudokuID>0){
@@ -54,15 +82,15 @@ export class SudokuFieldService {
       const fields = removeSolution(solved, 55);
       const fields2D = sudokuArrayTo2DArray(fields);
       const fieldEntities: SudokuFieldEntity[] = [];
-      for(let i = 0; i<9;i++) {
 
-        for (let j = 0; j < 9; j++) {
+      for(let y = 0; y<9;y++) {
+        for (let x = 0; x < 9; x++) {
           const field = new SudokuFieldEntity();
-          field.y = i;
-          field.x = j;
-          field.value = fields2D[i][j];
-          field.solution = solved2D[i][j];
-          field.editable = fields2D[i][j] == 0;
+          field.y = y;
+          field.x = x;
+          field.value = fields2D[y][x];
+          field.solution = solved2D[y][x];
+          field.editable = fields2D[y][x] == 0;
           field.sudoku = sudoku;
           let fieldEntity;
           if(sudokuID >0){
@@ -70,7 +98,6 @@ export class SudokuFieldService {
           }else{
             fieldEntity =field;
           }
-
           fieldEntities.push(fieldEntity);
         }
       }

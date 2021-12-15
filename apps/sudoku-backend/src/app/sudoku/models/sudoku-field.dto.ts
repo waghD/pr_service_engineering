@@ -1,9 +1,10 @@
 import { Min, Max, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
+import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 
 @Exclude()
-export class SudokuFieldDto {
+export class SudokuFieldDto implements ISudokuFieldDto{
 
   @Expose()
   @ApiProperty()
