@@ -36,7 +36,7 @@
       </div>
     </form>
     <div class='right-control-container'>
-      <div class='row-control-grid'>
+      <div *ngIf='authStateService.isLoggedIn && authStateService.Username !== ""' class='row-control-grid'>
         <div class='line-container'>
           <hr>
         </div>
@@ -69,4 +69,3 @@
     </div>
   </div>
 </div>
-<se-sudoku-footer></se-sudoku-footer>

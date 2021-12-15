@@ -3,15 +3,18 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RouterModule } from '@angular/router';
+import { LoginBannerComponent } from './components/login-banner/login-banner.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    LoginBannerComponent
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    LoginBannerComponent
   ],
   imports: [
     CommonModule,

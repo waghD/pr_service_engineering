@@ -25,21 +25,30 @@
     <h1>{{createAccount ? 'Signup' : 'Login'}}</h1>
     <div class='input-container'>
       <label>Email</label>
-      <input autocomplete='username' [ngClass]="{error: !!this.loginForm.get('email')?.errors && this.loginForm.get('email')?.touched}" formControlName='email' type='email' placeholder='somebody@example.com'>
-      <span *ngIf="this.loginForm.get('email')?.errors && this.loginForm.get('email')?.touched">Bitte valide E-Mail eingeben</span>
+      <input autocomplete='username'
+             [ngClass]="{error: !!this.loginForm.get('email')?.errors && this.loginForm.get('email')?.touched}"
+             formControlName='email' type='email' placeholder='somebody@example.com'>
+      <span
+        *ngIf="this.loginForm.get('email')?.errors && this.loginForm.get('email')?.touched">Insert valid E-Mail</span>
     </div>
     <div class='input-container'>
       <label>Password</label>
-      <input autocomplete='current-password' [ngClass]="{error: !!this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched}" formControlName='password' type='password' placeholder='**************'>
-      <span *ngIf="this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched">Passwort benötigt</span>
+      <input autocomplete='current-password'
+             [ngClass]="{error: !!this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched}"
+             formControlName='password' type='password' placeholder='**************'>
+      <span
+        *ngIf="this.loginForm.get('password')?.errors && this.loginForm.get('password')?.touched">Password required</span>
     </div>
     <div class='button-container'>
       <div class='button-row'>
-        <button class='default-button' type='submit'>{{createAccount ? 'Acount erstellen' : 'Login'}}</button>
-        <button class='default-button' type='button' (click)='loginAsGuest()'>Als Gast</button>
+        <button class='default-button' type='submit'>{{createAccount ? 'Create Account' : 'Login'}}</button>
+        <button class='default-button' type='button' (click)='loginAsGuest()'>Guest Login</button>
       </div>
-      <button class='default-button' type='button' *ngIf='!createAccount' (click)='createAccount = true'>Account erstellen</button>
-      <button class='default-button' type='button' *ngIf='createAccount' (click)='createAccount = false'>Zum Login</button>
+      <button class='default-button' type='button' *ngIf='!createAccount' (click)='createAccount = true'>Create
+        Account
+      </button>
+      <button class='default-button' type='button' *ngIf='createAccount' (click)='createAccount = false'>Back to Login
+      </button>
     </div>
   </form>
 

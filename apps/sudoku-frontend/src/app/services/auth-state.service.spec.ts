@@ -3,6 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { AuthStateService } from './auth-state.service';
 import { Subscription } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AuthStateService', () => {
   let service: AuthStateService;
@@ -10,7 +12,11 @@ describe('AuthStateService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
+      providers: [{
+        provide: Router,
+        useClass: RouterTestingModule
+      }]
     });
     service = TestBed.inject(AuthStateService);
   });
