@@ -379,6 +379,7 @@ export class DiagonalGameComponent implements OnInit {
    * @param key 'upperLeft' or 'bottomLeft' depending on the diagonal to which the css class is added
    * @param cssClassName the css class name that gets added to the diagonal cells
    * @param cacheGrid the grid, to specify the length of the grid
+   * @param doRemove false, if the css class should be added to the diagonals; true if it should be removed
    */
   highlightDiagonals(key: string, cssClassName: string, cacheGrid: number[][], doRemove: boolean) {
     if (key === 'upperLeft') {
@@ -485,6 +486,23 @@ export class DiagonalGameComponent implements OnInit {
             const boxIndices = getBoxIndices(x, y);
             this.highlightBox(boxIndices['startRowIdxBox'], boxIndices['startColIdxBox'], this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
 
+            // highlight diagonals
+
+            for (let i = 0; i < this.cacheGrid.length; i++) {
+              if (x == i && i == y) {
+                this.highlightDiagonals('upperLeft', this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, this.cacheGrid, false);
+                break;
+              }
+            }
+
+            let colIdx = 8;
+            for (let i = 0; i < this.cacheGrid.length; i++) {
+              if (x == i && colIdx == y) {
+                this.highlightDiagonals('bottomLeft', this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, this.cacheGrid, false);
+                break;
+              }
+              colIdx -= 1;
+            }
 
             // remove 'standard' highlight cell
             this.highlightField(x, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, true);
