@@ -1,8 +1,9 @@
 import { IsIn, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 
 
-export class SudokuDto {
+export class SudokuDto implements ISudokuDto{
 
    @ApiProperty()
    @IsNotEmpty()
@@ -22,6 +23,4 @@ export class SudokuDto {
    @IsIn(['classic','diagonal'])
    @ApiProperty()
    type:string;
-
-
 }

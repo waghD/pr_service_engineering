@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { SudokuFieldService } from './sudoku-field.service';
 import { SudokuDto } from '../models/sudoku.dto';
 import { UserService } from '../../auth/services/user.service';
+import { SudokuSolverDto } from '../models/sudoku-solver.dto';
 
 
 @Injectable()
@@ -42,9 +43,11 @@ export class SudokuService {
         skip: take * (page - 1),
         take,
       });
-
     }
+  }
 
+  async solveSudoku(sudoku: SudokuSolverDto) {
+    return this.sudokuFieldService.solveSudokuField(sudoku.type, sudoku.fields);
   }
 
   async generateSudoku(type:string, userId?: number):Promise<SudokuEntity>{
