@@ -6,6 +6,7 @@ import { SudokuService } from './sudoku.service';
 import { removeSolution } from '../helpers/sudoku-generator';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
 import { solveSudoku, sudokuArrayTo2DArray } from '../helpers/sudoku-solver';
+import { SudokuEntity } from "../models/sudoku.entity";
 
 @Injectable()
 export class SudokuFieldService {
@@ -62,7 +63,12 @@ export class SudokuFieldService {
   }
 
   async generateSudokuFields(userId:number,sudokuID:number, type:string){
-      const sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
+      let sudoku;
+      if(sudokuID>0){
+         sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
+      } else{
+        sudoku = new SudokuEntity()
+      }
 
     if(sudoku){
       const emptySudoku = new Array<number>();
