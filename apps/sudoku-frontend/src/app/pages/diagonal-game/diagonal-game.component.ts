@@ -367,7 +367,7 @@ export class DiagonalGameComponent implements OnInit {
       if (hasDuplicates(diagonalValues)) {
         this.highlightDiagonals(key, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, this.cacheGrid, false);
       } else {
-        this.highlightDiagonals(key, '', this.cacheGrid, true);
+        this.highlightDiagonals(key, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, this.cacheGrid, true);
       }
     }
 
