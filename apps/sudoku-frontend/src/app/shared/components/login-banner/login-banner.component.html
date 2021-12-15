@@ -1,7 +1,17 @@
-<div *ngIf='authService.isLoggedIn' class='login-banner-container'>
+<div *ngIf='authService.isLoggedIn && authService.Username !== ""' class='login-banner-container'>
   <div class='login-inner-container'>
-    <div class='prefix-string'>Logged in as</div>
-    <div class='email-string'>{{authService.Username}}</div>
-    <div class='logout-button'></div>
+    <div class='left-column'>
+      <div class='prefix-string'>Logged in as</div>
+      <div class='email-string'>{{authService.Username}}</div>
+      <div class='logout-button-container' (click)='logoutButtonClicked()'>
+        <img class='img-logout-icon' src='assets/svg/icon-logout.svg' alt='logout'>
+        <span class='logout-string'>Logout</span>
+      </div>
+    </div>
+    <div class='right-column'>
+      <div class='img-user-container'>
+        <img class='img-user-icon' src='assets/img/user-icon.png' alt='user icon' />
+      </div>
+    </div>
   </div>
 </div>

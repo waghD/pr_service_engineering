@@ -1,12 +1,62 @@
+@import "apps/sudoku-frontend/src/colors";
+
 .login-banner-container {
   .login-inner-container {
     position: fixed;
-    bottom: 10vw;
+    bottom: 5vw;
     right: 0;
 
     border-top: 2px solid black;
     border-bottom: 2px solid black;
     border-left: 2px solid black;
     padding: 5px;
+
+    max-width: 15vw;
+    display: flex;
+
+    .left-column {
+      margin-right: 4vw;
+
+      .prefix-string {
+        font-weight: 300;
+        color: $light-grey;
+      }
+
+      .email-string {
+        font-weight: 800;
+      }
+
+      .logout-button-container {
+        display: flex;
+        margin-top: 5px;
+
+        .img-logout-icon {
+          height: 1vw;
+          margin-right: 5px;
+        }
+
+        .logout-string {
+          color: $light-grey;
+        }
+
+        &:hover {
+          .logout-string {
+            text-decoration: underline 1px;
+            font-weight: 600;
+            color: black;
+          }
+
+          cursor: pointer;
+        }
+      }
+    }
+
+    .right-column {
+      .img-user-container {
+        .img-user-icon {
+          width: 4vw;
+        }
+      }
+    }
   }
 }
