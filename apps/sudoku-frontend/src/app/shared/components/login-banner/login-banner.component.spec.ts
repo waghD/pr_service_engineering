@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthStateService } from '../../../services/auth-state.service';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('LoginBannerComponent', () => {
   let component: LoginBannerComponent;
@@ -17,7 +18,8 @@ describe('LoginBannerComponent', () => {
         provide: Router,
         useClass: RouterTestingModule
       }],
-      declarations: [LoginBannerComponent]
+      declarations: [LoginBannerComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

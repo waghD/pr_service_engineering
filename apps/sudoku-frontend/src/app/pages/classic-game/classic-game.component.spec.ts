@@ -4,6 +4,7 @@ import { ClassicGameComponent } from './classic-game.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ClassicGameService } from './classic-game.service';
 import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ClassicGameComponent', () => {
   let component: ClassicGameComponent;
@@ -13,7 +14,8 @@ describe('ClassicGameComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       declarations: [ClassicGameComponent],
-      providers: [ClassicGameService]
+      providers: [ClassicGameService],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

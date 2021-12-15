@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ImpressComponent } from './impress.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ImpressComponent', () => {
   let component: ImpressComponent;
@@ -8,7 +9,8 @@ describe('ImpressComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ImpressComponent ]
+      declarations: [ ImpressComponent ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });

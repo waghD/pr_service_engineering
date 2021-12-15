@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthStateService } from '../../../services/auth-state.service';
 
 @Component({
@@ -6,15 +6,9 @@ import { AuthStateService } from '../../../services/auth-state.service';
   templateUrl: './login-banner.component.html',
   styleUrls: ['./login-banner.component.scss']
 })
-export class LoginBannerComponent implements OnInit {
+export class LoginBannerComponent {
 
   constructor(public authService: AuthStateService) {
-  }
-
-  ngOnInit(): void {
-    console.log(this.authService);
-    console.log(this.authService.isLoggedIn);
-    console.log(this.authService.Username);
   }
 
   logoutButtonClicked() {

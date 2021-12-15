@@ -82,6 +82,7 @@ export class AuthStateService {
       if (response && response.access_token) {
         this.authToken.next(response.access_token);
         this.authState.next(true);
+        this.username.next(response.username);
         return;
       }
       this.authToken.next('');
