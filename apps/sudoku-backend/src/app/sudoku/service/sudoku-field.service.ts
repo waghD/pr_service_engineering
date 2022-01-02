@@ -5,8 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SudokuService } from './sudoku.service';
 import { removeSolution } from '../helpers/sudoku-generator';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
-import { solveSudoku, sudokuArrayTo2DArray } from '../helpers/sudoku-solver';
+import {solveColourSudoku, solveSudoku, sudokuArrayTo2DArray} from '../helpers/sudoku-solver';
 import { SudokuEntity } from "../models/sudoku.entity";
+
 
 @Injectable()
 export class SudokuFieldService {
@@ -64,6 +65,10 @@ export class SudokuFieldService {
 
   async generateSudokuFields(userId:number,sudokuID:number, type:string){
       let sudoku;
+      let coloursudoku;
+      let solved;
+      let colors;
+      let colors2d;
       if(sudokuID>0){
          sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
       } else{
@@ -75,7 +80,21 @@ export class SudokuFieldService {
       for(let x = 0; x < 81; x++) {
         emptySudoku[x] = 0;
       }
-      const solved = solveSudoku(emptySudoku,type);
+      if(type == 'colour'){
+        const emptycolors = new Array<number>();
+        for(let x = 0; x < 81; x++) {
+          emptycolors[x] = 0;
+        }
+         coloursudoku = solveColourSudoku(emptySudoku,emptycolors,type);
+         solved = coloursudoku.sudoku;
+         colors = coloursudoku.colors;
+      }else{
+        solved = solveSudoku(emptySudoku,type);
+      }
+
+      if(type == 'colour'){
+        colors2d = sudokuArrayTo2DArray(colors);
+      }
 
       const solved2D = sudokuArrayTo2DArray(solved);
 
@@ -91,6 +110,7 @@ export class SudokuFieldService {
           field.value = fields2D[y][x];
           field.solution = solved2D[y][x];
           field.editable = fields2D[y][x] == 0;
+          if(type == 'colour') field.colour = colors2d[y][x];
           field.sudoku = sudoku;
           let fieldEntity;
           if(sudokuID >0){

@@ -51,7 +51,8 @@ export class SudokuService {
   }
 
   async generateSudoku(type:string, userId?: number):Promise<SudokuEntity>{
-    if(type == 'classic' || type == 'diagonal'){
+    const types = ['classic','diagonal','colour']
+    if(types.includes(type)){
       const generatedSudoku: SudokuEntity = new SudokuEntity();
       generatedSudoku.name= 'sudoku';
       generatedSudoku.difficulty='easy';
