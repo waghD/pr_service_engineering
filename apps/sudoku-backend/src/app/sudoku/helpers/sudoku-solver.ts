@@ -13,21 +13,40 @@ function returnBlock(cell: number) {
   return Math.floor(returnRow(cell) / 3) * 3 + Math.floor(returnCol(cell) / 3);
 }
 
-function returnColour(number:number,lastcolour:number ,possibleColors: number[] []){
-   const i = Math.round(Math.random() * (possibleColors[number].length-1));
+function returnColour(cell:number,number:number,colours:number [] ,possibleColors: number[] []){
+   let i = Math.round(Math.random() * (possibleColors[number].length-1));
+   let x = possibleColors[number].length -1;
+   while (!isPossibleColour(cell,possibleColors[number][i],colours) && x>=0){
+      i = x;
+      x--;
+   }
   return possibleColors[number][i];
 }
 
 function removeColour(number:number,colour:number,possibleColors: number[] []){
-      let colors = new Array<number>();
+      const colors = new Array<number>();
       for(let x = 0; x<possibleColors[number].length;x++){
         if(possibleColors[number][x]!= colour){
           colors.push(possibleColors[number][x]);
         }
 
       }
-      colors = shuffle(colors);
       return colors;
+}
+
+function isPossibleColour(cell:number,colour:number,colours:number[]){
+
+  if(cell-9 >=0 && colours[cell-9] == colour){
+    return false;
+  } else if(cell+9 <81 && colours[cell+9] == colour){
+    return false;
+  } else if(cell-1 >=0 && colours[cell-1] == colour){
+    return false;
+  } else if (cell+1 <81 && colours[cell+1] == colour){
+    return false;
+  }
+
+  return true;
 }
 
 function shuffle(a) {
@@ -264,27 +283,25 @@ export function solveColourSudoku(sudoku: number[], colors:number[] ,type:string
   let nextMove: number[][];
   let whatToTry: number;
   let attempt: number;
-  let lastcolour = 0;
   const coloursudoku = new ColourSudoku();
   coloursudoku.colors = colors;
   coloursudoku.sudoku = sudoku;
   const possiblecolours = generateColours();
-  while(!isSolvedSudoku(sudoku)) {
-    nextMove = scanSudokuForUnique(sudoku, type);
+  while(!isSolvedSudoku(coloursudoku.sudoku)) {
+    nextMove = scanSudokuForUnique(coloursudoku.sudoku, type);
     if(!nextMove) {
       nextMove = saved.pop();
-      sudoku = savedSudoku.pop();
+      coloursudoku.sudoku = savedSudoku.pop();
     }
     whatToTry = nextRandom(nextMove);
     attempt = determineRandomPossibleValue(nextMove, whatToTry);
     if(nextMove[whatToTry].length > 1) {
       nextMove[whatToTry] = removeAttempt(nextMove[whatToTry], attempt);
       saved.push(nextMove.slice());
-      savedSudoku.push(sudoku.slice());
+      savedSudoku.push(coloursudoku.sudoku.slice());
     }
       coloursudoku.sudoku[whatToTry] = attempt;
-      coloursudoku.colors[whatToTry] = returnColour((attempt-1),lastcolour,possiblecolours);
-      lastcolour = coloursudoku.colors[whatToTry];
+      coloursudoku.colors[whatToTry] = returnColour(whatToTry,(attempt-1),coloursudoku.colors,possiblecolours);
       possiblecolours[attempt-1] = removeColour((attempt-1),coloursudoku.colors[whatToTry],possiblecolours);
   }
     return coloursudoku;

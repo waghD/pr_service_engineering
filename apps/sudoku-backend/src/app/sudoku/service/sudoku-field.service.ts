@@ -80,19 +80,23 @@ export class SudokuFieldService {
       for(let x = 0; x < 81; x++) {
         emptySudoku[x] = 0;
       }
-      if(type == 'colour'){
+      if(type == 'colour'|| type=='diacolour'){
         const emptycolors = new Array<number>();
         for(let x = 0; x < 81; x++) {
           emptycolors[x] = 0;
         }
-         coloursudoku = solveColourSudoku(emptySudoku,emptycolors,type);
+         if (type == 'diacolour') {
+           coloursudoku = solveColourSudoku(emptySudoku,emptycolors,'diagonal');
+         } else {
+           coloursudoku = solveColourSudoku(emptySudoku,emptycolors,type);
+         }
          solved = coloursudoku.sudoku;
          colors = coloursudoku.colors;
       }else{
         solved = solveSudoku(emptySudoku,type);
       }
 
-      if(type == 'colour'){
+      if(type == 'colour'|| type == 'diacolour'){
         colors2d = sudokuArrayTo2DArray(colors);
       }
 
@@ -110,7 +114,7 @@ export class SudokuFieldService {
           field.value = fields2D[y][x];
           field.solution = solved2D[y][x];
           field.editable = fields2D[y][x] == 0;
-          if(type == 'colour') field.colour = colors2d[y][x];
+          if(type == 'colour'||  type == 'diacolour') field.colour = colors2d[y][x];
           field.sudoku = sudoku;
           let fieldEntity;
           if(sudokuID >0){
