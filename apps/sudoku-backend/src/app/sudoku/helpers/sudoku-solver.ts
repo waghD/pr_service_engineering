@@ -24,14 +24,14 @@ function returnColour(cell:number,number:number,colours:number [] ,possibleColou
 }
 
 function removeColour(number:number,colour:number,possibleColours: number[] []){
-      const colors = new Array<number>();
+      const colours = new Array<number>();
       for(let x = 0; x<possibleColours[number].length;x++){
         if(possibleColours[number][x]!= colour){
-          colors.push(possibleColours[number][x]);
+          colours.push(possibleColours[number][x]);
         }
 
       }
-      return colors;
+      return colours;
 }
 
 function isPossibleColour(cell:number,colour:number,colours:number[]){
