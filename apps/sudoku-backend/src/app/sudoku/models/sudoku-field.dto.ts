@@ -38,4 +38,11 @@ export class SudokuFieldDto implements ISudokuFieldDto{
   @ApiProperty()
   readonly editable:boolean;
 
+  @Expose()
+  @ApiProperty()
+  @Min(1)
+  @Max(9)
+  @IsNumber()
+  colour?:number;
+
 }

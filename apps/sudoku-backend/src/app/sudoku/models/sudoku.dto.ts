@@ -20,7 +20,7 @@ export class SudokuDto implements ISudokuDto{
    edit_time:number;
 
    @IsNotEmpty()
-   @IsIn(['classic','diagonal'])
+   @IsIn(['classic','diagonal','colour'])
    @ApiProperty()
    type:string;
 }

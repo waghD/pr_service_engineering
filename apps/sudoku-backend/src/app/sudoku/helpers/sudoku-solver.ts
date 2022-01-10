@@ -13,6 +13,50 @@ function returnBlock(cell: number) {
   return Math.floor(returnRow(cell) / 3) * 3 + Math.floor(returnCol(cell) / 3);
 }
 
+function returnColour(cell:number,number:number,colours:number [] ,possibleColours: number[] []){
+   let i = Math.round(Math.random() * (possibleColours[number].length-1));
+   let x = possibleColours[number].length -1;
+   while (!isPossibleColour(cell,possibleColours[number][i],colours) && x>=0){
+      i = x;
+      x--;
+   }
+  return possibleColours[number][i];
+}
+
+function removeColour(number:number,colour:number,possibleColours: number[] []){
+      const colours = new Array<number>();
+      for(let x = 0; x<possibleColours[number].length;x++){
+        if(possibleColours[number][x]!= colour){
+          colours.push(possibleColours[number][x]);
+        }
+
+      }
+      return colours;
+}
+
+function isPossibleColour(cell:number,colour:number,colours:number[]){
+
+  if(cell-9 >=0 && colours[cell-9] == colour){
+    return false;
+  } else if(cell+9 <81 && colours[cell+9] == colour){
+    return false;
+  } else if(cell-1 >=0 && colours[cell-1] == colour){
+    return false;
+  } else if (cell+1 <81 && colours[cell+1] == colour){
+    return false;
+  }
+
+  return true;
+}
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 // given a number, a row and a sudoku, returns true if the number can be placed in the row
 function isPossibleRow(number: number, row: number, sudoku: number[]) {
   for (let i=0; i<=8; i++) {
@@ -158,6 +202,15 @@ function scanSudokuForUnique(sudoku: number[], type:string): number[][] {
   return possible;
 }
 
+function  generateColours(){
+  const possible = new Array<Array<number>>();
+  for (let i = 0; i<9;i++){
+    possible[i] = new Array<number>();
+    possible[i] = shuffle([1,2,3,4,5,6,7,8,9]);
+  }
+  return possible;
+}
+
 // given an array and a number, removes the number from the array
 function removeAttempt(attemptArray: number[], number: number) {
   const newArray = new Array<number>();
@@ -201,6 +254,7 @@ export function solveSudoku(sudoku: number[], type:string) {
   let nextMove: number[][];
   let whatToTry: number;
   let attempt: number;
+
   while(!isSolvedSudoku(sudoku)) {
     nextMove = scanSudokuForUnique(sudoku, type);
     if(!nextMove) {
@@ -214,7 +268,49 @@ export function solveSudoku(sudoku: number[], type:string) {
       saved.push(nextMove.slice());
       savedSudoku.push(sudoku.slice());
     }
-    sudoku[whatToTry] = attempt;
+
+      sudoku[whatToTry] = attempt;
+
+
   }
+
   return sudoku;
+}
+
+export function solveColourSudoku(sudoku: number[], colours:number[] ,type:string) {
+  const saved = new Array<Array<Array<number>>>();
+  const savedSudoku = new Array<Array<number>>();
+  let nextMove: number[][];
+  let whatToTry: number;
+  let attempt: number;
+  const coloursudoku = new ColourSudoku();
+  coloursudoku.colours = colours;
+  coloursudoku.sudoku = sudoku;
+  const possiblecolours = generateColours();
+  while(!isSolvedSudoku(coloursudoku.sudoku)) {
+    nextMove = scanSudokuForUnique(coloursudoku.sudoku, type);
+    if(!nextMove) {
+      nextMove = saved.pop();
+      coloursudoku.sudoku = savedSudoku.pop();
+    }
+    whatToTry = nextRandom(nextMove);
+    attempt = determineRandomPossibleValue(nextMove, whatToTry);
+    if(nextMove[whatToTry].length > 1) {
+      nextMove[whatToTry] = removeAttempt(nextMove[whatToTry], attempt);
+      saved.push(nextMove.slice());
+      savedSudoku.push(coloursudoku.sudoku.slice());
+    }
+      coloursudoku.sudoku[whatToTry] = attempt;
+      coloursudoku.colours[whatToTry] = returnColour(whatToTry,(attempt-1),coloursudoku.colours,possiblecolours);
+      possiblecolours[attempt-1] = removeColour((attempt-1),coloursudoku.colours[whatToTry],possiblecolours);
+  }
+    return coloursudoku;
+}
+
+
+class ColourSudoku{
+
+  sudoku : number[]
+  colours: number[]
+
 }

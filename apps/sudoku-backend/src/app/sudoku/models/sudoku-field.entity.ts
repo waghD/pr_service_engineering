@@ -22,8 +22,12 @@ export class SudokuFieldEntity {
   @Column()
   editable:boolean;
 
+  @Column()
+  colour?:number;
+
   @ManyToOne(type => SudokuEntity, sudoku => sudoku.fields)
   sudoku:SudokuEntity;
+
 
 
 
