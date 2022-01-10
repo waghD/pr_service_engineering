@@ -13,21 +13,21 @@ function returnBlock(cell: number) {
   return Math.floor(returnRow(cell) / 3) * 3 + Math.floor(returnCol(cell) / 3);
 }
 
-function returnColour(cell:number,number:number,colours:number [] ,possibleColors: number[] []){
-   let i = Math.round(Math.random() * (possibleColors[number].length-1));
-   let x = possibleColors[number].length -1;
-   while (!isPossibleColour(cell,possibleColors[number][i],colours) && x>=0){
+function returnColour(cell:number,number:number,colours:number [] ,possibleColours: number[] []){
+   let i = Math.round(Math.random() * (possibleColours[number].length-1));
+   let x = possibleColours[number].length -1;
+   while (!isPossibleColour(cell,possibleColours[number][i],colours) && x>=0){
       i = x;
       x--;
    }
-  return possibleColors[number][i];
+  return possibleColours[number][i];
 }
 
-function removeColour(number:number,colour:number,possibleColors: number[] []){
+function removeColour(number:number,colour:number,possibleColours: number[] []){
       const colors = new Array<number>();
-      for(let x = 0; x<possibleColors[number].length;x++){
-        if(possibleColors[number][x]!= colour){
-          colors.push(possibleColors[number][x]);
+      for(let x = 0; x<possibleColours[number].length;x++){
+        if(possibleColours[number][x]!= colour){
+          colors.push(possibleColours[number][x]);
         }
 
       }
@@ -277,14 +277,14 @@ export function solveSudoku(sudoku: number[], type:string) {
   return sudoku;
 }
 
-export function solveColourSudoku(sudoku: number[], colors:number[] ,type:string) {
+export function solveColourSudoku(sudoku: number[], colours:number[] ,type:string) {
   const saved = new Array<Array<Array<number>>>();
   const savedSudoku = new Array<Array<number>>();
   let nextMove: number[][];
   let whatToTry: number;
   let attempt: number;
   const coloursudoku = new ColourSudoku();
-  coloursudoku.colors = colors;
+  coloursudoku.colours = colours;
   coloursudoku.sudoku = sudoku;
   const possiblecolours = generateColours();
   while(!isSolvedSudoku(coloursudoku.sudoku)) {
@@ -301,8 +301,8 @@ export function solveColourSudoku(sudoku: number[], colors:number[] ,type:string
       savedSudoku.push(coloursudoku.sudoku.slice());
     }
       coloursudoku.sudoku[whatToTry] = attempt;
-      coloursudoku.colors[whatToTry] = returnColour(whatToTry,(attempt-1),coloursudoku.colors,possiblecolours);
-      possiblecolours[attempt-1] = removeColour((attempt-1),coloursudoku.colors[whatToTry],possiblecolours);
+      coloursudoku.colours[whatToTry] = returnColour(whatToTry,(attempt-1),coloursudoku.colours,possiblecolours);
+      possiblecolours[attempt-1] = removeColour((attempt-1),coloursudoku.colours[whatToTry],possiblecolours);
   }
     return coloursudoku;
 }
@@ -311,6 +311,6 @@ export function solveColourSudoku(sudoku: number[], colors:number[] ,type:string
 class ColourSudoku{
 
   sudoku : number[]
-  colors: number[]
+  colours: number[]
 
 }
