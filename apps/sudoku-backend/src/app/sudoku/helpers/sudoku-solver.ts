@@ -13,48 +13,40 @@ function returnBlock(cell: number) {
   return Math.floor(returnRow(cell) / 3) * 3 + Math.floor(returnCol(cell) / 3);
 }
 
-function isPossibleSquare(cell:number,sudoku:number[]){
-   const possiblecells = [20,24,56,60]
-   if(possiblecells.includes(cell)) {
-     let possiblenumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-     for (let x = 10; x >= 0; x--) {
-       if (possiblenumbers.includes(sudoku[cell - x])) {
-         possiblenumbers = removeAttempt(possiblenumbers, sudoku[cell - x]);
-       } else if (sudoku[cell - x] == 0){
-         continue;
-       } else {
-         return false;
-       }
-
-       if (possiblenumbers.includes(sudoku[cell + x])) {
-         possiblenumbers = removeAttempt(possiblenumbers, sudoku[cell + x]);
-       } else {
-         return false;
-       }
-
-       if (x == 8) {
-         x = 2;
-       }
-
-     }
-   }
+function isPossibleSquare(number: number, block: number, sudoku: number[], row:number, col:number){
+  if ( row == 0|| col == 0 || row == 8 || col ==8) return true ;
+  if(row == 3 || row == 6) block = block-3;
+  if(col == 3) block = block -1;
+  if(col == 5) block = block +1;
+  const possibleblocks = [0,2,6,8]
+  if(possibleblocks.includes(block)){
+    let x = 0;
+    if(block == 0) x = 10;
+    if(block == 2) x= 8;
+    if( block == 6) x = -8;
+    if(block == 8) x = -10;
+    for(let i=0;i<=8;i++){
+      if(sudoku[(Math.floor(block/3)*27+i%3+9*Math.floor(i/3)+3*(block%3)+x)]==number){
+        return false;
+      }
+    }
+  }
   return true;
-
 }
 
 function generateColourRegion(colours:number []) {
-  const possiblecells:number[] = [20,24,56,60];
+  const blocks = [0,2,6,8]
   const possible_colours = shuffle([1,2,3,4])
-  for(const x of possiblecells){
-    const colour = possible_colours.pop();
-    for (let y = 10; y >= 0; y--) {
-      colours [x+y] = colour;
-      colours [x-y] = colour;
-      if (y == 8) {
-        y= 2;
-      }
+  for(const y of blocks){
+    let x = 0;
+    if(y == 0) x = 10;
+    if(y == 2) x= 8;
+    if(y == 6) x =-8;
+    if(y == 8) x =-10;
+    const colour = possible_colours.pop()
+    for(let i=0;i<=8;i++){
+     colours[(Math.floor(y/3)*27+i%3+9*Math.floor(i/3)+3*(y%3)+x)] = colour
     }
-
   }
   return colours;
 }
@@ -170,7 +162,7 @@ function isPossibleNumber(cell: number, number: number, sudoku: number[], type:s
       && isPossibleBlock(number, block, sudoku) && isPossibleDiag(number, cell, sudoku);
   } else if (type == 'region'){
     return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
-      && isPossibleBlock(number,block,sudoku)&& isPossibleSquare(cell,sudoku);
+      && isPossibleBlock(number,block,sudoku)&& isPossibleSquare(number,block,sudoku,row,col);
   } else {
     return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
       && isPossibleBlock(number,block,sudoku);
