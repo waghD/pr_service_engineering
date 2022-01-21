@@ -1,9 +1,8 @@
-import { Controller, Post, UseGuards, Request, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Body, HttpException } from '@nestjs/common';
 import { PasswordAuthGuard } from '../guards/password-auth.guard';
 import { AuthService } from '../services/auth.service';
 import { AuthenticatedRequest, UserDto } from '../models/user.dto';
 import { Public } from '../public.decorator';
-import { UserService } from '../services/user.service';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthResponseDto } from '../models/auth-response.dto';
 
@@ -28,6 +27,10 @@ export class AuthController {
   @ApiResponse({type: AuthResponseDto})
   @Post('signup')
   async signup(@Body() body: UserDto): Promise<AuthResponseDto> {
+    const userAlreadyExists = await this.authService.userExists(body.username);
+    if(userAlreadyExists) {
+      throw new HttpException('Username is already taken', 401);
+    }
     return this.authService.signup(body.username, body.password)
   }
 }
