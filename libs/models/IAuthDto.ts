@@ -9,3 +9,10 @@ export interface IAuthResponseDto {
   username: string;
   access_token: string;
 }
+
+export interface IAuthErrorDto {
+  error: {
+    statusCode: 401 | 402;
+    message: string;
+  }
+}
