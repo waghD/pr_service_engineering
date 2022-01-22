@@ -11,6 +11,15 @@ export class AuthService {
   constructor(private userService: UserService, private jwtService: JwtService) {
   }
 
+  async userExists(username: string): Promise<boolean> {
+    try {
+      const user = await this.userService.findUserByName(username);
+      return !!user;
+    } catch (e) {
+      return false;
+    }
+  }
+
   async login(user: UserData) {
     const payload = { username: user.username, sub: user.id };
     return {

@@ -20,6 +20,11 @@ export class LoginComponent {
     });
   }
 
+  toggleMode() {
+    this.createAccount = !this.createAccount;
+    this.loginForm.reset();
+  }
+
   async login() {
     if(this.loginForm.invalid) {
       return;
@@ -30,9 +35,30 @@ export class LoginComponent {
       return;
     }
     if(this.createAccount) {
-      await this.authService.signup(username, password);
+      const responseCode = await this.authService.signup(username, password);
+      if (responseCode === 401) {
+        this.loginForm.get('email')?.setErrors({
+          'taken': true
+        });
+      }
+      if (responseCode === 200) {
+        this.loginForm.get('email')?.setErrors({});
+      }
     } else {
-      await this.authService.login(username, password);
+      const responseCode = await this.authService.login(username, password);
+      if (responseCode === 401) {
+        this.loginForm.get('email')?.setErrors({
+          'em-wrong': true
+        });
+      }
+      if (responseCode === 402) {
+        this.loginForm.get('password')?.setErrors({
+          'pw-wrong': true
+        });
+      }
+      if (responseCode === 200) {
+        this.loginForm.get('email')?.setErrors({});
+      }
     }
     if(this.authService.hasRedirectPage()) {
       this.router.navigateByUrl(this.authService.consumeRedirectPage());
