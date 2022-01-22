@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SudokuService } from './sudoku.service';
 import { removeSolution } from '../helpers/sudoku-generator';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
-import {solveColourSudoku, solveSudoku, sudokuArrayTo2DArray} from '../helpers/sudoku-solver';
+import { solveColourSudoku, solveRegionSudoku, solveSudoku, sudokuArrayTo2DArray } from "../helpers/sudoku-solver";
 import { SudokuEntity } from "../models/sudoku.entity";
 
 
@@ -80,14 +80,16 @@ export class SudokuFieldService {
       for(let x = 0; x < 81; x++) {
         emptySudoku[x] = 0;
       }
-      if(type == 'colour'|| type=='diacolour'){
+      if(type == 'colour'|| type=='diacolour'|| type == 'region' ){
         const emptycolors = new Array<number>();
         for(let x = 0; x < 81; x++) {
           emptycolors[x] = 0;
         }
          if (type == 'diacolour') {
            coloursudoku = solveColourSudoku(emptySudoku,emptycolors,'diagonal');
-         } else {
+         } else if (type == 'region') {
+          coloursudoku = solveRegionSudoku(emptySudoku,emptycolors,type);
+        } else {
            coloursudoku = solveColourSudoku(emptySudoku,emptycolors,type);
          }
          solved = coloursudoku.sudoku;
@@ -96,7 +98,7 @@ export class SudokuFieldService {
         solved = solveSudoku(emptySudoku,type);
       }
 
-      if(type == 'colour'|| type == 'diacolour'){
+      if(type == 'colour'|| type == 'diacolour' || type =='region'){
         colours2d = sudokuArrayTo2DArray(colours);
       }
 
@@ -114,7 +116,7 @@ export class SudokuFieldService {
           field.value = fields2D[y][x];
           field.solution = solved2D[y][x];
           field.editable = fields2D[y][x] == 0;
-          if(type == 'colour'||  type == 'diacolour') field.colour = colours2d[y][x];
+          if(type == 'colour'||  type == 'diacolour' || type == 'region') field.colour = colours2d[y][x];
           field.sudoku = sudoku;
           let fieldEntity;
           if(sudokuID >0){

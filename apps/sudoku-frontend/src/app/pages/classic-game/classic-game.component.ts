@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ClassicGameService } from './classic-game.service';
-import { SudokuEntity } from '../../../../../../libs/models/sudoku.entity';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ISudokuDto } from "../../../../../../libs/models/sudoku.dto";
+import { ISudokuFieldDto } from "../../../../../../libs/models/sudoku-field.dto";
 
 
 @Component({
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 export class ClassicGameComponent implements OnInit {
 
   // vars
-  sudokuAPIData: SudokuEntity;
+  sudokuAPIData: ISudokuDto;
   cacheGrid: number[][];
   highlightGrid: number[][];
   emptyGrid: number[][];
@@ -35,7 +36,8 @@ export class ClassicGameComponent implements OnInit {
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
   constructor(public classicGameService: ClassicGameService, private router: Router) {
-    this.sudokuAPIData = new SudokuEntity(-1, '', '', 0, []); //dummy data for variable instance
+
+    this.sudokuAPIData = {} as ISudokuDto;
 
     this.highlightGrid = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -103,8 +105,8 @@ export class ClassicGameComponent implements OnInit {
      * Fills the sudokuGrid with data specified from a SudokuEntity
      * @param gridData the SudokuEntity which yields the fields
      */
-    const fillGridWithData = (gridData: SudokuEntity) => {
-      for (const field of gridData.fields) {
+    const fillGridWithData = (gridData: ISudokuFieldDto[]) => {
+      for (const field of gridData) {
         const newVal = {};
         // necessary due to inconvenience, maybe there is a better solution...?
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -122,7 +124,7 @@ export class ClassicGameComponent implements OnInit {
     // gets a new sudoku
     this.classicGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
       this.sudokuAPIData = generatedSudokuData;
-      fillGridWithData(generatedSudokuData);
+      if(generatedSudokuData.fields) fillGridWithData(generatedSudokuData.fields);
       this.timerCount = generatedSudokuData.edit_time;
       this.concealGrid();
       // make the initial fields non editable

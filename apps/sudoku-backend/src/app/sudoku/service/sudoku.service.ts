@@ -36,6 +36,27 @@ export class SudokuService {
         skip: take * (page - 1),
         take,
       });
+    } else if(type=='region'){
+      return this.sudokuRepository.find({
+        where:{type:'region', user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+    }else if(type=='colour'){
+      return this.sudokuRepository.find({
+        where:{type:'colour', user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
+    }else if(type=='diacolour'){
+      return this.sudokuRepository.find({
+        where:{type:'diacolour', user:user},
+        relations: ['fields'],
+        skip: take * (page - 1),
+        take,
+      });
     } else {
       return this.sudokuRepository.find({
         where:{user:user},
@@ -51,7 +72,7 @@ export class SudokuService {
   }
 
   async generateSudoku(type:string, userId?: number):Promise<SudokuEntity>{
-    const types = ['classic','diagonal','colour','diacolour']
+    const types = ['classic','diagonal','colour','diacolour', 'region']
     if(types.includes(type)){
       const generatedSudoku: SudokuEntity = new SudokuEntity();
       generatedSudoku.name= 'sudoku';

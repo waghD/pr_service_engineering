@@ -13,6 +13,45 @@ function returnBlock(cell: number) {
   return Math.floor(returnRow(cell) / 3) * 3 + Math.floor(returnCol(cell) / 3);
 }
 
+function isPossibleSquare(number: number, block: number, sudoku: number[], row:number, col:number){
+  if ( row == 0|| col == 0 || row == 8 || col ==8) return true ;
+  if(row == 3 || row == 6) block = block-3;
+  if(col == 3) block = block -1;
+  if(col == 5) block = block +1;
+  const possibleblocks = [0,2,6,8]
+  if(possibleblocks.includes(block)){
+    let x = 0;
+    if(block == 0) x = 10;
+    if(block == 2) x= 8;
+    if( block == 6) x = -8;
+    if(block == 8) x = -10;
+    for(let i=0;i<=8;i++){
+      if(sudoku[(Math.floor(block/3)*27+i%3+9*Math.floor(i/3)+3*(block%3)+x)]==number){
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+function generateColourRegion(colours:number []) {
+  const blocks = [0,2,6,8]
+  const possible_colours = shuffle([1,2,3,4])
+  for(const y of blocks){
+    let x = 0;
+    if(y == 0) x = 10;
+    if(y == 2) x= 8;
+    if(y == 6) x =-8;
+    if(y == 8) x =-10;
+    const colour = possible_colours.pop()
+    for(let i=0;i<=8;i++){
+     colours[(Math.floor(y/3)*27+i%3+9*Math.floor(i/3)+3*(y%3)+x)] = colour
+    }
+  }
+  return colours;
+}
+
+
 function returnColour(cell:number,number:number,colours:number [] ,possibleColours: number[] []){
    let i = Math.round(Math.random() * (possibleColours[number].length-1));
    let x = possibleColours[number].length -1;
@@ -118,11 +157,17 @@ function isPossibleNumber(cell: number, number: number, sudoku: number[], type:s
   const row = returnRow(cell);
   const col = returnCol(cell);
   const block = returnBlock(cell);
-  if(type =='diagonal') return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
-    && isPossibleBlock(number,block,sudoku) && isPossibleDiag(number,cell,sudoku);
+  if(type =='diagonal') {
+    return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
+      && isPossibleBlock(number, block, sudoku) && isPossibleDiag(number, cell, sudoku);
+  } else if (type == 'region'){
+    return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
+      && isPossibleBlock(number,block,sudoku)&& isPossibleSquare(number,block,sudoku,row,col);
+  } else {
+    return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
+      && isPossibleBlock(number,block,sudoku);
+  }
 
-  return isPossibleRow(number,row,sudoku) && isPossibleCol(number,col,sudoku)
-    && isPossibleBlock(number,block,sudoku);
 }
 
 // given a row and a sudoku, returns true if it's a legal row
@@ -276,6 +321,15 @@ export function solveSudoku(sudoku: number[], type:string) {
 
   return sudoku;
 }
+
+export function solveRegionSudoku(sudoku: number[],colours:number[], type:string){
+  const coloursudoku = new ColourSudoku();
+  coloursudoku.sudoku = solveSudoku(sudoku,type);
+  coloursudoku.colours = generateColourRegion(colours);
+  return coloursudoku;
+}
+
+
 
 export function solveColourSudoku(sudoku: number[], colours:number[] ,type:string) {
   const saved = new Array<Array<Array<number>>>();
