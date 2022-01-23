@@ -12,9 +12,21 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(username: string, password: string): Promise<UserData> {
+    const userExists = await this.authService.userExists(username);
+
+    if(!userExists) {
+      throw new UnauthorizedException({
+        statusCode: 401,
+        message: 'Username does not exist'
+      });
+    }
+
     const user = await this.authService.validateUser(username, password);
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({
+        statusCode: 402,
+        message: 'Wrong password'
+      });
     }
     return user;
   }

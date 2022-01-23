@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { IAuthDto, IAuthResponseDto } from '../../../../../libs/models/IAuthDto';
+import { IAuthDto, IAuthErrorDto, IAuthResponseDto } from '../../../../../libs/models/IAuthDto';
 import { map, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -45,7 +45,12 @@ export class AuthStateService {
     this.authState.next(true);
   }
 
-  public async login(username: string, password: string) {
+  /**
+   * Logs the user into the app. Returns statuscode: 200 for OK, 401 for wrong email, 402 for wrong password
+   * @param username
+   * @param password
+   */
+  public async login(username: string, password: string): Promise<200 | 401 | 402> {
     const body: IAuthDto = {
       username,
       password
@@ -58,19 +63,28 @@ export class AuthStateService {
         this.authToken.next(response.access_token);
         this.authState.next(true);
         this.username.next(response.username);
-        return;
+        return 200;
       }
       this.authToken.next('');
       this.authState.next(false);
+
+      return 401;
     } catch (e) {
       console.error(e);
       this.authToken.next('');
       this.authState.next(false);
+      const typesError: IAuthErrorDto = e;
+
+      return typesError?.error?.statusCode ?? 401;
     }
   }
 
-
-  public async signup(username: string, password: string) {
+  /**
+   * Sign user up. Returns status code: 200 for ok, 401 for email taken
+   * @param username
+   * @param password
+   */
+  public async signup(username: string, password: string): Promise<200 | 401 | 402> {
     const body: IAuthDto = {
       username,
       password
@@ -79,18 +93,22 @@ export class AuthStateService {
       const response = await this.httpClient.post<IAuthResponseDto>('http://localhost:8080/api/auth/signup', body).pipe(
         take(1)
       ).toPromise();
+
       if (response && response.access_token) {
         this.authToken.next(response.access_token);
         this.authState.next(true);
         this.username.next(response.username);
-        return;
+        return 200;
       }
       this.authToken.next('');
       this.authState.next(false);
+      return 401;
     } catch (e) {
       console.error(e);
+      const typedError: IAuthErrorDto = e;
       this.authToken.next('');
       this.authState.next(false);
+      return typedError?.error?.statusCode ?? 401;
     }
   }
 
