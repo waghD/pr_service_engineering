@@ -39,7 +39,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/diagonal-game/diagonal-game.module').then(m => m.DiagonalGameModule),
     canActivate: [AuthGuard]
   },
-  { path: 'saved-games', loadChildren: () => import('./pages/saved-games/saved-games.module').then(m => m.SavedGamesModule) },
+  {
+    path: 'saved-games',
+    loadChildren: () => import('./pages/saved-games/saved-games.module').then(m => m.SavedGamesModule),
+    canActivate: [AuthGuard]
+  },
   {
     path: '**',
     loadChildren: () => import('./pages/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)

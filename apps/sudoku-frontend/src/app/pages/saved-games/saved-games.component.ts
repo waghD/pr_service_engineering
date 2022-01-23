@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { SavedGamesService } from './saved-games.service';
+import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 
 @Component({
   selector: 'se-sudoku-saved-games',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SavedGamesComponent implements OnInit {
 
-  constructor() { }
+  savedGames: ISudokuDto[];
+
+  constructor(public savedGamesService: SavedGamesService) {
+    this.savedGames = [];
+  }
 
   ngOnInit(): void {
+    this.savedGamesService.getSavedSudokus().subscribe((savedGames) => {
+      this.savedGames = savedGames;
+    });
   }
 
 }

@@ -1,1 +1,18 @@
-<p>saved-games works!</p>
+<se-sudoku-header additionalClass='single-line-heading' pageHeading='Saved Games'></se-sudoku-header>
+<div class='main-content'>
+  <div class='table-container'>
+    <table>
+      <tr *ngFor='let oneSudoku of savedGames; let i = index'>
+        <!--TODO: make this pretty and create a link/button for each of those to continue playing-->
+        <!--TODO: idea of how many percent complete-->
+        <!--TODO: option to delete a sudoku-->
+        <td>{{i + 1}}</td>
+        <td>{{oneSudoku.type}}</td>
+        <td>{{oneSudoku.difficutly}}</td>
+        <td>{{oneSudoku.edit_time}}</td>
+      </tr>
+    </table>
+
+  </div>
+</div>
+<se-sudoku-footer></se-sudoku-footer>

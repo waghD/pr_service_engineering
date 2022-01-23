@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { SavedGamesRoutingModule } from './saved-games-routing.module';
 import { SavedGamesComponent } from './saved-games.component';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { SavedGamesComponent } from './saved-games.component';
   ],
   imports: [
     CommonModule,
-    SavedGamesRoutingModule
+    SavedGamesRoutingModule,
+    SharedModule
   ]
 })
 export class SavedGamesModule { }

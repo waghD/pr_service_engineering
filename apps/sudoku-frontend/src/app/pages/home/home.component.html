@@ -9,9 +9,8 @@
         <ul class='mm-ul'>
           <li class='mm-li'><a routerLink='/diagonal-game'>Sudoku Diagonal</a></li>
         </ul>
-        <ul class='mm-ul'>
-          <li class='mm-li'><a routerLink=''>Load Saved Sudoku</a></li>
-          <!-- TODO: Insert link to the actual saved games -->
+        <ul *ngIf='authStateService.Username !== "" && authStateService.isLoggedIn' class='mm-ul'>
+          <li class='mm-li'><a routerLink='/saved-games'>Load Saved Sudoku</a></li>
         </ul>
         <ul class='mm-ul'>
           <li class='mm-li'><a routerLink='/how-to-play'>How to Play</a></li>
