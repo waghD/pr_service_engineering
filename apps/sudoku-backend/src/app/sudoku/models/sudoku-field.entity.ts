@@ -22,7 +22,7 @@ export class SudokuFieldEntity {
   @Column()
   editable:boolean;
 
-  @Column()
+  @Column({nullable:true})
   colour?:number;
 
   @ManyToOne(type => SudokuEntity, sudoku => sudoku.fields)
