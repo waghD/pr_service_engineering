@@ -8,9 +8,9 @@ describe('FinishSudokuButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FinishSudokuButtonComponent ]
+      declarations: [FinishSudokuButtonComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -66,9 +66,8 @@
                alt='back arrow' /></span>
         </button>
       </div>
-      <!--*ngIf='isEveryFieldAssigned'-->
       <div
-        *ngIf='true'
+        *ngIf='isEveryFieldAssigned'
         class='row-control-grid'>
 
         <se-sudoku-finish-sudoku-button [sudokuFieldsInput]='cacheGrid'

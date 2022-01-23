@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthStateService } from '../../../services/auth-state.service';
-import { SudokuEntity } from '../../../../../../../libs/models/sudoku.entity';
+import { ISudokuDto } from '../../../../../../../libs/models/sudoku.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +24,8 @@ export class FinishSudokuButtonService {
    * Calls API to delete a sudoku
    * @param sudokuId the id of the sudoku
    */
-  deleteSudoku(sudokuId: number): Observable<SudokuEntity> {
+  deleteSudoku(sudokuId: number): Observable<ISudokuDto> {
     return this.http
-      .delete<SudokuEntity>(this.baseApiURL + '/sudokus/' + sudokuId);
+      .delete<ISudokuDto>(this.baseApiURL + '/sudokus/' + sudokuId);
   }
 }
