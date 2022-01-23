@@ -21,7 +21,6 @@ export class ClassicGameService {
   constructor(private readonly http: HttpClient, private authStateService: AuthStateService) {
   }
 
-  // TODO: insert correct api call here when finished
   getNewRandomSudoku(): Observable<ISudokuDto> {
     return this.http
       .post<ISudokuDto>(this.baseApiURL + '/sudokus/generate?type=classic', {});
