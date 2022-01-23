@@ -28,7 +28,8 @@
                   <input [formControlName]='"cell" + colIdx  + "" + rowIdx'
                          (focusout)='focusOutFunction()'
                          (focusin)='focusInFunction()'
-                         [ngClass]='"cell" + colIdx  + "" + rowIdx'>
+                         [ngClass]='"cell" + colIdx  + "" + rowIdx'
+                         (keydown)='checkKeyInput($event)'>
               </span>
             </td>
           </tr>
