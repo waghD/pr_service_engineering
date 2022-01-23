@@ -35,6 +35,9 @@ export class FinishSudokuButtonComponent implements OnInit {
     console.log(this.sudokuId);
   }
 
+  /***
+   * Called when submit button clicked
+   */
   submitButtonClicked() {
     // check if sudoku is solved correctly
     let isSolvedCorrectly = false;
@@ -43,7 +46,6 @@ export class FinishSudokuButtonComponent implements OnInit {
     if (this.is2DArraysEqual(this.sudokuFieldsInput, this.sudokuFieldsSolution)) {
       isSolvedCorrectly = true;
     }
-    isSolvedCorrectly = true;
     if (isSolvedCorrectly) {
       this.solvedTime = this.investedTime;
 
@@ -54,7 +56,7 @@ export class FinishSudokuButtonComponent implements OnInit {
       }
     } else {
       // display error message
-      alert('The sudoku is not solved correctly, check your inputs and try again!');
+      alert('The Sudoku is not solved correctly, check your input fields and try again!');
     }
   }
 
