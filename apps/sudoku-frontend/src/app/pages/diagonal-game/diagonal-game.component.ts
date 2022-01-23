@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DiagonalGameService } from './diagonal-game.service';
 import { Router } from '@angular/router';
-import { ISudokuDto } from "../../../../../../libs/models/sudoku.dto";
-import { ISudokuFieldDto } from "../../../../../../libs/models/sudoku-field.dto";
+import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
+import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 
 @Component({
   selector: 'se-sudoku-diagonal-game',
@@ -15,7 +15,7 @@ export class DiagonalGameComponent implements OnInit {
   // vars
   sudokuAPIData: ISudokuDto;
   cacheGrid: number[][];
-  highlightGrid: number[][];
+  solvedGrid: number[][];
   emptyGrid: number[][];
   gridForm: FormGroup;
   timerCount: number;
@@ -25,6 +25,7 @@ export class DiagonalGameComponent implements OnInit {
   isInHelperMode: boolean;
   nonEditableFields: { x: number; y: number; }[];
   errorInUpLeftFlag: boolean;
+  isEveryFieldAssigned: boolean;
 
   // css constant classes
   NON_EDITABLE_CSS_CLASSNAME: string;
@@ -40,7 +41,7 @@ export class DiagonalGameComponent implements OnInit {
   constructor(public diagonalGameService: DiagonalGameService, private router: Router) {
     this.sudokuAPIData = {} as ISudokuDto;
 
-    this.highlightGrid = [
+    this.solvedGrid = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -98,6 +99,7 @@ export class DiagonalGameComponent implements OnInit {
     this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
 
     this.nonEditableFields = [];
+    this.isEveryFieldAssigned = false;
   }
 
   ngOnInit(): void {
@@ -125,7 +127,7 @@ export class DiagonalGameComponent implements OnInit {
     // gets a new sudoku
     this.diagonalGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
       this.sudokuAPIData = generatedSudokuData;
-      if(generatedSudokuData.fields) fillGridWithData(generatedSudokuData.fields);
+      if (generatedSudokuData.fields) fillGridWithData(generatedSudokuData.fields);
       this.timerCount = generatedSudokuData.edit_time;
       this.concealGrid();
       // make the initial fields non editable
@@ -376,7 +378,25 @@ export class DiagonalGameComponent implements OnInit {
       }
     }
 
+    /***
+     * Checks if every field is filled with an input
+     * @param sudokuGrid the 2D-grid to check
+     */
+    function isEverythingFilledOut(sudokuGrid: number[][]) {
+      for (let i = 0; i < sudokuGrid.length; i++) {
+        for (let j = 0; j < sudokuGrid[i].length; j++) {
+          if (sudokuGrid[i][j] == 0) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
 
+    // set booleans if everything is solved
+    if (isEverythingFilledOut(this.cacheGrid)) {
+      this.isEveryFieldAssigned = true;
+    }
   }
 
   /***
@@ -566,8 +586,8 @@ export class DiagonalGameComponent implements OnInit {
    * @private
    */
   private concealGrid() {
-    for (let i = 0; i < this.highlightGrid.length; i++) {
-      for (let j = 0; j < this.highlightGrid.length; j++) {
+    for (let i = 0; i < this.solvedGrid.length; i++) {
+      for (let j = 0; j < this.solvedGrid.length; j++) {
         this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, false);
       }
     }
@@ -579,8 +599,8 @@ export class DiagonalGameComponent implements OnInit {
    * @private
    */
   private revealGrid() {
-    for (let i = 0; i < this.highlightGrid.length; i++) {
-      for (let j = 0; j < this.highlightGrid.length; j++) {
+    for (let i = 0; i < this.solvedGrid.length; i++) {
+      for (let j = 0; j < this.solvedGrid.length; j++) {
         this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, true);
       }
     }
