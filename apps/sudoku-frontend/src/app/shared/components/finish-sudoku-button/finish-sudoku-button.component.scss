@@ -27,7 +27,6 @@
 .outer-overflow-container {
   display: none;
   position: relative;
-  overflow: hidden;
 }
 
 .outer-success-msg-container {
@@ -36,12 +35,14 @@
   width: 100vw;
   left: 0;
   top: 0;
-  position: absolute;
+  position: fixed;
   justify-content: center;
   align-items: center;
   z-index: 100;
 
   #success-animation {
+    width: 50%;
+    margin: 5em auto;
     z-index: 100;
     border-radius: 20px;
     background-color: white;

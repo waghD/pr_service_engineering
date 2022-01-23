@@ -44,7 +44,6 @@ export class FinishSudokuButtonComponent implements OnInit {
       isSolvedCorrectly = true;
     }
 
-    isSolvedCorrectly = true;
     if (isSolvedCorrectly) {
       this.solvedTime = this.investedTime;
 
@@ -55,7 +54,7 @@ export class FinishSudokuButtonComponent implements OnInit {
       }
     } else {
       // display error message
-
+      alert('The sudoku is not solved correctly, check your inputs and try again!');
     }
   }
 
@@ -72,7 +71,10 @@ export class FinishSudokuButtonComponent implements OnInit {
     // check if it is a guest and the sudokuId is set
     if (this.authService.isLoggedIn && this.authService.Username !== '' && this.sudokuId != -1) {
       // delete sudoku of player
-      this.finishSudokuButtonService.deleteSudoku(this.sudokuId);
+      this.finishSudokuButtonService.deleteSudoku(this.sudokuId).subscribe(res => {
+        console.log('Deleted sudoku:');
+        console.log(res);
+      });
     }
     // go back to menu
     this.router.navigate(['/home']).then(r => {
