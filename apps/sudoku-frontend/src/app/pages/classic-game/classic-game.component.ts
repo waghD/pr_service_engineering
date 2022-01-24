@@ -154,6 +154,7 @@ export class ClassicGameComponent implements OnInit {
     this.sudokuAPIData = sudokuData;
     if (sudokuData.fields) fillGridWithData(sudokuData.fields);
     this.timerCount = sudokuData.edit_time;
+    this.timeString = this.secondsToStringTime(this.timerCount);
     this.concealGrid();
     // make the initial fields non editable
     this.makeFieldsNotEditable(this.nonEditableFields);
@@ -484,27 +485,25 @@ export class ClassicGameComponent implements OnInit {
     }
   }
 
+  /***
+   * Converts a number of seconds to a string in the format hh:mm:ss
+   * @param seconds the seconds that should be transformed
+   */
+  secondsToStringTime(seconds: number) {
+    const date = new Date(0);
+    date.setSeconds(seconds);
+    return date.toISOString().substr(11, 8);
+  }
 
   /***
    * Called when the timer buttons are clicked
    */
   toggleTimer() {
-
-    /***
-     * Converts a number of seconds to a string in the format hh:mm:ss
-     * @param seconds the seconds that should be transformed
-     */
-    function secondsToStringTime(seconds: number) {
-      const date = new Date(0);
-      date.setSeconds(seconds);
-      return date.toISOString().substr(11, 8);
-    }
-
     if (!this.timerIsRunning) {
       // start timer
       this.interval = setInterval(() => {
         this.timerCount += 1;
-        this.timeString = secondsToStringTime(this.timerCount);
+        this.timeString = this.secondsToStringTime(this.timerCount);
       }, 1000);
       this.timerIsRunning = true;
 

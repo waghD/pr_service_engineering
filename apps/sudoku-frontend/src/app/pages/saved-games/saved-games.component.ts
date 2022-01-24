@@ -22,7 +22,7 @@ export class SavedGamesComponent implements OnInit {
   ngOnInit(): void {
     this.savedGamesService.getSavedSudokus().subscribe((savedDBGames) => {
 
-      if (this.savedGames.length === 0) {
+      if (savedDBGames.length === 0) {
         // no games to load, show notification and redirect
         const dialogRef = this.infoDialog.open(GenericInfoDialogComponent, {
           height: '400px',
