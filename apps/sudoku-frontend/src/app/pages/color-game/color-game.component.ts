@@ -147,6 +147,9 @@ export class ColorGameComponent implements OnInit {
         this.gridForm.patchValue(newVal);
         // save solution
         this.solvedGrid[field.x][field.y] = field.solution;
+
+        // add color css class
+        document.getElementsByClassName(`cell${field.x}${field.y}`)[0].classList.add(`color-${field.colour}`);
       }
     };
 
@@ -422,67 +425,6 @@ export class ColorGameComponent implements OnInit {
     }
   }
 
-
-  /***
-   * Gets called when clicking in a cell -> highlights the cell, col and row to help to solve
-   */
-  focusInFunction(): void {
-
-    /***
-     * Returns the start indices (col and row) of the surrounding box for a given row and col idx
-     * @param colIdx the col index of the cell
-     * @param rowIdx the row index of the cell
-     */
-    function getBoxIndices(colIdx: number, rowIdx: number) {
-      let startRowIdxBox = rowIdx;
-      let startColIdxBox = colIdx;
-
-      // count down to start indices
-      while (startRowIdxBox % 3 !== 0) {
-        startRowIdxBox -= 1;
-      }
-      while (startColIdxBox % 3 !== 0) {
-        startColIdxBox -= 1;
-      }
-      return { 'startRowIdxBox': startRowIdxBox, 'startColIdxBox': startColIdxBox };
-    }
-
-    // only highlight if in helper mode
-    if (this.isInHelperMode) {
-
-      // get active cell
-      if (document.activeElement) {
-
-        const currCellClassList = document.activeElement.classList;
-
-        for (let i = 0; i < currCellClassList.length; i++) {
-
-          const currCell: string = currCellClassList[i];
-
-          if (currCell.startsWith('cell')) {
-            const x: number = parseInt(currCell.charAt(4));
-            const y: number = parseInt(currCell.charAt(5));
-
-            // highlight row/column/box except for active cell
-            for (let index = 0; index < this.cacheGrid.length; index++) {
-              this.highlightField(index, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
-              this.highlightField(x, index, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
-            }
-
-            // highlight box
-            const boxIndices = getBoxIndices(x, y);
-            this.highlightBox(boxIndices['startRowIdxBox'], boxIndices['startColIdxBox'], this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, false);
-
-
-            // remove 'standard' highlight cell
-            this.highlightField(x, y, this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME, true);
-            // highlight cell little darker
-            this.highlightField(x, y, this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME, false);
-          }
-        }
-      }
-    }
-  }
 
   /***
    * Converts a number of seconds to a string in the format hh:mm:ss

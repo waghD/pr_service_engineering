@@ -27,7 +27,6 @@
               <span>
                   <input [formControlName]='"cell" + colIdx  + "" + rowIdx'
                          (focusout)='focusOutFunction()'
-                         (focusin)='focusInFunction()'
                          [ngClass]='"cell" + colIdx  + "" + rowIdx'
                          (keydown)='checkKeyInput($event)'>
               </span>
@@ -47,14 +46,6 @@
           <img src='assets/img/download-icon.png' alt='download icon' />
         </span>
         </button>
-      </div>
-      <div class='row-control-grid'>
-        <div class='line-container'>
-          <hr>
-        </div>
-        <mat-slide-toggle class='slide-toggle-button' checked='true' color='primary' (toggleChange)='helperSwitched()'>
-          <span class='slide-toggle-button-text'>Helper Mode</span>
-        </mat-slide-toggle>
       </div>
       <div class='row-control-grid'>
         <div class='line-container'>
