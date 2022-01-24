@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthStateService } from '../../services/auth-state.service';
-import { ISudokuDto } from "../../../../../../libs/models/sudoku.dto";
-import { ISudokuFieldDto } from "../../../../../../libs/models/sudoku-field.dto";
+import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
+import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +35,9 @@ export class ClassicGameService {
   saveSudokuParams(sudokuId: number, secondsOfTimer: { edit_time: number }) {
     return this.http
       .put<ISudokuDto>(this.baseApiURL + '/sudokus/' + sudokuId, secondsOfTimer);
+  }
+
+  getSavedSudoku(openId: number): Observable<ISudokuDto> {
+    return this.http.get<ISudokuDto>(this.baseApiURL + '/sudokus/' + openId);
   }
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DiagonalGameService } from './diagonal-game.service';
-import { Router } from '@angular/router';
-import { ISudokuDto } from "../../../../../../libs/models/sudoku.dto";
-import { ISudokuFieldDto } from "../../../../../../libs/models/sudoku-field.dto";
+import { ActivatedRoute, Router } from '@angular/router';
+import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
+import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 
 @Component({
   selector: 'se-sudoku-diagonal-game',
@@ -37,7 +37,7 @@ export class DiagonalGameComponent implements OnInit {
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
 
-  constructor(public diagonalGameService: DiagonalGameService, private router: Router) {
+  constructor(public diagonalGameService: DiagonalGameService, private router: Router, private route: ActivatedRoute) {
     this.sudokuAPIData = {} as ISudokuDto;
 
     this.highlightGrid = [
@@ -102,6 +102,32 @@ export class DiagonalGameComponent implements OnInit {
 
   ngOnInit(): void {
 
+    let openId = -1;
+    // check if this is a new game or a saved game
+    if (this.route.snapshot.params.openId) {
+      openId = parseInt(this.route.snapshot.params.openId);
+    }
+
+
+    if (openId != -1) {
+      // got an id from the router, open a saved sudoku
+      this.diagonalGameService.getSavedSudoku(openId).subscribe((savedSudokuData) => {
+        this.initVars(savedSudokuData);
+      });
+    } else {
+      // get a new sudoku
+      this.diagonalGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
+        this.initVars(generatedSudokuData);
+      });
+    }
+  }
+
+  /**
+   * Sets the initial values for playing the sudoku
+   * @param sudokuData the sudoko object containing the values
+   */
+  initVars(sudokuData: ISudokuDto) {
+
     /***
      * Fills the sudokuGrid with data specified from a SudokuEntity
      * @param gridData the SudokuEntity which yields the fields
@@ -122,15 +148,12 @@ export class DiagonalGameComponent implements OnInit {
       }
     };
 
-    // gets a new sudoku
-    this.diagonalGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
-      this.sudokuAPIData = generatedSudokuData;
-      if(generatedSudokuData.fields) fillGridWithData(generatedSudokuData.fields);
-      this.timerCount = generatedSudokuData.edit_time;
-      this.concealGrid();
-      // make the initial fields non editable
-      this.makeFieldsNotEditable(this.nonEditableFields);
-    });
+    this.sudokuAPIData = sudokuData;
+    if (sudokuData.fields) fillGridWithData(sudokuData.fields);
+    this.timerCount = sudokuData.edit_time;
+    this.concealGrid();
+    // make the initial fields non editable
+    this.makeFieldsNotEditable(this.nonEditableFields);
   }
 
   makeFieldsNotEditable(classList: { x: number; y: number }[]) {

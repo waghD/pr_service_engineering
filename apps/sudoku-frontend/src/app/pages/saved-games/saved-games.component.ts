@@ -3,6 +3,7 @@ import { SavedGamesService } from './saved-games.service';
 import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'se-sudoku-saved-games',
@@ -13,7 +14,7 @@ export class SavedGamesComponent implements OnInit {
 
   savedGames: ISudokuDto[];
 
-  constructor(public savedGamesService: SavedGamesService, public deleteDialog: MatDialog) {
+  constructor(public savedGamesService: SavedGamesService, public deleteDialog: MatDialog, private router: Router) {
     this.savedGames = [];
   }
 
@@ -63,10 +64,22 @@ export class SavedGamesComponent implements OnInit {
 
   /***
    * Called when play button is clicked
-   * @param oneSudoku
+   * @param oneSudoku the sudoku which will be opened
    */
   playButtonClicked(oneSudoku: ISudokuDto) {
-    console.log(oneSudoku);
+    switch (oneSudoku.type) {
+      case 'classic':
+        this.router.navigate(['/classic-game', { openId: oneSudoku.id }]);
+        break;
+      case 'diagonal':
+        this.router.navigate(['/diagonal-game', { openId: oneSudoku.id }]);
+        break;
+      //TODO add the others when implmented
+      default:
+        console.error('can\'t open unknown sudoku-type: ' + oneSudoku.type);
+    }
+
+
   }
 
   /***
