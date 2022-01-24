@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ClassicGameService } from './classic-game.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ISudokuDto } from "../../../../../../libs/models/sudoku.dto";
-import { ISudokuFieldDto } from "../../../../../../libs/models/sudoku-field.dto";
+import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
+import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 
 
 @Component({
@@ -27,6 +27,7 @@ export class ClassicGameComponent implements OnInit {
   nonEditableFields: { x: number; y: number; }[];
   NON_EDITABLE_CSS_CLASSNAME: string;
   isEveryFieldAssigned: boolean;
+  INPUT_FIELD_REGEX = new RegExp('^[1-9]$');
 
   // css constant classes
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
@@ -127,7 +128,7 @@ export class ClassicGameComponent implements OnInit {
     // gets a new sudoku
     this.classicGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
       this.sudokuAPIData = generatedSudokuData;
-      if(generatedSudokuData.fields) fillGridWithData(generatedSudokuData.fields);
+      if (generatedSudokuData.fields) fillGridWithData(generatedSudokuData.fields);
       this.timerCount = generatedSudokuData.edit_time;
       this.concealGrid();
       // make the initial fields non editable
@@ -545,4 +546,27 @@ export class ClassicGameComponent implements OnInit {
       });
     }
   }
+
+  /***
+   * Checks if the user input is valid for a sudoku field
+   * @param event the KeyboardEvent which will be checked
+   */
+  checkKeyInput(event: KeyboardEvent) {
+    console.log(event);
+    // only allow digits 1-9, backspace, delete, arrow to right and arrow to left
+    if (!(this.INPUT_FIELD_REGEX.test(event.key) || event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
+      event.preventDefault();
+      alert('Enter a number between 1-9!');
+    }
+    // check if cell has already a digit
+    if ((<HTMLInputElement>event.target).value.length > 0) {
+      // allow for these inputs inside field
+      if (!(event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
+        // do not allow further input
+        event.preventDefault();
+        alert('Only a single number between 1-9 is allowed!');
+      }
+    }
+  }
 }
+
