@@ -1,0 +1,30 @@
+<div class='submit-button-container'>
+  <div class='line-container'>
+    <hr>
+  </div>
+  <button class='default-button back-to-menu-button submit-sudoku-button' (click)='submitButtonClicked()'>
+    <span class='button-text'>Submit</span>
+  </button>
+</div>
+<div class='outer-overflow-container' id='outer-success-container'>
+  <div class='outer-success-msg-container'>
+    <div class='success-message' id='success-animation'>
+      <h1>Congratulations, you have solved the sudoku correctly!</h1>
+      <h2>Your Time: {{solvedTime}}</h2>
+      <div class='success-checkmark'>
+        <div class='check-icon'>
+          <span class='icon-line line-tip'></span>
+          <span class='icon-line line-long'></span>
+          <div class='icon-circle'></div>
+          <div class='icon-fix'></div>
+        </div>
+      </div>
+      <button class='default-button back-to-menu-button' (click)='backToMenuButtonClicked()'>
+          <span class='inner-button'>
+          <span class='button-text'>Back to Menu</span>
+          <img src='assets/svg/mono-tab-duplicate.svg'
+               alt='back arrow' /></span>
+      </button>
+    </div>
+  </div>
+</div>

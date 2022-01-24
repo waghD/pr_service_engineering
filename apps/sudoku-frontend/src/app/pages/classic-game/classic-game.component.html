@@ -66,6 +66,16 @@
                alt='back arrow' /></span>
         </button>
       </div>
+      <div
+        *ngIf='isEveryFieldAssigned'
+        class='row-control-grid'>
+
+        <se-sudoku-finish-sudoku-button [sudokuFieldsInput]='cacheGrid'
+                                        [sudokuFieldsSolution]='solvedGrid'
+                                        [investedTime]='this.timeString'
+                                        [sudokuId]='this.sudokuAPIData.id'>
+        </se-sudoku-finish-sudoku-button>
+      </div>
     </div>
   </div>
 </div>
