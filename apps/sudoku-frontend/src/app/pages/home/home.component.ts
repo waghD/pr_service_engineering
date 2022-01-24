@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HomeStateService } from './home-state.service';
+import { AuthStateService } from '../../services/auth-state.service';
 
 @Component({
   selector: 'se-sudoku-home',
@@ -8,7 +9,7 @@ import { HomeStateService } from './home-state.service';
 })
 export class HomeComponent {
 
-  constructor(public state: HomeStateService) {
+  constructor(public state: HomeStateService, public authStateService: AuthStateService) {
   }
 
 }

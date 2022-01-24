@@ -14,7 +14,7 @@ export class SudokuDto implements ISudokuDto{
 
    @ApiProperty()
    @IsNotEmpty()
-   difficutly:string;
+   difficulty:string;
 
    @IsNumber()
    @IsPositive()
