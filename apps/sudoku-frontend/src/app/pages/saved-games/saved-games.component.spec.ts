@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SavedGamesComponent } from './saved-games.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('SavedGamesComponent', () => {
   let component: SavedGamesComponent;
@@ -8,9 +11,11 @@ describe('SavedGamesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SavedGamesComponent ]
+      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
+      declarations: [SavedGamesComponent],
+      providers: [SavedGamesComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GenericInfoDialogComponent } from './generic-info-dialog.component';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 describe('GenericInfoDialogComponent', () => {
   let component: GenericInfoDialogComponent;
@@ -8,10 +9,16 @@ describe('GenericInfoDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GenericInfoDialogComponent ]
+      declarations: [GenericInfoDialogComponent],
+      imports: [MatDialogModule],
+      providers: [GenericInfoDialogComponent, {
+        provide: MatDialogRef,
+        useValue: {}
+      }, { provide: MAT_DIALOG_DATA, useValue: {} }]
     })
-    .compileComponents();
-  });
+      .compileComponents();
+  })
+  ;
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GenericInfoDialogComponent);
