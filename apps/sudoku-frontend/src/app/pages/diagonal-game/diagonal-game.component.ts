@@ -15,7 +15,7 @@ export class DiagonalGameComponent implements OnInit {
   // vars
   sudokuAPIData: ISudokuDto;
   cacheGrid: number[][];
-  highlightGrid: number[][];
+  solvedGrid: number[][];
   emptyGrid: number[][];
   gridForm: FormGroup;
   timerCount: number;
@@ -25,6 +25,8 @@ export class DiagonalGameComponent implements OnInit {
   isInHelperMode: boolean;
   nonEditableFields: { x: number; y: number; }[];
   errorInUpLeftFlag: boolean;
+  isEveryFieldAssigned: boolean;
+  INPUT_FIELD_REGEX = new RegExp('^[1-9]$');
 
   // css constant classes
   NON_EDITABLE_CSS_CLASSNAME: string;
@@ -40,7 +42,7 @@ export class DiagonalGameComponent implements OnInit {
   constructor(public diagonalGameService: DiagonalGameService, private router: Router, private route: ActivatedRoute) {
     this.sudokuAPIData = {} as ISudokuDto;
 
-    this.highlightGrid = [
+    this.solvedGrid = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -98,6 +100,7 @@ export class DiagonalGameComponent implements OnInit {
     this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
 
     this.nonEditableFields = [];
+    this.isEveryFieldAssigned = false;
   }
 
   ngOnInit(): void {
@@ -399,7 +402,25 @@ export class DiagonalGameComponent implements OnInit {
       }
     }
 
+    /***
+     * Checks if every field is filled with an input
+     * @param sudokuGrid the 2D-grid to check
+     */
+    function isEverythingFilledOut(sudokuGrid: number[][]) {
+      for (let i = 0; i < sudokuGrid.length; i++) {
+        for (let j = 0; j < sudokuGrid[i].length; j++) {
+          if (sudokuGrid[i][j] == 0) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
 
+    // set booleans if everything is solved
+    if (isEverythingFilledOut(this.cacheGrid)) {
+      this.isEveryFieldAssigned = true;
+    }
   }
 
   /***
@@ -589,8 +610,8 @@ export class DiagonalGameComponent implements OnInit {
    * @private
    */
   private concealGrid() {
-    for (let i = 0; i < this.highlightGrid.length; i++) {
-      for (let j = 0; j < this.highlightGrid.length; j++) {
+    for (let i = 0; i < this.solvedGrid.length; i++) {
+      for (let j = 0; j < this.solvedGrid.length; j++) {
         this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, false);
       }
     }
@@ -602,8 +623,8 @@ export class DiagonalGameComponent implements OnInit {
    * @private
    */
   private revealGrid() {
-    for (let i = 0; i < this.highlightGrid.length; i++) {
-      for (let j = 0; j < this.highlightGrid.length; j++) {
+    for (let i = 0; i < this.solvedGrid.length; i++) {
+      for (let j = 0; j < this.solvedGrid.length; j++) {
         this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, true);
       }
     }
@@ -628,6 +649,29 @@ export class DiagonalGameComponent implements OnInit {
       this.router.navigate(['/home']).then(r => {
         console.log('redirected=' + r);
       });
+    }
+  }
+
+
+  /***
+   * Checks if the user input is valid for a sudoku field
+   * @param event the KeyboardEvent which will be checked
+   */
+  checkKeyInput(event: KeyboardEvent) {
+    console.log(event);
+    // only allow digits 1-9, backspace, delete, arrow to right and arrow to left
+    if (!(this.INPUT_FIELD_REGEX.test(event.key) || event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
+      event.preventDefault();
+      alert('Enter a number between 1-9!');
+    }
+    // check if cell has already a digit
+    if ((<HTMLInputElement>event.target).value.length > 0) {
+      // allow for these inputs inside field
+      if (!(event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
+        // do not allow further input
+        event.preventDefault();
+        alert('Only a single number between 1-9 is allowed!');
+      }
     }
   }
 }

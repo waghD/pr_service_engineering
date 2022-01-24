@@ -28,7 +28,8 @@
                   <input [formControlName]='"cell" + colIdx  + "" + rowIdx'
                          (focusout)='focusOutFunction()'
                          (focusin)='focusInFunction()'
-                         [ngClass]='"cell" + colIdx  + "" + rowIdx'>
+                         [ngClass]='"cell" + colIdx  + "" + rowIdx'
+                         (keydown)='checkKeyInput($event)'>
               </span>
             </td>
           </tr>
@@ -65,6 +66,16 @@
           <img src='assets/svg/mono-tab-duplicate.svg'
                alt='back arrow' /></span>
         </button>
+      </div>
+      <div
+        *ngIf='isEveryFieldAssigned'
+        class='row-control-grid'>
+
+        <se-sudoku-finish-sudoku-button [sudokuFieldsInput]='cacheGrid'
+                                        [sudokuFieldsSolution]='solvedGrid'
+                                        [investedTime]='this.timeString'
+                                        [sudokuId]='this.sudokuAPIData.id'>
+        </se-sudoku-finish-sudoku-button>
       </div>
     </div>
   </div>

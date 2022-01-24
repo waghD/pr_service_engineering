@@ -16,7 +16,7 @@ export class ClassicGameComponent implements OnInit {
   // vars
   sudokuAPIData: ISudokuDto;
   cacheGrid: number[][];
-  highlightGrid: number[][];
+  solvedGrid: number[][];
   emptyGrid: number[][];
   gridForm: FormGroup;
   timerCount: number;
@@ -26,6 +26,8 @@ export class ClassicGameComponent implements OnInit {
   isInHelperMode: boolean;
   nonEditableFields: { x: number; y: number; }[];
   NON_EDITABLE_CSS_CLASSNAME: string;
+  isEveryFieldAssigned: boolean;
+  INPUT_FIELD_REGEX = new RegExp('^[1-9]$');
 
   // css constant classes
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
@@ -39,7 +41,7 @@ export class ClassicGameComponent implements OnInit {
 
     this.sudokuAPIData = {} as ISudokuDto;
 
-    this.highlightGrid = [
+    this.solvedGrid = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -96,7 +98,7 @@ export class ClassicGameComponent implements OnInit {
     this.nonEditableFields = [];
 
     this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
-
+    this.isEveryFieldAssigned = false;
   }
 
   ngOnInit(): void {
@@ -144,6 +146,8 @@ export class ClassicGameComponent implements OnInit {
           this.nonEditableFields.push(temp);
         }
         this.gridForm.patchValue(newVal);
+        // save solution
+        this.solvedGrid[field.x][field.y] = field.solution;
       }
     };
 
@@ -355,6 +359,27 @@ export class ClassicGameComponent implements OnInit {
         this.highlightBox(startIdxRow, startIdxCol, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, true);
       }
     }
+
+    /***
+     * Checks if every field is filled with an input
+     * @param sudokuGrid the 2D-grid to check
+     */
+    function isEverythingFilledOut(sudokuGrid: number[][]) {
+      for (let i = 0; i < sudokuGrid.length; i++) {
+        for (let j = 0; j < sudokuGrid[i].length; j++) {
+          if (sudokuGrid[i][j] == 0) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    // set booleans if everything is solved
+    if (isEverythingFilledOut(this.cacheGrid)) {
+      this.isEveryFieldAssigned = true;
+    }
+
   }
 
   /***
@@ -502,8 +527,8 @@ export class ClassicGameComponent implements OnInit {
    * @private
    */
   private concealGrid() {
-    for (let i = 0; i < this.highlightGrid.length; i++) {
-      for (let j = 0; j < this.highlightGrid.length; j++) {
+    for (let i = 0; i < this.solvedGrid.length; i++) {
+      for (let j = 0; j < this.solvedGrid.length; j++) {
         this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, false);
       }
     }
@@ -515,8 +540,8 @@ export class ClassicGameComponent implements OnInit {
    * @private
    */
   private revealGrid() {
-    for (let i = 0; i < this.highlightGrid.length; i++) {
-      for (let j = 0; j < this.highlightGrid.length; j++) {
+    for (let i = 0; i < this.solvedGrid.length; i++) {
+      for (let j = 0; j < this.solvedGrid.length; j++) {
         this.highlightField(i, j, this.CONCEAL_FIELD_CSS_CLASSNAME, true);
       }
     }
@@ -543,4 +568,27 @@ export class ClassicGameComponent implements OnInit {
       });
     }
   }
+
+  /***
+   * Checks if the user input is valid for a sudoku field
+   * @param event the KeyboardEvent which will be checked
+   */
+  checkKeyInput(event: KeyboardEvent) {
+    console.log(event);
+    // only allow digits 1-9, backspace, delete, arrow to right and arrow to left
+    if (!(this.INPUT_FIELD_REGEX.test(event.key) || event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
+      event.preventDefault();
+      alert('Enter a number between 1-9!');
+    }
+    // check if cell has already a digit
+    if ((<HTMLInputElement>event.target).value.length > 0) {
+      // allow for these inputs inside field
+      if (!(event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
+        // do not allow further input
+        event.preventDefault();
+        alert('Only a single number between 1-9 is allowed!');
+      }
+    }
+  }
 }
+

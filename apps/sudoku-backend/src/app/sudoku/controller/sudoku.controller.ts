@@ -74,7 +74,7 @@ export class SudokuController {
   async getOne(@Param('id') id: number, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
     try {
-      return await this.sudokuService.getOneSudoku(id,userId);
+      return await this.sudokuService.getOneSudoku(userId,id);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }

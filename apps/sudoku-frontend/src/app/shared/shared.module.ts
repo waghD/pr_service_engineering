@@ -6,18 +6,22 @@ import { RouterModule } from '@angular/router';
 import { LoginBannerComponent } from './components/login-banner/login-banner.component';
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
+import { FinishSudokuButtonComponent } from './components/finish-sudoku-button/finish-sudoku-button.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     LoginBannerComponent,
+    FinishSudokuButtonComponent
+    LoginBannerComponent,
     DeleteDialogComponent
   ],
   exports: [
     HeaderComponent,
     FooterComponent,
-    LoginBannerComponent
+    LoginBannerComponent,
+    FinishSudokuButtonComponent
   ],
   imports: [
     CommonModule,

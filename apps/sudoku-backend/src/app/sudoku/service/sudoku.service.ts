@@ -81,7 +81,7 @@ export class SudokuService {
       generatedSudoku.type= type;
       let sudoku;
       if(userId >0){
-        generatedSudoku.user =await this.userService.findUserByID(userId);
+        generatedSudoku.user = await this.userService.findUserByID(userId);
         sudoku = await this.sudokuRepository.save(generatedSudoku);
       }else{
         generatedSudoku.id= 0;
@@ -95,13 +95,13 @@ export class SudokuService {
 
   }
 
-  getOneSudoku(userId:number,id: number ): Promise<SudokuEntity> {
+  async getOneSudoku(userId:number,id: number ): Promise<SudokuEntity> {
     if(userId == 0){
       return this.sudokuRepository.findOneOrFail(id, {
         relations: ['fields']
       });
     }
-    const user = this.userService.findUserByID(userId);
+    const user = await this.userService.findUserByID(userId);
     return this.sudokuRepository.findOneOrFail(id, {
       where:{user:user},
       relations: ['fields']
