@@ -4,12 +4,15 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RouterModule } from '@angular/router';
 import { LoginBannerComponent } from './components/login-banner/login-banner.component';
+import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    LoginBannerComponent
+    LoginBannerComponent,
+    DeleteDialogComponent
   ],
   exports: [
     HeaderComponent,
@@ -18,7 +21,8 @@ import { LoginBannerComponent } from './components/login-banner/login-banner.com
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    MatButtonModule
   ]
 })
 export class SharedModule {

@@ -1,0 +1,67 @@
+@import "apps/sudoku-frontend/src/colors.scss";
+
+.table-container {
+
+  th, td, table {
+    text-align: center;
+
+    h2, h3 {
+      margin: 0;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+
+    .dialog-container {
+      margin: 0;
+      padding: 8px 0;
+      display: flex;
+      flex-wrap: wrap;
+      min-height: 52px;
+      align-items: center;
+      box-sizing: content-box;
+
+      .trash-bin-button {
+        -webkit-transition: background-color 0.5s linear;
+        -ms-transition: background-color 0.5s linear;
+        transition: background-color 0.5s linear;
+
+        &:hover {
+          background-color: $error-red;
+          -webkit-transition: background-color 0.5s linear;
+          -ms-transition: background-color 0.5s linear;
+          transition: background-color 0.5s linear;
+        }
+      }
+    }
+
+    .play-button {
+      -webkit-transition: background-color 0.5s linear;
+      -ms-transition: background-color 0.5s linear;
+      transition: background-color 0.5s linear;
+
+      &:hover {
+        background-color: $confirmation-green;
+        -webkit-transition: background-color 0.5s linear;
+        -ms-transition: background-color 0.5s linear;
+        transition: background-color 0.5s linear;
+      }
+    }
+
+    td, th {
+      padding: 0.5em 1em;
+      border-bottom: 1px solid black;
+    }
+  }
+
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5em;
+
+  .actual-id {
+    display: none;
+  }
+}

@@ -18,4 +18,8 @@ export class SavedGamesService {
   getSavedSudokus(): Observable<ISudokuDto[]> {
     return this.http.get<ISudokuDto[]>(this.baseApiURL + '/sudokus');
   }
+
+  deleteSudoku(sudokuId: number): Observable<ISudokuDto> {
+    return this.http.delete<ISudokuDto>(this.baseApiURL + '/sudokus/' + sudokuId);
+  }
 }
