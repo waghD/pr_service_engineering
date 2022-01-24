@@ -7,15 +7,17 @@ import { LoginBannerComponent } from './components/login-banner/login-banner.com
 import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { FinishSudokuButtonComponent } from './components/finish-sudoku-button/finish-sudoku-button.component';
+import { GenericInfoDialogComponent } from './components/generic-info-dialog/generic-info-dialog.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     LoginBannerComponent,
-    FinishSudokuButtonComponent
+    FinishSudokuButtonComponent,
     LoginBannerComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    GenericInfoDialogComponent
   ],
   exports: [
     HeaderComponent,

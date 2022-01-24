@@ -4,6 +4,7 @@ import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';
 import { Router } from '@angular/router';
+import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
 
 @Component({
   selector: 'se-sudoku-saved-games',
@@ -14,27 +15,42 @@ export class SavedGamesComponent implements OnInit {
 
   savedGames: ISudokuDto[];
 
-  constructor(public savedGamesService: SavedGamesService, public deleteDialog: MatDialog, private router: Router) {
+  constructor(public savedGamesService: SavedGamesService, public deleteDialog: MatDialog, private router: Router, public infoDialog: MatDialog) {
     this.savedGames = [];
   }
 
   ngOnInit(): void {
     this.savedGamesService.getSavedSudokus().subscribe((savedDBGames) => {
-      // calc ratio for progress percentage and add timestring
-      for (let i = 0; i < savedDBGames.length; i++) {
-        const currentSudoku = savedDBGames[i];
-        let filledOutFields = 0;
-        if (currentSudoku.fields) {
-          currentSudoku.fields.forEach(function(field) {
-            // field does not contain zero -> it is filled out
-            if (field.value > 0) filledOutFields++;
-          });
 
-          currentSudoku.filled_out_ratio = Math.round(filledOutFields * 100 / (currentSudoku.fields.length ^ 2));
-          currentSudoku.time_string = this.secondsToStringTime(currentSudoku.edit_time);
+      if (this.savedGames.length === 0) {
+        // no games to load, show notification and redirect
+        const dialogRef = this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '600px',
+          autoFocus: false,
+          data: { infoMessage: 'You did not safe any sudoku games yet. Play a few games and safe them to display them here!' }
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+          this.router.navigate(['/home']);
+        });
+      } else {
+        // calc ratio for progress percentage and add timestring
+        for (let i = 0; i < savedDBGames.length; i++) {
+          const currentSudoku = savedDBGames[i];
+          let filledOutFields = 0;
+          if (currentSudoku.fields) {
+            currentSudoku.fields.forEach(function(field) {
+              // field does not contain zero -> it is filled out
+              if (field.value > 0) filledOutFields++;
+            });
+
+            currentSudoku.filled_out_ratio = Math.round(filledOutFields * 100 / (currentSudoku.fields.length ^ 2));
+            currentSudoku.time_string = this.secondsToStringTime(currentSudoku.edit_time);
+          }
         }
+        this.savedGames = savedDBGames;
       }
-      this.savedGames = savedDBGames;
     });
   }
 
