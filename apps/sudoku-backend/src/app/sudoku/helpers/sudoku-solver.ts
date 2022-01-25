@@ -88,6 +88,14 @@ function isPossibleColour(cell:number,colour:number,colours:number[]){
     return false;
   } else if (cell+1 <81 && colours[cell+1] == colour){
     return false;
+  } else if (cell+8 <81 && colours[cell+8] == colour){
+    return false;
+  }else if (cell-8 >=0 && colours[cell-8] == colour) {
+    return false;
+  }else if (cell-10 >=0 && colours[cell-10] == colour) {
+    return false;
+  }else if (cell+10 <81 && colours[cell+10] == colour){
+    return false;
   }
 
   return true;
