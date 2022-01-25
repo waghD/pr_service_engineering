@@ -1,14 +1,14 @@
-import { ISudokuSolverDto } from '../../../../../../libs/models/ISudokuSolverDto';
-import { IsIn, IsNotEmpty } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { SudokuFieldDto } from './sudoku-field.dto';
+import { ISudokuSolverDto } from "../../../../../../libs/models/ISudokuSolverDto";
+import { IsIn, IsNotEmpty } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { SudokuFieldDto } from "./sudoku-field.dto";
 
 export class SudokuSolverDto implements ISudokuSolverDto {
   @IsNotEmpty()
-  @IsIn(['classic','diagonal'])
+  @IsIn(["classic", "diagonal"])
   @ApiProperty()
-  type:string;
+  type: string;
 
   @ApiProperty()
-  fields: SudokuFieldDto[]
+  fields: SudokuFieldDto[];
 }
