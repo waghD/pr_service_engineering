@@ -3,7 +3,7 @@
   <div class='heading-container'>
     <div class='heading-first-row-container'>
       <a
-        *ngIf='!GAME_PAGE_URLS.includes(router.url); else DOSpan'
+        *ngIf='!GAME_PAGE_URLS.includes(routerUrlPrefix); else DOSpan'
         routerLink=''>
         <span class='heading-chars'>DO</span>
       </a>
@@ -12,21 +12,21 @@
       </ng-template>
     </div>
     <div class='heading-second-row-container'>
-      <a *ngIf='!GAME_PAGE_URLS.includes(router.url); else SUDiv' routerLink=''>
+      <a *ngIf='!GAME_PAGE_URLS.includes(routerUrlPrefix); else SUDiv' routerLink=''>
         <div class='heading-chars'>SU</div>
       </a>
       <ng-template #SUDiv>
         <div class='heading-chars'>SU</div>
       </ng-template>
       <div class='heading-img-container'>
-        <a *ngIf='!GAME_PAGE_URLS.includes(router.url); else imgSpan' routerLink=''>
+        <a *ngIf='!GAME_PAGE_URLS.includes(routerUrlPrefix); else imgSpan' routerLink=''>
           <img class='heading-logo' src='../../../../assets/img/sudoku-rectangle-logo.jpg' alt='sudoku logo'>
         </a>
         <ng-template #imgSpan>
           <img class='heading-logo' src='../../../../assets/img/sudoku-rectangle-logo.jpg' alt='sudoku logo'>
         </ng-template>
       </div>
-      <a *ngIf='!GAME_PAGE_URLS.includes(router.url); else KUDiv' routerLink=''>
+      <a *ngIf='!GAME_PAGE_URLS.includes(routerUrlPrefix); else KUDiv' routerLink=''>
         <div class='heading-chars'>KU</div>
       </a>
       <ng-template #KUDiv>
