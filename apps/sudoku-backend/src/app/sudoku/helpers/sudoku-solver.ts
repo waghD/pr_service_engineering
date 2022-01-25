@@ -13,35 +13,30 @@ function returnBlock(cell: number) {
   return Math.floor(returnRow(cell) / 3) * 3 + Math.floor(returnCol(cell) / 3);
 }
 
-function isinSquare(cell:number) {
+function getSquare(cell:number) {
   const square_one = [10,11,12,19,20,21,28,29,30]
   const square_two = [14,15,16,23,24,25,32,33,34]
   const square_three = [46,47,48,55,56,57,64,65,66]
   const square_four = [50,51,52,59,60,61,68,69,70]
 
-  if( square_one.includes(cell)) return true;
-  if( square_two.includes(cell)) return true;
-  if( square_three.includes(cell)) return true;
-  return square_four.includes(cell);
+  if( square_one.includes(cell)) return square_one;
+  if( square_two.includes(cell)) return square_two;
+  if( square_three.includes(cell)) return square_three;
+  if(square_four.includes(cell)) return  square_four;
 
+
+  return undefined;
 
 }
 
-function isPossibleSquare(number: number, block: number, sudoku: number[], row: number, col: number) {
-  let x = 0;
-  if (row == 3 || row == 6) block = block - 3;
-  if (col == 3) block = block - 1;
-  if (col == 5) block = block + 1;
-  if (block == 0) x = 10;
-  if (block == 2) x = 8;
-  if (block == 6) x = -8;
-  if (block == 8) x = -10;
+function isPossibleSquare(number: number, sudoku: number[],square:number[]) {
 
-    for (let i = 0; i <= 8; i++) {
-      if (sudoku[(Math.floor(block / 3) * 27 + i % 3 + 9 * Math.floor(i / 3) + 3 * (block % 3) + x)] == number) {
-        return false;
-      }
+  for(const x of square){
+    if(sudoku[x]==number){
+      return  false;
     }
+  }
+
   return true;
 }
 
@@ -175,12 +170,14 @@ function isPossibleNumber(cell: number, number: number, sudoku: number[], type: 
   const row = returnRow(cell);
   const col = returnCol(cell);
   const block = returnBlock(cell);
+  let square;
+  if(type =="region") square = getSquare(cell);
   if (type == "diagonal") {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
       && isPossibleBlock(number, block, sudoku) && isPossibleDiag(number, cell, sudoku);
-  } else if (type == "region" && isinSquare(cell)) {
+  } else if (type == "region" && square ) {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
-      && isPossibleBlock(number, block, sudoku) && isPossibleSquare(number, block, sudoku, row, col);
+      && isPossibleBlock(number, block, sudoku) && isPossibleSquare(number,sudoku, square);
   } else {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
       && isPossibleBlock(number, block, sudoku);
