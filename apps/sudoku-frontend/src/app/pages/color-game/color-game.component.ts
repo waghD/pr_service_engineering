@@ -46,24 +46,24 @@ export class ColorGameComponent {
     public colorGameService: ColorGameService,
     private router: Router,
     private route: ActivatedRoute,
-    private authStateService: AuthStateService,
+    private authStateService: AuthStateService
   ) {
 
     this.route.paramMap.subscribe(paramMap => {
       const openID = paramMap.get('openId');
-      if(openID) {
+      if (openID) {
         this.openID = parseInt(openID);
         this.initialize();
       }
-    })
+    });
 
     this.route.queryParamMap.subscribe(paramMap => {
       const difficultyString = paramMap.get('difficulty');
-      if(difficultyString && isValidSudokuDifficulty(difficultyString)) {
+      if (difficultyString && isValidSudokuDifficulty(difficultyString)) {
         this.difficulty = difficultyString as SudokuDifficulties;
         this.initialize();
       }
-    })
+    });
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -117,7 +117,7 @@ export class ColorGameComponent {
     this.ERROR_BACKGROUND_COL_CSS_CLASSNAME = 'error-background-col';
     this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME = 'error-background-row';
     this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME = 'error-background-box';
-    this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME = 'error-background-color'
+    this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME = 'error-background-color';
     this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME = 'selected-cell-background';
     this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME = 'selected-row-background';
     this.CONCEAL_FIELD_CSS_CLASSNAME = 'conceal-field';
@@ -136,7 +136,7 @@ export class ColorGameComponent {
     if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
       this.colorGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
-        if(isValidSudokuDifficulty(savedSudokuData.difficulty)) {
+        if (isValidSudokuDifficulty(savedSudokuData.difficulty)) {
           this.difficulty = savedSudokuData.difficulty as SudokuDifficulties;
         }
         this.initVars(savedSudokuData);
@@ -429,9 +429,7 @@ export class ColorGameComponent {
     }
 
     // set booleans if everything is solved
-    if (isEverythingFilledOut(this.cacheGrid)) {
-      this.isEveryFieldAssigned = true;
-    }
+    this.isEveryFieldAssigned = isEverythingFilledOut(this.cacheGrid);
 
   }
 

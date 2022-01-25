@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -46,19 +46,19 @@ export class RegionGameComponent {
 
     this.route.paramMap.subscribe(paramMap => {
       const openID = paramMap.get('openId');
-      if(openID) {
+      if (openID) {
         this.openID = parseInt(openID);
         this.initialize();
       }
-    })
+    });
 
     this.route.queryParamMap.subscribe(paramMap => {
       const difficultyString = paramMap.get('difficulty');
-      if(difficultyString && isValidSudokuDifficulty(difficultyString)) {
+      if (difficultyString && isValidSudokuDifficulty(difficultyString)) {
         this.difficulty = difficultyString as SudokuDifficulties;
         this.initialize();
       }
-    })
+    });
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -131,7 +131,7 @@ export class RegionGameComponent {
     if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
       this.regionGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
-        if(isValidSudokuDifficulty(savedSudokuData.difficulty)) {
+        if (isValidSudokuDifficulty(savedSudokuData.difficulty)) {
           this.difficulty = savedSudokuData.difficulty as SudokuDifficulties;
         }
         this.initVars(savedSudokuData);
@@ -424,9 +424,7 @@ export class RegionGameComponent {
     }
 
     // set booleans if everything is solved
-    if (isEverythingFilledOut(this.cacheGrid)) {
-      this.isEveryFieldAssigned = true;
-    }
+    this.isEveryFieldAssigned = isEverythingFilledOut(this.cacheGrid);
 
   }
 

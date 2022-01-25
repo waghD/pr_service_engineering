@@ -46,24 +46,24 @@ export class ClassicGameComponent {
     public classicGameService: ClassicGameService,
     private router: Router,
     private route: ActivatedRoute,
-    private authStateService: AuthStateService,
+    private authStateService: AuthStateService
   ) {
 
     this.route.paramMap.subscribe(paramMap => {
       const openID = paramMap.get('openId');
-      if(openID) {
+      if (openID) {
         this.openID = parseInt(openID);
         this.initialize();
       }
-    })
+    });
 
     this.route.queryParamMap.subscribe(paramMap => {
       const difficultyString = paramMap.get('difficulty');
-      if(difficultyString && isValidSudokuDifficulty(difficultyString)) {
+      if (difficultyString && isValidSudokuDifficulty(difficultyString)) {
         this.difficulty = difficultyString as SudokuDifficulties;
         this.initialize();
       }
-    })
+    });
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -135,7 +135,7 @@ export class ClassicGameComponent {
     if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
       this.classicGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
-        if(isValidSudokuDifficulty(savedSudokuData.difficulty)) {
+        if (isValidSudokuDifficulty(savedSudokuData.difficulty)) {
           this.difficulty = savedSudokuData.difficulty as SudokuDifficulties;
         }
         this.initVars(savedSudokuData);
@@ -402,9 +402,7 @@ export class ClassicGameComponent {
     }
 
     // set booleans if everything is solved
-    if (isEverythingFilledOut(this.cacheGrid)) {
-      this.isEveryFieldAssigned = true;
-    }
+    this.isEveryFieldAssigned = isEverythingFilledOut(this.cacheGrid);
 
   }
 

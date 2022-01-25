@@ -478,9 +478,7 @@ export class DiagonalColorGameComponent {
     }
 
     // set booleans if everything is solved
-    if (isEverythingFilledOut(this.cacheGrid)) {
-      this.isEveryFieldAssigned = true;
-    }
+    this.isEveryFieldAssigned = isEverythingFilledOut(this.cacheGrid);
 
   }
 
