@@ -364,7 +364,7 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
     }
     coloursudoku.sudoku[whatToTry] = attempt;
     coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours);
-    if (possiblecolours[attempt].length > 1) {
+    if (possiblecolours[attempt].length > 1 && type == "colour") {
       possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours);
     }
   }
