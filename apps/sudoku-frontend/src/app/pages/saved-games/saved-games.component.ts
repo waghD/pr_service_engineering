@@ -62,7 +62,8 @@ export class SavedGamesComponent implements OnInit {
     const dialogRef = this.deleteDialog.open(DeleteDialogComponent, {
       height: '400px',
       width: '600px',
-      autoFocus: false
+      autoFocus: false,
+      data: { questionText: 'Do you really want to delete this sudoku? All your progress made so far will be lost!' }
     });
 
     dialogRef.afterClosed().subscribe(isAnswerYes => {

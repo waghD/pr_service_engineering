@@ -8,6 +8,7 @@ import { AuthStateService } from '../../services/auth-state.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
 import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'se-sudoku-color-game',
@@ -49,7 +50,8 @@ export class ColorGameComponent {
     private router: Router,
     private route: ActivatedRoute,
     private authStateService: AuthStateService,
-    public infoDialog: MatDialog
+    public infoDialog: MatDialog,
+    public deleteDialog: MatDialog
   ) {
 
     this.route.paramMap.subscribe(paramMap => {
@@ -228,11 +230,11 @@ export class ColorGameComponent {
     this.colorGameService.saveSudokuFields(id, gridValues).subscribe(() => {
       console.log('saved fields');
       const dialogRef = this.infoDialog.open(GenericInfoDialogComponent, {
-          height: '400px',
-          width: '50vw',
-          autoFocus: false,
-          data: { infoMessage: 'Successfully saved Sudoku!' }
-        });
+        height: '400px',
+        width: '50vw',
+        autoFocus: false,
+        data: { infoMessage: 'Successfully saved Sudoku!' }
+      });
     });
   }
 
@@ -558,13 +560,20 @@ export class ColorGameComponent {
   backToMenuButtonClicked() {
     // check if logged in
     if (this.authStateService.Username != '') {
-      const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
-      if (isRedirectOk) {
-        // player confirmation -> go to main menu
-        this.router.navigate(['/home']).then(r => {
-          console.log('redirected=' + r);
-        });
-      }
+      const dialogRef = this.deleteDialog.open(DeleteDialogComponent, {
+        height: '400px',
+        width: '60vw',
+        autoFocus: false,
+        data: { questionText: 'Behold fellow player, if you go back without saving, your changes since the last save get lost!' }
+      });
+      dialogRef.afterClosed().subscribe(isRedirectOk => {
+        if (isRedirectOk) {
+          // player confirmation -> go to main menu
+          this.router.navigate(['/home']).then(r => {
+            console.log('redirected=' + r);
+          });
+        }
+      });
     } else {
       // logged in as guest, no saving possible just redirect
       this.router.navigate(['/home']).then(r => {
@@ -583,11 +592,11 @@ export class ColorGameComponent {
     if (!(this.INPUT_FIELD_REGEX.test(event.key) || event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
       event.preventDefault();
       this.infoDialog.open(GenericInfoDialogComponent, {
-          height: '400px',
-          width: '50vw',
-          autoFocus: false,
-          data: { infoMessage: 'Enter a number between 1-9!' }
-        });
+        height: '400px',
+        width: '50vw',
+        autoFocus: false,
+        data: { infoMessage: 'Enter a number between 1-9!' }
+      });
     }
     // check if cell has already a digit
     if ((<HTMLInputElement>event.target).value.length > 0) {

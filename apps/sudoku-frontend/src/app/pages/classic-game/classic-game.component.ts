@@ -8,6 +8,7 @@ import { AuthStateService } from '../../services/auth-state.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
 import { MatDialog } from '@angular/material/dialog';
 import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
+import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';
 
 
 @Component({
@@ -49,7 +50,8 @@ export class ClassicGameComponent {
     private router: Router,
     private route: ActivatedRoute,
     private authStateService: AuthStateService,
-    public infoDialog: MatDialog
+    public infoDialog: MatDialog,
+    public deleteDialog: MatDialog
   ) {
 
     this.route.paramMap.subscribe(paramMap => {
@@ -592,13 +594,21 @@ export class ClassicGameComponent {
   backToMenuButtonClicked() {
     // check if logged in
     if (this.authStateService.Username != '') {
-      const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
-      if (isRedirectOk) {
-        // player confirmation -> go to main menu
-        this.router.navigate(['/home']).then(r => {
-          console.log('redirected=' + r);
-        });
-      }
+      const dialogRef = this.deleteDialog.open(DeleteDialogComponent, {
+        height: '400px',
+        width: '60vw',
+        autoFocus: false,
+        data: { questionText: 'Behold fellow player, if you go back without saving, your changes since the last save get lost!' }
+      });
+
+      dialogRef.afterClosed().subscribe(isRedirectOk => {
+        if (isRedirectOk) {
+          // player confirmation -> go to main menu
+          this.router.navigate(['/home']).then(r => {
+            console.log('redirected=' + r);
+          });
+        }
+      });
     } else {
       // logged in as guest, no saving possible just redirect
       this.router.navigate(['/home']).then(r => {
