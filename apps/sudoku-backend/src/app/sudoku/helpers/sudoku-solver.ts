@@ -166,10 +166,10 @@ function isPossibleNumber(cell: number, number: number, sudoku: number[], type: 
   const row = returnRow(cell);
   const col = returnCol(cell);
   const block = returnBlock(cell);
-  if (type == "diagonal") {
+  if (type == 'diagonal') {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
       && isPossibleBlock(number, block, sudoku) && isPossibleDiag(number, cell, sudoku);
-  } else if (type == "region") {
+  } else if (type == 'region') {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
       && isPossibleBlock(number, block, sudoku) && isPossibleSquare(number, block, sudoku, row, col);
   } else {
@@ -364,7 +364,7 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
     }
     coloursudoku.sudoku[whatToTry] = attempt;
     coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours);
-    if (possiblecolours[attempt].length > 1 && type == "colour") {
+    if (possiblecolours[attempt].length > 1 && type == 'colour') {
       possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours);
     }
   }
@@ -372,7 +372,7 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
 }
 
 
-export class ColourSudoku{
+export class ColourSudoku {
 
   sudoku: number[];
   colours: number[];
