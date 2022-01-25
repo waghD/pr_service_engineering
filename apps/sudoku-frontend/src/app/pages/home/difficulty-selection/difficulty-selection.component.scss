@@ -1,0 +1,32 @@
+.mm-menu {
+  max-width: fit-content;
+  padding: 2rem 4rem;
+
+  .mm-ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+
+    .mm-li {
+      font-size: 48px;
+      font-weight: 100;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.19;
+      letter-spacing: normal;
+      transition: transform 250ms;
+
+      &:hover {
+        text-decoration: underline 1px;
+        transform: translateY(-5px);
+      }
+
+      a {
+        text-decoration: none;
+        color: black;
+        cursor: pointer;
+      }
+    }
+  }
+}
