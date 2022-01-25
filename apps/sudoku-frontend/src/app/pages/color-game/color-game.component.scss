@@ -151,7 +151,16 @@
       }
 
       .error-background-col, .error-background-row, .error-background-box, .error-background-color {
-        background-color: $error-red;
+        animation: blinking-background 1s infinite; /* IE 10+, Fx 29+ */
+      }
+
+      @keyframes blinking-background {
+        0%, 49% {
+          background-color: $error-red;
+        }
+        50%, 100% {
+          background-color: $light-grey;
+        }
       }
 
       .selected-cell-background {

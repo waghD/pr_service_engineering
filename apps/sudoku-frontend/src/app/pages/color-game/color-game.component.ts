@@ -32,6 +32,7 @@ export class ColorGameComponent implements OnInit {
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_COL_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_BOX_CSS_CLASSNAME: string;
+  ERROR_BACKGROUND_COLOR_CSS_CLASSNAME: string;
   SELECTED_CELL_BACKGROUND_CSS_CLASSNAME: string;
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
@@ -90,6 +91,7 @@ export class ColorGameComponent implements OnInit {
     this.ERROR_BACKGROUND_COL_CSS_CLASSNAME = 'error-background-col';
     this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME = 'error-background-row';
     this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME = 'error-background-box';
+    this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME = 'error-background-color'
     this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME = 'selected-cell-background';
     this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME = 'selected-row-background';
     this.CONCEAL_FIELD_CSS_CLASSNAME = 'conceal-field';
@@ -363,6 +365,29 @@ export class ColorGameComponent implements OnInit {
       }
     }
 
+    // #################################################################
+    // ########### check and highlight duplicates colors ###########
+    // #################################################################
+    for (let i = 0; i < this.cacheGrid.length; i++) {
+      const valuesFoundForColor = [];
+      const currentColorIdx = i + 1;
+      if (this.sudokuAPIData.fields) {
+        for (let j = 0; j < this.sudokuAPIData.fields.length; j++) {
+          const currField = this.sudokuAPIData.fields[j];
+          if (currField.colour === currentColorIdx) {
+            //found a match get the value and add it to the array of values
+            valuesFoundForColor.push(this.cacheGrid[currField.y][currField.x]);
+          }
+        }
+      }
+      // all values for the current colour are now in valuesFoundForColor, check if it has any duplicates
+      if (hasDuplicates(valuesFoundForColor)) {
+        this.highlightColor(currentColorIdx, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, this.sudokuAPIData, false);
+      } else {
+        this.highlightColor(currentColorIdx, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, this.sudokuAPIData, true);
+      }
+    }
+
     /***
      * Checks if every field is filled with an input
      * @param sudokuGrid the 2D-grid to check
@@ -527,6 +552,25 @@ export class ColorGameComponent implements OnInit {
         // do not allow further input
         event.preventDefault();
         alert('Only a single number between 1-9 is allowed!');
+      }
+    }
+  }
+
+  /***
+   * Highlights all fields of specific color
+   * @param colorIdentifier the color identifier (number between 1-9)
+   * @param cssClass the css class to be added/removed to the field
+   * @param sudokuAPIData the data which stores which color belongs to which field
+   * @param doRemove whether to remove or add the specified css class
+   * @private
+   */
+  private highlightColor(colorIdentifier: number, cssClass: string, sudokuAPIData: ISudokuDto, doRemove: boolean) {
+    if (sudokuAPIData.fields) {
+      for (let i = 0; i < sudokuAPIData.fields.length; i++) {
+        const currField = sudokuAPIData.fields[i];
+        if (colorIdentifier == currField.colour) {
+          this.highlightField(currField.x, currField.y, cssClass, doRemove);
+        }
       }
     }
   }
