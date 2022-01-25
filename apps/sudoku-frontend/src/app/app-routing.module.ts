@@ -55,6 +55,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'region-game',
+    loadChildren: () => import('./pages/region-game/region-game.module').then(m => m.RegionGameModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
   }
