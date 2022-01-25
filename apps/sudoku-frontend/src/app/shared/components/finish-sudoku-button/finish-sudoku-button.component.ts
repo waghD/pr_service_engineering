@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthStateService } from '../../../services/auth-state.service';
 import { FinishSudokuButtonService } from './finish-sudoku-button.service';
@@ -8,7 +8,7 @@ import { FinishSudokuButtonService } from './finish-sudoku-button.service';
   templateUrl: './finish-sudoku-button.component.html',
   styleUrls: ['./finish-sudoku-button.component.scss']
 })
-export class FinishSudokuButtonComponent implements OnInit {
+export class FinishSudokuButtonComponent {
 
   @Input()
   sudokuFieldsInput: number[][];
@@ -26,13 +26,6 @@ export class FinishSudokuButtonComponent implements OnInit {
     this.investedTime = '';
     this.solvedTime = '';
     this.sudokuId = -1;
-  }
-
-  ngOnInit(): void {
-    console.log(this.sudokuFieldsInput);
-    console.log(this.sudokuFieldsSolution);
-    console.log(this.investedTime);
-    console.log(this.sudokuId);
   }
 
   /***

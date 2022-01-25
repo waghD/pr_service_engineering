@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Choose Difficulty</h2>
+<mat-dialog-content>
+  <div class='mm-container'>
+    <div class='mm-menu'>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="easy()">Easy</a></li>
+      </ul>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="medium()">Medium</a></li>
+      </ul>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="hard()">Hard</a></li>
+      </ul>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="ultraHard()">Ultra&nbsp;Hard</a></li>
+      </ul>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)='cancel()'>Cancel</button>
+</mat-dialog-actions>

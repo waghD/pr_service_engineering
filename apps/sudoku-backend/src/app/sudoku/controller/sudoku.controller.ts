@@ -15,10 +15,15 @@ import { SudokuService } from "../service/sudoku.service";
 import { SudokuDto } from "../models/sudoku.dto";
 
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags, ApiBody } from "@nestjs/swagger";
-import { AuthenticatedRequest, OptionalAuthRequest } from "../../auth/models/user.dto";
-import { Public } from "../../auth/public.decorator";
-import { OptionalAuthGuard } from "../../auth/guards/optional-auth.guard";
-import { SudokuSolverDto } from "../models/sudoku-solver.dto";
+import { AuthenticatedRequest, OptionalAuthRequest } from '../../auth/models/user.dto';
+import { Public } from '../../auth/public.decorator';
+import { OptionalAuthGuard } from '../../auth/guards/optional-auth.guard';
+import { SudokuSolverDto } from '../models/sudoku-solver.dto';
+import {
+  getValidDifficulties,
+  isValidSudokuDifficulty,
+  SudokuDifficulties
+} from '../../../../../../libs/enums/SudokuDifficulties';
 
 @ApiTags("Sudoku")
 @Controller("sudokus")
@@ -139,15 +144,27 @@ export class SudokuController {
       required: true
     }
   )
+  @ApiQuery(
+    {
+      name:"difficulty",
+      type: String,
+      description:"Parameter for the difficulty of the Sudoku",
+      required:true
+    }
+  )
   @Public()
   @UseGuards(OptionalAuthGuard)
-  @Post("generate")
-  async generateSudoku(@Query("type") type: string, @Request() req: OptionalAuthRequest) {
+  @Post('generate')
+   async generateSudoku(@Query('type') type:string, @Query('difficulty') difficulty: SudokuDifficulties, @Request() req: OptionalAuthRequest){
+    if(!isValidSudokuDifficulty(difficulty)) {
+      throw new HttpException(`Invalid difficulty setting. Valid settings are: ${getValidDifficulties().join(', ')}`, HttpStatus.BAD_REQUEST);
+    }
+
     try {
-      if (req.user) {
-        return await this.sudokuService.generateSudoku(type, req.user.id);
+      if(req.user) {
+        return await this.sudokuService.generateSudoku(type, difficulty, req.user.id);
       } else {
-        return await this.sudokuService.generateSudoku(type, 0);
+        return await this.sudokuService.generateSudoku(type, difficulty, 0);
       }
     } catch (err) {
       console.error(err);

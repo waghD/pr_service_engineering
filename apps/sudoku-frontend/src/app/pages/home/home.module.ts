@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { SharedModule } from '../../shared/shared.module';
+import { DifficultySelectionComponent } from './difficulty-selection/difficulty-selection.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const routes: Routes = [
@@ -11,7 +14,8 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
+    DifficultySelectionComponent
   ],
   exports: [
     HomeComponent
@@ -19,7 +23,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
+    MatDialogModule,
+    MatButtonModule
   ]
 })
 export class HomeModule {

@@ -5,6 +5,7 @@ import { AuthStateService } from '../../../services/auth-state.service';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('FinishSudokuButtonComponent', () => {
   let component: FinishSudokuButtonComponent;
@@ -17,7 +18,8 @@ describe('FinishSudokuButtonComponent', () => {
       providers: [AuthStateService, {
         provide: Router,
         useClass: RouterTestingModule
-      }]
+      }],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

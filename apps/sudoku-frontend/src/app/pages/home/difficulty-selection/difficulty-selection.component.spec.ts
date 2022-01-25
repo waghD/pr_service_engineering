@@ -1,28 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeleteDialogComponent } from './delete-dialog.component';
+import { DifficultySelectionComponent } from './difficulty-selection.component';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-describe('DeleteDialogComponent', () => {
-  let component: DeleteDialogComponent;
-  let fixture: ComponentFixture<DeleteDialogComponent>;
+describe('DifficultySelectionComponent', () => {
+  let component: DifficultySelectionComponent;
+  let fixture: ComponentFixture<DifficultySelectionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DeleteDialogComponent],
+      declarations: [ DifficultySelectionComponent ],
       imports: [MatDialogModule],
-      providers: [DeleteDialogComponent, {
+      providers: [DifficultySelectionComponent, {
         provide: MatDialogRef,
         useValue: {}
       }],
       schemas: [NO_ERRORS_SCHEMA]
     })
-      .compileComponents();
+    .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeleteDialogComponent);
+    fixture = TestBed.createComponent(DifficultySelectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

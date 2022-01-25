@@ -1,11 +1,12 @@
-import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { SudokuEntity } from "../models/sudoku.entity";
-import { Repository } from "typeorm";
-import { SudokuFieldService } from "./sudoku-field.service";
-import { SudokuDto } from "../models/sudoku.dto";
-import { UserService } from "../../auth/services/user.service";
-import { SudokuSolverDto } from "../models/sudoku-solver.dto";
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { SudokuEntity } from '../models/sudoku.entity';
+import { Repository } from 'typeorm';
+import { SudokuFieldService } from './sudoku-field.service';
+import { SudokuDto } from '../models/sudoku.dto';
+import { UserService } from '../../auth/services/user.service';
+import { SudokuSolverDto } from '../models/sudoku-solver.dto';
+import { SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
 
 
 @Injectable()
@@ -72,12 +73,12 @@ export class SudokuService {
     return this.sudokuFieldService.solveSudokuField(sudoku.type, sudoku.fields);
   }
 
-  async generateSudoku(type: string, userId?: number): Promise<SudokuEntity> {
-    const types = ["classic", "diagonal", "colour", "diacolour", "region"];
-    if (types.includes(type)) {
+  async generateSudoku(type:string, difficulty: SudokuDifficulties, userId?: number):Promise<SudokuEntity>{
+    const types = ['classic','diagonal','colour','diacolour', 'region']
+    if(types.includes(type)){
       const generatedSudoku: SudokuEntity = new SudokuEntity();
-      generatedSudoku.name = "sudoku";
-      generatedSudoku.difficulty = "easy";
+      generatedSudoku.name= 'sudoku';
+      generatedSudoku.difficulty = difficulty;
       generatedSudoku.edit_time = 0;
       generatedSudoku.type = type;
       let sudoku;
@@ -88,7 +89,7 @@ export class SudokuService {
         generatedSudoku.id = 0;
         sudoku = generatedSudoku;
       }
-      sudoku.fields = await this.sudokuFieldService.generateSudokuFields(userId ?? 0, sudoku.id, type);
+      sudoku.fields = await this.sudokuFieldService.generateSudokuFields(userId ?? 0, sudoku.id, type, difficulty);
       return sudoku;
     } else {
       throw new HttpException("Not Acceptable", HttpStatus.NOT_ACCEPTABLE);

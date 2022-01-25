@@ -5,13 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthStateService } from '../../services/auth-state.service';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 import { RegionGameService } from './region-game.service';
+import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
 
 @Component({
   selector: 'se-sudoku-region-game',
   templateUrl: './region-game.component.html',
   styleUrls: ['./region-game.component.scss']
 })
-export class RegionGameComponent implements OnInit {
+export class RegionGameComponent {
 
   // vars
   sudokuAPIData: ISudokuDto;
@@ -38,7 +39,26 @@ export class RegionGameComponent implements OnInit {
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
+  private openID = -1;
+  difficulty: SudokuDifficulties = SudokuDifficulties.EASY;
+
   constructor(public regionGameService: RegionGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
+
+    this.route.paramMap.subscribe(paramMap => {
+      const openID = paramMap.get('openId');
+      if(openID) {
+        this.openID = parseInt(openID);
+        this.initialize();
+      }
+    })
+
+    this.route.queryParamMap.subscribe(paramMap => {
+      const difficultyString = paramMap.get('difficulty');
+      if(difficultyString && isValidSudokuDifficulty(difficultyString)) {
+        this.difficulty = difficultyString as SudokuDifficulties;
+        this.initialize();
+      }
+    })
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -103,23 +123,22 @@ export class RegionGameComponent implements OnInit {
     this.isEveryFieldAssigned = false;
   }
 
-  ngOnInit(): void {
-
-    let openId = -1;
-    // check if this is a new game or a saved game
-    if (this.route.snapshot.params.openId) {
-      openId = parseInt(this.route.snapshot.params.openId);
-    }
-
-
-    if (openId != -1) {
+  /**
+   * general initialize function called from paramMap observer to avoid race condition.
+   * ngOnInit is sometimes called before query parameter map is initialized
+   */
+  initialize(): void {
+    if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
-      this.regionGameService.getSavedSudoku(openId).subscribe((savedSudokuData) => {
+      this.regionGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
+        if(isValidSudokuDifficulty(savedSudokuData.difficulty)) {
+          this.difficulty = savedSudokuData.difficulty as SudokuDifficulties;
+        }
         this.initVars(savedSudokuData);
       });
     } else {
       // get a new sudoku
-      this.regionGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
+      this.regionGameService.getNewRandomSudoku(this.difficulty).subscribe((generatedSudokuData) => {
         this.initVars(generatedSudokuData);
       });
     }
