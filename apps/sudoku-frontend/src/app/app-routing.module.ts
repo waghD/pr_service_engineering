@@ -45,6 +45,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'color-game',
+    loadChildren: () => import('./pages/color-game/color-game.module').then(m => m.ColorGameModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
   }
