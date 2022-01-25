@@ -50,6 +50,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'diagonal-color-game',
+    loadChildren: () => import('./pages/diagonal-color-game/diagonal-color-game.module').then(m => m.DiagonalColorGameModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
   }

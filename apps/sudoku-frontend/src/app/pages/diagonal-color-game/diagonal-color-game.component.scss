@@ -1,0 +1,183 @@
+@import "apps/sudoku-frontend/src/colors";
+
+
+.dia-color-game-container {
+  margin-top: 5em;
+  display: flex;
+  justify-content: center;
+
+  .left-control-container, .right-control-container {
+    width: 15em;
+    margin: auto 0 auto 0;
+
+    .row-control-grid {
+      display: flex;
+
+      .line-container {
+        width: 10em;
+        margin: auto 0 auto 0;
+      }
+    }
+  }
+
+  .right-control-container {
+    .slide-toggle-button-text {
+      font-size: 1.25em;
+    }
+
+    .row-control-grid {
+      justify-content: flex-start;
+      margin: 1em 0;
+
+      .line-container {
+        width: 2em;
+      }
+    }
+  }
+
+  .left-control-container {
+
+    .row-control-grid {
+      justify-content: flex-end;
+
+      .time-string {
+        font-weight: 200;
+        margin-top: -15px;
+      }
+
+      .time-heading {
+        margin-bottom: -15px;
+      }
+
+      .text-align-heading {
+        text-align: center;
+        width: 5em;
+      }
+    }
+
+    .toggle-time-button {
+      background-color: transparent;
+      border: none;
+      padding: unset;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      img {
+        height: 5em;
+        transition: transform 250ms;
+
+        &:hover {
+          transform: translateY(-5px);
+        }
+      }
+    }
+  }
+
+  .game-grid {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+    .grid-table {
+      border: 5px solid black;
+      border-collapse: collapse;
+
+      .grid-row {
+        .grid-cell {
+          text-align: center;
+          border: 1px solid $light-grey;
+
+          span {
+            input {
+              color: black;
+              width: 1.55em;
+              height: 1.55em;
+              font-size: 2em;
+              border: none;
+              text-align: center;
+              margin: 3px;
+            }
+
+            .color-1 {
+              background-color: $color-sudoku-color-1;
+            }
+
+            .color-2 {
+              background-color: $color-sudoku-color-2;
+              color: white;
+            }
+
+            .color-3 {
+              background-color: $color-sudoku-color-3;
+            }
+
+            .color-4 {
+              background-color: $color-sudoku-color-4;
+              color: white;
+            }
+
+            .color-5 {
+              background-color: $color-sudoku-color-5;
+              color: white;
+            }
+
+            .color-6 {
+              background-color: $color-sudoku-color-6;
+            }
+
+            .color-7 {
+              background-color: $color-sudoku-color-7;
+            }
+
+            .color-8 {
+              background-color: $color-sudoku-color-8;
+            }
+
+            .color-9 {
+              background-color: $color-sudoku-color-9;
+            }
+          }
+        }
+
+        .grid-cell.right-line-cell {
+          border-right: 4px solid black;
+        }
+
+        .grid-cell.bottom-line-cell {
+          border-bottom: 4px solid black;
+        }
+      }
+
+      .error-background-col, .error-background-row, .error-background-box, .error-background-color {
+        background-color: $error-red;
+      }
+
+      .selected-cell-background {
+        background-color: $light-blue;
+      }
+
+      .selected-row-background {
+        background-color: $lighter-blue;
+      }
+
+      .non-editable-field {
+        input {
+          color: $light-grey;
+          pointer-events: none;
+        }
+      }
+
+      .conceal-field {
+        input {
+          color: transparent !important;
+          background-color: white !important;
+          pointer-events: none;
+        }
+      }
+
+    }
+
+  }
+}
