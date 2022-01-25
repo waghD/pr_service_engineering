@@ -15,6 +15,9 @@
         <ul class='mm-ul'>
           <li class='mm-li'><a (click)="goToSudokuGame('/diagonal-color-game')">Sudoku Dia-Color</a></li>
         </ul>
+        <ul class='mm-ul'>
+          <li class='mm-li'><a routerLink='/region-game'>Sudoku Region</a></li>
+        </ul>
         <ul *ngIf='authStateService.Username !== "" && authStateService.isLoggedIn' class='mm-ul'>
           <li class='mm-li'><a routerLink='/saved-games'>Load Saved Sudoku</a></li>
         </ul>
