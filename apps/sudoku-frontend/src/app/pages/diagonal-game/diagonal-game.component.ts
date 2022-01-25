@@ -49,10 +49,9 @@ export class DiagonalGameComponent {
     private router: Router,
     private route: ActivatedRoute,
     private authStateService: AuthStateService,
-    private activatedRoute: ActivatedRoute
   ) {
 
-    this.activatedRoute.paramMap.subscribe(paramMap => {
+    this.route.paramMap.subscribe(paramMap => {
       const openID = paramMap.get('openId');
       if(openID) {
         this.openID = parseInt(openID);
@@ -60,7 +59,7 @@ export class DiagonalGameComponent {
       }
     })
 
-    this.activatedRoute.queryParamMap.subscribe(paramMap => {
+    this.route.queryParamMap.subscribe(paramMap => {
       const difficultyString = paramMap.get('difficulty');
       if(difficultyString && isValidSudokuDifficulty(difficultyString)) {
         this.difficulty = difficultyString as SudokuDifficulties;

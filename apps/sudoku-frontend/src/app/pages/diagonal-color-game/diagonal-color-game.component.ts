@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 import { DiagonalColorGameService } from './diagonal-color-game.service';
 import { AuthStateService } from '../../services/auth-state.service';
+import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
 
 @Component({
   selector: 'se-sudoku-diagonal-color-game',
   templateUrl: './diagonal-color-game.component.html',
   styleUrls: ['./diagonal-color-game.component.scss']
 })
-export class DiagonalColorGameComponent implements OnInit {
+export class DiagonalColorGameComponent {
 
   // vars
   sudokuAPIData: ISudokuDto;
@@ -40,7 +41,31 @@ export class DiagonalColorGameComponent implements OnInit {
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
-  constructor(public diagonalColorGameService: DiagonalColorGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
+  private openID = -1;
+  private difficulty: SudokuDifficulties = SudokuDifficulties.EASY;
+
+  constructor(
+    public diagonalColorGameService: DiagonalColorGameService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private authStateService: AuthStateService
+  ) {
+
+    this.route.paramMap.subscribe(paramMap => {
+      const openID = paramMap.get('openId');
+      if(openID) {
+        this.openID = parseInt(openID);
+        this.initialize();
+      }
+    })
+
+    this.route.queryParamMap.subscribe(paramMap => {
+      const difficultyString = paramMap.get('difficulty');
+      if(difficultyString && isValidSudokuDifficulty(difficultyString)) {
+        this.difficulty = difficultyString as SudokuDifficulties;
+        this.initialize();
+      }
+    })
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -107,23 +132,19 @@ export class DiagonalColorGameComponent implements OnInit {
     this.errorInUpLeftFlag = false;
   }
 
-  ngOnInit(): void {
-
-    let openId = -1;
-    // check if this is a new game or a saved game
-    if (this.route.snapshot.params.openId) {
-      openId = parseInt(this.route.snapshot.params.openId);
-    }
-
-
-    if (openId != -1) {
+  /**
+   * general initialize function called from paramMap observer to avoid race condition.
+   * ngOnInit is sometimes called before query parameter map is initialized
+   */
+  initialize(): void {
+    if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
-      this.diagonalColorGameService.getSavedSudoku(openId).subscribe((savedSudokuData) => {
+      this.diagonalColorGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
         this.initVars(savedSudokuData);
       });
     } else {
       // get a new sudoku
-      this.diagonalColorGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
+      this.diagonalColorGameService.getNewRandomSudoku(this.difficulty).subscribe((generatedSudokuData) => {
         this.initVars(generatedSudokuData);
       });
     }
