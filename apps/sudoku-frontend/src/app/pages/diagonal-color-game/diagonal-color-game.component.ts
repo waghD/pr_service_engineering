@@ -28,11 +28,14 @@ export class DiagonalColorGameComponent implements OnInit {
   NON_EDITABLE_CSS_CLASSNAME: string;
   isEveryFieldAssigned: boolean;
   INPUT_FIELD_REGEX = new RegExp('^[1-9]$');
+  errorInUpLeftFlag: boolean;
 
   // css constant classes
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_COL_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_BOX_CSS_CLASSNAME: string;
+  ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME: string;
+  ERROR_BACKGROUND_COLOR_CSS_CLASSNAME: string;
   SELECTED_CELL_BACKGROUND_CSS_CLASSNAME: string;
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
@@ -91,6 +94,8 @@ export class DiagonalColorGameComponent implements OnInit {
     this.ERROR_BACKGROUND_COL_CSS_CLASSNAME = 'error-background-col';
     this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME = 'error-background-row';
     this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME = 'error-background-box';
+    this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME = 'error-background-diagonal';
+    this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME = 'error-background-color';
     this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME = 'selected-cell-background';
     this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME = 'selected-row-background';
     this.CONCEAL_FIELD_CSS_CLASSNAME = 'conceal-field';
@@ -99,6 +104,7 @@ export class DiagonalColorGameComponent implements OnInit {
 
     this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
     this.isEveryFieldAssigned = false;
+    this.errorInUpLeftFlag = false;
   }
 
   ngOnInit(): void {
@@ -364,6 +370,74 @@ export class DiagonalColorGameComponent implements OnInit {
       }
     }
 
+    // #################################################################
+    // ########### check and highlight duplicates diagonals ###########
+    // #################################################################
+
+
+    /***
+     * Get diagonal values of grid as array
+     * @param cacheGrid The whole grid which provides the values
+     */
+    function getDiagonals(cacheGrid: number[][]) {
+      const result: { [id: string]: number[]; } = {
+        'upperLeft': [],
+        'bottomLeft': []
+      };
+
+      for (let i = 0; i < cacheGrid.length; i++) {
+        result['upperLeft'].push(cacheGrid[i][i]);
+      }
+
+      let colIdx = 8;
+      for (let i = 0; i < cacheGrid.length; i++) {
+        result['bottomLeft'].push(cacheGrid[i][colIdx]);
+        colIdx -= 1;
+      }
+      return result;
+    }
+
+    const diagonalArrays = getDiagonals(this.cacheGrid);
+
+
+    for (const key in diagonalArrays) {
+      const diagonalValues = diagonalArrays[key];
+      if (hasDuplicates(diagonalValues)) {
+        // field in the middle will else be marked twice
+        if (key == 'upperLeft') {
+          this.errorInUpLeftFlag = true;
+        }
+        this.highlightDiagonals(key, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, this.cacheGrid, false);
+      } else {
+        this.highlightDiagonals(key, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, this.cacheGrid, true);
+      }
+    }
+
+
+    // #################################################################
+    // ########### check and highlight duplicates colors ###########
+    // #################################################################
+    for (let i = 0; i < this.cacheGrid.length; i++) {
+      const valuesFoundForColor = [];
+      const currentColorIdx = i + 1;
+      if (this.sudokuAPIData.fields) {
+        for (let j = 0; j < this.sudokuAPIData.fields.length; j++) {
+          const currField = this.sudokuAPIData.fields[j];
+          if (currField.colour === currentColorIdx) {
+            //found a match get the value and add it to the array of values
+            valuesFoundForColor.push(this.cacheGrid[currField.y][currField.x]);
+          }
+        }
+      }
+      // all values for the current colour are now in valuesFoundForColor, check if it has any duplicates
+      if (hasDuplicates(valuesFoundForColor)) {
+        this.highlightColor(currentColorIdx, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, this.sudokuAPIData, false);
+      } else {
+        this.highlightColor(currentColorIdx, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, this.sudokuAPIData, true);
+      }
+    }
+
+
     /***
      * Checks if every field is filled with an input
      * @param sudokuGrid the 2D-grid to check
@@ -384,6 +458,33 @@ export class DiagonalColorGameComponent implements OnInit {
       this.isEveryFieldAssigned = true;
     }
 
+  }
+
+
+  /***
+   * Adds a css class to the diagonal cells
+   * @param key 'upperLeft' or 'bottomLeft' depending on the diagonal to which the css class is added
+   * @param cssClassName the css class name that gets added to the diagonal cells
+   * @param cacheGrid the grid, to specify the length of the grid
+   * @param doRemove false, if the css class should be added to the diagonals; true if it should be removed
+   */
+  highlightDiagonals(key: string, cssClassName: string, cacheGrid: number[][], doRemove: boolean) {
+    if (key === 'upperLeft') {
+      for (let i = 0; i < cacheGrid.length; i++) {
+        this.highlightField(i, i, cssClassName, doRemove);
+      }
+    } else if (key === 'bottomLeft') {
+      let colIdx = 8;
+      for (let i = 0; i < cacheGrid.length; i++) {
+        if (this.errorInUpLeftFlag && i == colIdx) {
+          this.errorInUpLeftFlag = false;
+          colIdx -= 1;
+        } else {
+          this.highlightField(i, colIdx, cssClassName, doRemove);
+          colIdx -= 1;
+        }
+      }
+    }
   }
 
   /***
@@ -536,6 +637,25 @@ export class DiagonalColorGameComponent implements OnInit {
         // do not allow further input
         event.preventDefault();
         alert('Only a single number between 1-9 is allowed!');
+      }
+    }
+  }
+
+  /***
+   * Highlights all fields of specific color
+   * @param colorIdentifier the color identifier (number between 1-9)
+   * @param cssClass the css class to be added/removed to the field
+   * @param sudokuAPIData the data which stores which color belongs to which field
+   * @param doRemove whether to remove or add the specified css class
+   * @private
+   */
+  private highlightColor(colorIdentifier: number, cssClass: string, sudokuAPIData: ISudokuDto, doRemove: boolean) {
+    if (sudokuAPIData.fields) {
+      for (let i = 0; i < sudokuAPIData.fields.length; i++) {
+        const currField = sudokuAPIData.fields[i];
+        if (colorIdentifier == currField.colour) {
+          this.highlightField(currField.x, currField.y, cssClass, doRemove);
+        }
       }
     }
   }
