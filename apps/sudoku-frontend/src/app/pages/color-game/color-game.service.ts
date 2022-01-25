@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthStateService } from '../../services/auth-state.service';
 import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
+import { SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +22,9 @@ export class ColorGameService {
   constructor(private readonly http: HttpClient, private authStateService: AuthStateService) {
   }
 
-  getNewRandomSudoku(): Observable<ISudokuDto> {
+  getNewRandomSudoku(difficulty: SudokuDifficulties): Observable<ISudokuDto> {
     return this.http
-      .post<ISudokuDto>(this.baseApiURL + '/sudokus/generate?type=colour', {});
+      .post<ISudokuDto>(`${this.baseApiURL}/sudokus/generate?type=colour&difficulty=${difficulty}`, {});
   }
 
   saveSudokuFields(sudokuId: number, gridData: { x: number, y: number, value: number }[]): Observable<ISudokuFieldDto[]> {
