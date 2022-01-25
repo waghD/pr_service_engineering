@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 import { ColorGameService } from './color-game.service';
+import { AuthStateService } from '../../services/auth-state.service';
 
 @Component({
   selector: 'se-sudoku-color-game',
@@ -37,7 +38,7 @@ export class ColorGameComponent implements OnInit {
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
-  constructor(public colorGameService: ColorGameService, private router: Router, private route: ActivatedRoute) {
+  constructor(public colorGameService: ColorGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -525,9 +526,17 @@ export class ColorGameComponent implements OnInit {
    * Called when clicking on back to menu button
    */
   backToMenuButtonClicked() {
-    const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
-    if (isRedirectOk) {
-      // player confirmation -> go to main menu
+    // check if logged in
+    if (this.authStateService.Username != '') {
+      const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
+      if (isRedirectOk) {
+        // player confirmation -> go to main menu
+        this.router.navigate(['/home']).then(r => {
+          console.log('redirected=' + r);
+        });
+      }
+    } else {
+      // logged in as guest, no saving possible just redirect
       this.router.navigate(['/home']).then(r => {
         console.log('redirected=' + r);
       });
