@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DifficultySelectionComponent } from './difficulty-selection.component';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('DifficultySelectionComponent', () => {
   let component: DifficultySelectionComponent;
@@ -8,7 +10,13 @@ describe('DifficultySelectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DifficultySelectionComponent ]
+      declarations: [ DifficultySelectionComponent ],
+      imports: [MatDialogModule],
+      providers: [DifficultySelectionComponent, {
+        provide: MatDialogRef,
+        useValue: {}
+      }],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });

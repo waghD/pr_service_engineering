@@ -4,6 +4,7 @@ import { SavedGamesComponent } from './saved-games.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('SavedGamesComponent', () => {
   let component: SavedGamesComponent;
@@ -13,7 +14,8 @@ describe('SavedGamesComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
       declarations: [SavedGamesComponent],
-      providers: [SavedGamesComponent]
+      providers: [SavedGamesComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

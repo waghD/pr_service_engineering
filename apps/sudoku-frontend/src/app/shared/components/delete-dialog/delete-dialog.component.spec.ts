@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeleteDialogComponent } from './delete-dialog.component';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('DeleteDialogComponent', () => {
   let component: DeleteDialogComponent;
@@ -14,7 +15,8 @@ describe('DeleteDialogComponent', () => {
       providers: [DeleteDialogComponent, {
         provide: MatDialogRef,
         useValue: {}
-      }]
+      }],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });
