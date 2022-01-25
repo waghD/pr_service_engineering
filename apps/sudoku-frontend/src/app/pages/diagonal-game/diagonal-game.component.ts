@@ -4,6 +4,7 @@ import { DiagonalGameService } from './diagonal-game.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
+import { AuthStateService } from '../../services/auth-state.service';
 
 @Component({
   selector: 'se-sudoku-diagonal-game',
@@ -39,7 +40,7 @@ export class DiagonalGameComponent implements OnInit {
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
 
-  constructor(public diagonalGameService: DiagonalGameService, private router: Router, private route: ActivatedRoute) {
+  constructor(public diagonalGameService: DiagonalGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
     this.sudokuAPIData = {} as ISudokuDto;
 
     this.solvedGrid = [
@@ -644,9 +645,17 @@ export class DiagonalGameComponent implements OnInit {
    * Called when clicking on back to menu button
    */
   backToMenuButtonClicked() {
-    const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
-    if (isRedirectOk) {
-      // player confirmation -> go to main menu
+    // check if logged in
+    if (this.authStateService.Username != '') {
+      const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
+      if (isRedirectOk) {
+        // player confirmation -> go to main menu
+        this.router.navigate(['/home']).then(r => {
+          console.log('redirected=' + r);
+        });
+      }
+    } else {
+      // logged in as guest, no saving possible just redirect
       this.router.navigate(['/home']).then(r => {
         console.log('redirected=' + r);
       });

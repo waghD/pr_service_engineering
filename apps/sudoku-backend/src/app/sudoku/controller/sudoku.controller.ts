@@ -10,9 +10,9 @@ import {
   Put,
   Query,
   Request, UseGuards
-} from '@nestjs/common';
-import { SudokuService } from '../service/sudoku.service';
-import { SudokuDto } from '../models/sudoku.dto';
+} from "@nestjs/common";
+import { SudokuService } from "../service/sudoku.service";
+import { SudokuDto } from "../models/sudoku.dto";
 
 import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags, ApiBody } from "@nestjs/swagger";
 import { AuthenticatedRequest, OptionalAuthRequest } from '../../auth/models/user.dto';
@@ -24,44 +24,49 @@ import {
   isValidSudokuDifficulty,
   SudokuDifficulties
 } from '../../../../../../libs/enums/SudokuDifficulties';
+import { AuthenticatedRequest, OptionalAuthRequest } from "../../auth/models/user.dto";
+import { Public } from "../../auth/public.decorator";
+import { OptionalAuthGuard } from "../../auth/guards/optional-auth.guard";
+import { SudokuSolverDto } from "../models/sudoku-solver.dto";
 
-@ApiTags('Sudoku')
-@Controller('sudokus')
+@ApiTags("Sudoku")
+@Controller("sudokus")
 export class SudokuController {
 
-  constructor(private sudokuService:SudokuService) {}
+  constructor(private sudokuService: SudokuService) {
+  }
 
 
   @ApiQuery(
     {
-      name:"page",
-      type:Number,
-      description:"An optional Parameter for paging",
-      required:false
+      name: "page",
+      type: Number,
+      description: "An optional Parameter for paging",
+      required: false
     }
   )
   @ApiQuery(
     {
-      name:"take",
-      type:Number,
-      description:"An optional Parameter for specifing number of objects to take",
-      required:false
+      name: "take",
+      type: Number,
+      description: "An optional Parameter for specifing number of objects to take",
+      required: false
     }
   )
   @ApiQuery(
     {
-      name:"type",
-      type:String,
-      description:"An optional Parameter for filtering specific types of Sudokus",
-      required:false
+      name: "type",
+      type: String,
+      description: "An optional Parameter for filtering specific types of Sudokus",
+      required: false
     }
   )
   @ApiBearerAuth()
   @Get()
-  getAll(@Query('page') page: number, @Query('take') take: number, @Query('type')type: string, @Request() req: AuthenticatedRequest) {
+  getAll(@Query("page") page: number, @Query("take") take: number, @Query("type") type: string, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
     try {
-      return this.sudokuService.getSudokus(page,take,type,userId);
+      return this.sudokuService.getSudokus(page, take, type, userId);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
@@ -69,17 +74,17 @@ export class SudokuController {
 
   @ApiParam(
     {
-      name:"id",
-      type:Number,
-      description:"A mandatory Parameter for specifying the id of the sudoku",
-      required:true
+      name: "id",
+      type: Number,
+      description: "A mandatory Parameter for specifying the id of the sudoku",
+      required: true
     }
   )
-  @Get(':id')
-  async getOne(@Param('id') id: number, @Request() req: AuthenticatedRequest) {
+  @Get(":id")
+  async getOne(@Param("id") id: number, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
     try {
-      return await this.sudokuService.getOneSudoku(userId,id);
+      return await this.sudokuService.getOneSudoku(userId, id);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
@@ -90,7 +95,7 @@ export class SudokuController {
   async create(@Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
     try {
-      return await this.sudokuService.createSudoku(userId,sudokuDto);
+      return await this.sudokuService.createSudoku(userId, sudokuDto);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
     }
@@ -98,18 +103,18 @@ export class SudokuController {
 
   @ApiParam(
     {
-      name:"id",
-      type:Number,
-      description:"A mandatory Parameter for specifying the id of the sudoku",
-      required:true
+      name: "id",
+      type: Number,
+      description: "A mandatory Parameter for specifying the id of the sudoku",
+      required: true
     }
   )
   @ApiBearerAuth()
-  @Put(':id')
-  async update(@Param('id') id: number, @Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
+  @Put(":id")
+  async update(@Param("id") id: number, @Body() sudokuDto: SudokuDto, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
     try {
-      return await this.sudokuService.updateSudoku(userId,id, sudokuDto);
+      return await this.sudokuService.updateSudoku(userId, id, sudokuDto);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_ACCEPTABLE);
     }
@@ -118,18 +123,18 @@ export class SudokuController {
 
   @ApiParam(
     {
-      name:"id",
-      type:Number,
-      description:"A mandatory Parameter for specifying the id of the sudoku",
-      required:true
+      name: "id",
+      type: Number,
+      description: "A mandatory Parameter for specifying the id of the sudoku",
+      required: true
     }
   )
   @ApiBearerAuth()
-  @Delete(':id')
-  async remove(@Param('id') id: number, @Request() req: AuthenticatedRequest) {
+  @Delete(":id")
+  async remove(@Param("id") id: number, @Request() req: AuthenticatedRequest) {
     const userId = req.user.id;
     try {
-      return await this.sudokuService.removeSudoku(userId,id);
+      return await this.sudokuService.removeSudoku(userId, id);
     } catch (err) {
       throw new HttpException(err, HttpStatus.NOT_FOUND);
     }
@@ -137,10 +142,10 @@ export class SudokuController {
 
   @ApiQuery(
     {
-      name:"type",
-      type:String,
-      description:"An mandatory Parameter to specify type of Sudoku",
-      required:true
+      name: "type",
+      type: String,
+      description: "An mandatory Parameter to specify type of Sudoku",
+      required: true
     }
   )
   @ApiQuery(
@@ -173,11 +178,11 @@ export class SudokuController {
 
   @ApiBody({
     type: SudokuSolverDto,
-    description: 'The body must contain the type of sudoku to solve and the fields of the sudoku',
-    required: true,
+    description: "The body must contain the type of sudoku to solve and the fields of the sudoku",
+    required: true
   })
   @Public()
-  @Post('solve')
+  @Post("solve")
   async solveSudoku(@Body() body: SudokuSolverDto) {
     try {
       return await this.sudokuService.solveSudoku(body);

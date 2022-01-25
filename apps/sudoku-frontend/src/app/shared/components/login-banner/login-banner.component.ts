@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthStateService } from '../../../services/auth-state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'se-sudoku-login-banner',
@@ -8,7 +9,7 @@ import { AuthStateService } from '../../../services/auth-state.service';
 })
 export class LoginBannerComponent {
 
-  constructor(public authService: AuthStateService) {
+  constructor(public authService: AuthStateService, public router: Router) {
   }
 
   logoutButtonClicked() {

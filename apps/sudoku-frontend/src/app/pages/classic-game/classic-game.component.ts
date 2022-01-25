@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
+import { AuthStateService } from '../../services/auth-state.service';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class ClassicGameComponent implements OnInit {
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
-  constructor(public classicGameService: ClassicGameService, private router: Router, private route: ActivatedRoute) {
+  constructor(public classicGameService: ClassicGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -559,9 +560,17 @@ export class ClassicGameComponent implements OnInit {
    * Called when clicking on back to menu button
    */
   backToMenuButtonClicked() {
-    const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
-    if (isRedirectOk) {
-      // player confirmation -> go to main menu
+    // check if logged in
+    if (this.authStateService.Username != '') {
+      const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
+      if (isRedirectOk) {
+        // player confirmation -> go to main menu
+        this.router.navigate(['/home']).then(r => {
+          console.log('redirected=' + r);
+        });
+      }
+    } else {
+      // logged in as guest, no saving possible just redirect
       this.router.navigate(['/home']).then(r => {
         console.log('redirected=' + r);
       });
