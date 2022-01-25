@@ -53,12 +53,13 @@ function generateColourRegion(colours:number []) {
 
 
 function returnColour(cell:number,number:number,colours:number [] ,possibleColours: number[] []){
-   let i = Math.round(Math.random() * (possibleColours[number].length-1));
+   let i = Math.floor(Math.random() * (possibleColours[number].length-1));
    let x = possibleColours[number].length -1;
    while (!isPossibleColour(cell,possibleColours[number][i],colours) && x>=0){
       i = x;
       x--;
    }
+
   return possibleColours[number][i];
 }
 
@@ -68,8 +69,12 @@ function removeColour(number:number,colour:number,possibleColours: number[] []){
         if(possibleColours[number][x]!= colour){
           colours.push(possibleColours[number][x]);
         }
-
       }
+      if(colours.length == 0){
+        console.log("number: "+number)
+        console.log("colour: "+colour)
+      }
+
       return colours;
 }
 
@@ -249,7 +254,7 @@ function scanSudokuForUnique(sudoku: number[], type:string): number[][] {
 
 function  generateColours(){
   const possible = new Array<Array<number>>();
-  for (let i = 0; i<9;i++){
+  for (let i = 1; i<=9;i++){
     possible[i] = new Array<number>();
     possible[i] = shuffle([1,2,3,4,5,6,7,8,9]);
   }
@@ -355,8 +360,10 @@ export function solveColourSudoku(sudoku: number[], colours:number[] ,type:strin
       savedSudoku.push(coloursudoku.sudoku.slice());
     }
       coloursudoku.sudoku[whatToTry] = attempt;
-      coloursudoku.colours[whatToTry] = returnColour(whatToTry,(attempt-1),coloursudoku.colours,possiblecolours);
-      possiblecolours[attempt-1] = removeColour((attempt-1),coloursudoku.colours[whatToTry],possiblecolours);
+      coloursudoku.colours[whatToTry] = returnColour(whatToTry,attempt,coloursudoku.colours,possiblecolours);
+      if(possiblecolours[attempt].length >1){
+        possiblecolours[attempt] = removeColour(attempt,coloursudoku.colours[whatToTry],possiblecolours);
+      }
   }
     return coloursudoku;
 }
