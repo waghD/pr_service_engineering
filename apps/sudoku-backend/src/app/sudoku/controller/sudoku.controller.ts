@@ -24,10 +24,6 @@ import {
   isValidSudokuDifficulty,
   SudokuDifficulties
 } from '../../../../../../libs/enums/SudokuDifficulties';
-import { AuthenticatedRequest, OptionalAuthRequest } from "../../auth/models/user.dto";
-import { Public } from "../../auth/public.decorator";
-import { OptionalAuthGuard } from "../../auth/guards/optional-auth.guard";
-import { SudokuSolverDto } from "../models/sudoku-solver.dto";
 
 @ApiTags("Sudoku")
 @Controller("sudokus")
