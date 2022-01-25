@@ -90,6 +90,9 @@ export class SavedGamesComponent implements OnInit {
       case 'diagonal':
         this.router.navigate(['/diagonal-game', { openId: oneSudoku.id }]);
         break;
+      case 'colour':
+        this.router.navigate(['/color-game', { openId: oneSudoku.id }]);
+        break;
       //TODO add the others when implmented
       default:
         console.error('can\'t open unknown sudoku-type: ' + oneSudoku.type);
