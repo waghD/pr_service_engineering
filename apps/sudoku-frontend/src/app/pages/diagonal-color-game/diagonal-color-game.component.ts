@@ -42,7 +42,7 @@ export class DiagonalColorGameComponent {
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
   private openID = -1;
-  private difficulty: SudokuDifficulties = SudokuDifficulties.EASY;
+  difficulty: SudokuDifficulties = SudokuDifficulties.EASY;
 
   constructor(
     public diagonalColorGameService: DiagonalColorGameService,

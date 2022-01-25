@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
   @Input() pageHeading: string;
   @Input() additionalClass: string;
+  @Input() difficulty?: string;
 
   GAME_PAGE_URLS: string[];
 
