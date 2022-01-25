@@ -5,25 +5,44 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SudokuService } from './sudoku.service';
 import { removeSolution } from '../helpers/sudoku-generator';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
-import { solveColourSudoku, solveRegionSudoku, solveSudoku, sudokuArrayTo2DArray } from "../helpers/sudoku-solver";
-import { SudokuEntity } from "../models/sudoku.entity";
+import {
+  ColourSudoku,
+  solveColourSudoku,
+  solveRegionSudoku,
+  solveSudoku,
+  sudokuArrayTo2DArray
+} from '../helpers/sudoku-solver';
+import { SudokuEntity } from '../models/sudoku.entity';
+import { SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
 
+type DifficultyMap = {
+  [key in SudokuDifficulties]: number
+}
 
 @Injectable()
 export class SudokuFieldService {
-    constructor(
-      @InjectRepository(SudokuFieldEntity)
-      private readonly sudokufieldRepo: Repository<SudokuFieldEntity>,
-      @Inject(forwardRef(() => SudokuService))
-      private readonly sudokuService: SudokuService,
-    ) {}
+
+  private static readonly DIFFICULTY_MAP: DifficultyMap = {
+    [SudokuDifficulties.EASY]: 55,
+    [SudokuDifficulties.MEDIUM]: 42,
+    [SudokuDifficulties.HARD]: 30,
+    [SudokuDifficulties.ULTRA_HARD]: 20
+  };
+
+  constructor(
+    @InjectRepository(SudokuFieldEntity)
+    private readonly sudokufieldRepo: Repository<SudokuFieldEntity>,
+    @Inject(forwardRef(() => SudokuService))
+    private readonly sudokuService: SudokuService
+  ) {
+  }
 
   async createSudokuField(
-    userId:number,
+    userId: number,
     sudokuID: number,
-    sudokuFieldDto:SudokuFieldDto,
+    sudokuFieldDto: SudokuFieldDto
   ): Promise<SudokuFieldEntity> {
-    const sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
+    const sudoku = await this.sudokuService.getOneSudoku(userId, sudokuID);
     const field = new SudokuFieldEntity();
     field.y = sudokuFieldDto.y;
     field.x = sudokuFieldDto.x;
@@ -32,7 +51,7 @@ export class SudokuFieldService {
     field.editable = sudokuFieldDto.value == 0;
     field.sudoku = sudoku;
     const createdField = await this.sudokufieldRepo.save(field);
-    return this.getOneSudokuField(sudokuID,createdField.x, createdField.y);
+    return this.getOneSudokuField(sudokuID, createdField.x, createdField.y);
   }
 
   async solveSudokuField(type: string, sudoku: SudokuFieldDto[]) {
@@ -48,14 +67,14 @@ export class SudokuFieldService {
     const solved2D = sudokuArrayTo2DArray(solved);
 
     const fieldEntities: SudokuFieldEntity[] = [];
-    for(let y = 0; y<9;y++) {
+    for (let y = 0; y < 9; y++) {
       for (let x = 0; x < 9; x++) {
         const field = new SudokuFieldEntity();
         field.y = y;
         field.x = x;
         field.value = solved2D[y][x];
         field.solution = solved2D[y][x];
-        field.editable = false
+        field.editable = false;
         fieldEntities.push(field);
       }
     }
@@ -63,52 +82,54 @@ export class SudokuFieldService {
     return fieldEntities;
   }
 
-  async generateSudokuFields(userId:number,sudokuID:number, type:string){
-      let sudoku;
-      let coloursudoku;
-      let solved;
-      let colours;
-      let colours2d;
-      if(sudokuID>0){
-         sudoku = await this.sudokuService.getOneSudoku(userId,sudokuID);
-      } else{
-        sudoku = new SudokuEntity()
-      }
+  async generateSudokuFields(userId: number, sudokuID: number, type: string, difficulty: SudokuDifficulties) {
+    let sudoku: SudokuEntity;
+    let coloursudoku: ColourSudoku;
+    let solved: number[];
+    let colours: number[];
+    let colours2d: number[][];
+    if (sudokuID > 0) {
+      sudoku = await this.sudokuService.getOneSudoku(userId, sudokuID);
+    } else {
+      sudoku = new SudokuEntity();
+    }
 
-    if(sudoku){
+    if (sudoku) {
       const emptySudoku = new Array<number>();
-      for(let x = 0; x < 81; x++) {
+      for (let x = 0; x < 81; x++) {
         emptySudoku[x] = 0;
       }
-      if(type == 'colour'|| type=='diacolour'|| type == 'region' ){
+      if (type == 'colour' || type == 'diacolour' || type == 'region') {
         const emptycolors = new Array<number>();
-        for(let x = 0; x < 81; x++) {
+        for (let x = 0; x < 81; x++) {
           emptycolors[x] = 0;
         }
-         if (type == 'diacolour') {
-           coloursudoku = solveColourSudoku(emptySudoku,emptycolors,'diagonal');
-         } else if (type == 'region') {
-          coloursudoku = solveRegionSudoku(emptySudoku,emptycolors,type);
+        if (type == 'diacolour') {
+          coloursudoku = solveColourSudoku(emptySudoku, emptycolors, 'diagonal');
+        } else if (type == 'region') {
+          coloursudoku = solveRegionSudoku(emptySudoku, emptycolors, type);
         } else {
-           coloursudoku = solveColourSudoku(emptySudoku,emptycolors,type);
-         }
-         solved = coloursudoku.sudoku;
-         colours = coloursudoku.colours;
-      }else{
-        solved = solveSudoku(emptySudoku,type);
+          coloursudoku = solveColourSudoku(emptySudoku, emptycolors, type);
+        }
+        solved = coloursudoku.sudoku;
+        colours = coloursudoku.colours;
+      } else {
+        solved = solveSudoku(emptySudoku, type);
       }
 
-      if(type == 'colour'|| type == 'diacolour' || type =='region'){
+      if (type == 'colour' || type == 'diacolour' || type == 'region') {
         colours2d = sudokuArrayTo2DArray(colours);
       }
 
       const solved2D = sudokuArrayTo2DArray(solved);
 
-      const fields = removeSolution(solved, 55);
+      const targetFieldCount = SudokuFieldService.DIFFICULTY_MAP[difficulty] ?? SudokuFieldService.DIFFICULTY_MAP.easy;
+
+      const fields = removeSolution(solved, targetFieldCount);
       const fields2D = sudokuArrayTo2DArray(fields);
       const fieldEntities: SudokuFieldEntity[] = [];
 
-      for(let y = 0; y<9;y++) {
+      for (let y = 0; y < 9; y++) {
         for (let x = 0; x < 9; x++) {
           const field = new SudokuFieldEntity();
           field.y = y;
@@ -116,13 +137,13 @@ export class SudokuFieldService {
           field.value = fields2D[y][x];
           field.solution = solved2D[y][x];
           field.editable = fields2D[y][x] == 0;
-          if(type == 'colour'||  type == 'diacolour' || type == 'region') field.colour = colours2d[y][x];
+          if (type == 'colour' || type == 'diacolour' || type == 'region') field.colour = colours2d[y][x];
           field.sudoku = sudoku;
           let fieldEntity;
-          if(sudokuID >0){
-             fieldEntity = await this.sudokufieldRepo.save(field);
-          }else{
-            fieldEntity =field;
+          if (sudokuID > 0) {
+            fieldEntity = await this.sudokufieldRepo.save(field);
+          } else {
+            fieldEntity = field;
           }
           fieldEntities.push(fieldEntity);
         }
@@ -132,29 +153,27 @@ export class SudokuFieldService {
   }
 
 
-  async getSudokuFields(sudokuId: number, page=1, take=25): Promise<SudokuFieldEntity[]> {
-    return this.sudokufieldRepo.createQueryBuilder("field").
-    where("field.sudoku = :id", {id:sudokuId}).
-    getMany();
+  async getSudokuFields(sudokuId: number, page = 1, take = 25): Promise<SudokuFieldEntity[]> {
+    return this.sudokufieldRepo.createQueryBuilder('field').where('field.sudoku = :id', { id: sudokuId }).getMany();
   }
 
-  async getOneSudokuField(id:number,x:number,y:number) {
-    return await this.sudokufieldRepo.createQueryBuilder("field")
-      .where("field.x = :x and field.y = :y and field.sudoku = :id",{x:x,y:y, id:id}).getOne()
+  async getOneSudokuField(id: number, x: number, y: number) {
+    return await this.sudokufieldRepo.createQueryBuilder('field')
+    .where('field.x = :x and field.y = :y and field.sudoku = :id', { x: x, y: y, id: id }).getOne();
   }
 
 
-  async updateSudokuField(id:number,x:number,y:number, sudokuFieldDto: SudokuFieldDto): Promise<SudokuFieldEntity> {
-    const field = await this.getOneSudokuField(id,x,y);
-    if(field) {
-               await this.sudokufieldRepo.update(field.id,sudokuFieldDto);
+  async updateSudokuField(id: number, x: number, y: number, sudokuFieldDto: SudokuFieldDto): Promise<SudokuFieldEntity> {
+    const field = await this.getOneSudokuField(id, x, y);
+    if (field) {
+      await this.sudokufieldRepo.update(field.id, sudokuFieldDto);
     }
 
     return await this.sudokufieldRepo.findOneOrFail(field.id);
   }
 
-  async removeSudokuField(id:number,x:number,y:number): Promise<SudokuFieldEntity> {
-    const field= await this.getOneSudokuField(id,x,y);
+  async removeSudokuField(id: number, x: number, y: number): Promise<SudokuFieldEntity> {
+    const field = await this.getOneSudokuField(id, x, y);
     return this.sudokufieldRepo.remove(field);
   }
 

@@ -362,7 +362,7 @@ export function solveColourSudoku(sudoku: number[], colours:number[] ,type:strin
 }
 
 
-class ColourSudoku{
+export class ColourSudoku{
 
   sudoku : number[]
   colours: number[]

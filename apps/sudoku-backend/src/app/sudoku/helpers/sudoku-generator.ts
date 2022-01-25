@@ -5,8 +5,8 @@ function rNG(size: number): number {
 
 
 export function removeSolution(sudoku: number[], target: number): number[] {
-  let count: number = target;
-  while (count != 0) {
+  let count: number = 9*9;
+  while (count >= target) {
     const field: number = rNG(sudoku.length);
     if(field < sudoku.length) {
       sudoku[field] = 0;
