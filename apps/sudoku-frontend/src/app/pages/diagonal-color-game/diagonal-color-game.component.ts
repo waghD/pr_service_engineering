@@ -3,15 +3,15 @@ import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
-import { ColorGameService } from './color-game.service';
+import { DiagonalColorGameService } from './diagonal-color-game.service';
 import { AuthStateService } from '../../services/auth-state.service';
 
 @Component({
-  selector: 'se-sudoku-color-game',
-  templateUrl: './color-game.component.html',
-  styleUrls: ['./color-game.component.scss']
+  selector: 'se-sudoku-diagonal-color-game',
+  templateUrl: './diagonal-color-game.component.html',
+  styleUrls: ['./diagonal-color-game.component.scss']
 })
-export class ColorGameComponent implements OnInit {
+export class DiagonalColorGameComponent implements OnInit {
 
   // vars
   sudokuAPIData: ISudokuDto;
@@ -28,17 +28,19 @@ export class ColorGameComponent implements OnInit {
   NON_EDITABLE_CSS_CLASSNAME: string;
   isEveryFieldAssigned: boolean;
   INPUT_FIELD_REGEX = new RegExp('^[1-9]$');
+  errorInUpLeftFlag: boolean;
 
   // css constant classes
   ERROR_BACKGROUND_ROW_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_COL_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_BOX_CSS_CLASSNAME: string;
+  ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME: string;
   ERROR_BACKGROUND_COLOR_CSS_CLASSNAME: string;
   SELECTED_CELL_BACKGROUND_CSS_CLASSNAME: string;
   SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME: string;
   CONCEAL_FIELD_CSS_CLASSNAME: string;
 
-  constructor(public colorGameService: ColorGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
+  constructor(public diagonalColorGameService: DiagonalColorGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -92,7 +94,8 @@ export class ColorGameComponent implements OnInit {
     this.ERROR_BACKGROUND_COL_CSS_CLASSNAME = 'error-background-col';
     this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME = 'error-background-row';
     this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME = 'error-background-box';
-    this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME = 'error-background-color'
+    this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME = 'error-background-diagonal';
+    this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME = 'error-background-color';
     this.SELECTED_CELL_BACKGROUND_CSS_CLASSNAME = 'selected-cell-background';
     this.SELECTED_ROW_COL_BOX_BACKGROUND_CSS_CLASSNAME = 'selected-row-background';
     this.CONCEAL_FIELD_CSS_CLASSNAME = 'conceal-field';
@@ -101,6 +104,7 @@ export class ColorGameComponent implements OnInit {
 
     this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
     this.isEveryFieldAssigned = false;
+    this.errorInUpLeftFlag = false;
   }
 
   ngOnInit(): void {
@@ -114,12 +118,12 @@ export class ColorGameComponent implements OnInit {
 
     if (openId != -1) {
       // got an id from the router, open a saved sudoku
-      this.colorGameService.getSavedSudoku(openId).subscribe((savedSudokuData) => {
+      this.diagonalColorGameService.getSavedSudoku(openId).subscribe((savedSudokuData) => {
         this.initVars(savedSudokuData);
       });
     } else {
       // get a new sudoku
-      this.colorGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
+      this.diagonalColorGameService.getNewRandomSudoku().subscribe((generatedSudokuData) => {
         this.initVars(generatedSudokuData);
       });
     }
@@ -194,11 +198,11 @@ export class ColorGameComponent implements OnInit {
 
     const id = this.sudokuAPIData.id;
 
-    this.colorGameService.saveSudokuParams(id, { 'edit_time': this.timerCount }).subscribe(() => {
+    this.diagonalColorGameService.saveSudokuParams(id, { 'edit_time': this.timerCount }).subscribe(() => {
       console.log('saved time');
     });
 
-    this.colorGameService.saveSudokuFields(id, gridValues).subscribe(() => {
+    this.diagonalColorGameService.saveSudokuFields(id, gridValues).subscribe(() => {
       console.log('saved fields');
       alert('Successfully saved Sudoku!');
     });
@@ -367,6 +371,50 @@ export class ColorGameComponent implements OnInit {
     }
 
     // #################################################################
+    // ########### check and highlight duplicates diagonals ###########
+    // #################################################################
+
+
+    /***
+     * Get diagonal values of grid as array
+     * @param cacheGrid The whole grid which provides the values
+     */
+    function getDiagonals(cacheGrid: number[][]) {
+      const result: { [id: string]: number[]; } = {
+        'upperLeft': [],
+        'bottomLeft': []
+      };
+
+      for (let i = 0; i < cacheGrid.length; i++) {
+        result['upperLeft'].push(cacheGrid[i][i]);
+      }
+
+      let colIdx = 8;
+      for (let i = 0; i < cacheGrid.length; i++) {
+        result['bottomLeft'].push(cacheGrid[i][colIdx]);
+        colIdx -= 1;
+      }
+      return result;
+    }
+
+    const diagonalArrays = getDiagonals(this.cacheGrid);
+
+
+    for (const key in diagonalArrays) {
+      const diagonalValues = diagonalArrays[key];
+      if (hasDuplicates(diagonalValues)) {
+        // field in the middle will else be marked twice
+        if (key == 'upperLeft') {
+          this.errorInUpLeftFlag = true;
+        }
+        this.highlightDiagonals(key, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, this.cacheGrid, false);
+      } else {
+        this.highlightDiagonals(key, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, this.cacheGrid, true);
+      }
+    }
+
+
+    // #################################################################
     // ########### check and highlight duplicates colors ###########
     // #################################################################
     for (let i = 0; i < this.cacheGrid.length; i++) {
@@ -389,6 +437,7 @@ export class ColorGameComponent implements OnInit {
       }
     }
 
+
     /***
      * Checks if every field is filled with an input
      * @param sudokuGrid the 2D-grid to check
@@ -409,6 +458,33 @@ export class ColorGameComponent implements OnInit {
       this.isEveryFieldAssigned = true;
     }
 
+  }
+
+
+  /***
+   * Adds a css class to the diagonal cells
+   * @param key 'upperLeft' or 'bottomLeft' depending on the diagonal to which the css class is added
+   * @param cssClassName the css class name that gets added to the diagonal cells
+   * @param cacheGrid the grid, to specify the length of the grid
+   * @param doRemove false, if the css class should be added to the diagonals; true if it should be removed
+   */
+  highlightDiagonals(key: string, cssClassName: string, cacheGrid: number[][], doRemove: boolean) {
+    if (key === 'upperLeft') {
+      for (let i = 0; i < cacheGrid.length; i++) {
+        this.highlightField(i, i, cssClassName, doRemove);
+      }
+    } else if (key === 'bottomLeft') {
+      let colIdx = 8;
+      for (let i = 0; i < cacheGrid.length; i++) {
+        if (this.errorInUpLeftFlag && i == colIdx) {
+          this.errorInUpLeftFlag = false;
+          colIdx -= 1;
+        } else {
+          this.highlightField(i, colIdx, cssClassName, doRemove);
+          colIdx -= 1;
+        }
+      }
+    }
   }
 
   /***
