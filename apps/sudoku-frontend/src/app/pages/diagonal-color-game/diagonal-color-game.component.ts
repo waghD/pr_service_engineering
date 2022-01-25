@@ -140,6 +140,9 @@ export class DiagonalColorGameComponent {
     if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
       this.diagonalColorGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
+        if(isValidSudokuDifficulty(savedSudokuData.difficulty)) {
+          this.difficulty = savedSudokuData.difficulty as SudokuDifficulties;
+        }
         this.initVars(savedSudokuData);
       });
     } else {

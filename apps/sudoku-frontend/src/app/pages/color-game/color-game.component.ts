@@ -136,6 +136,9 @@ export class ColorGameComponent {
     if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
       this.colorGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
+        if(isValidSudokuDifficulty(savedSudokuData.difficulty)) {
+          this.difficulty = savedSudokuData.difficulty as SudokuDifficulties;
+        }
         this.initVars(savedSudokuData);
       });
     } else {
