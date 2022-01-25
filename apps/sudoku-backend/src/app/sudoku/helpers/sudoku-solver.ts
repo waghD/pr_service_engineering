@@ -70,11 +70,6 @@ function removeColour(number: number, colour: number, possibleColours: number[] 
       colours.push(possibleColours[number][x]);
     }
   }
-  if (colours.length == 0) {
-    console.log("number: " + number);
-    console.log("colour: " + colour);
-  }
-
   return colours;
 }
 
