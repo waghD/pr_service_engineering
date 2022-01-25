@@ -14,11 +14,12 @@ function returnBlock(cell: number) {
 }
 
 function isPossibleSquare(number: number, block: number, sudoku: number[], row: number, col: number) {
+  const possibleblocks = [0, 2, 6, 8];
   if (row == 0 || col == 0 || row == 8 || col == 8) return true;
+  if (!possibleblocks.includes(block)) return true;
   if (row == 3 || row == 6) block = block - 3;
   if (col == 3) block = block - 1;
   if (col == 5) block = block + 1;
-  const possibleblocks = [0, 2, 6, 8];
   if (possibleblocks.includes(block)) {
     let x = 0;
     if (block == 0) x = 10;
