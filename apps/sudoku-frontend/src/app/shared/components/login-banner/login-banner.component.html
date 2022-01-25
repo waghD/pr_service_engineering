@@ -1,11 +1,17 @@
-<div *ngIf='authService.isLoggedIn && authService.Username !== ""' class='login-banner-container'>
+<div *ngIf='router.url !== ("/login") ' class='login-banner-container'>
   <div class='login-inner-container'>
     <div class='left-column'>
       <div class='prefix-string'>Logged in as</div>
-      <div class='email-string'>{{authService.Username}}</div>
+      <div *ngIf='authService.Username !== ""; else unameDiv' class='email-string'>{{authService.Username}}</div>
+      <ng-template #unameDiv>
+        <div class='email-string'>Guest</div>
+      </ng-template>
       <div class='logout-button-container' (click)='logoutButtonClicked()'>
         <img class='img-logout-icon' src='assets/svg/icon-logout.svg' alt='logout'>
-        <span class='logout-string'>Logout</span>
+        <span *ngIf='authService.Username !== ""; else loginSpan' class='logout-string'>Logout</span>
+        <ng-template #loginSpan>
+          <span class='logout-string'>Login</span>
+        </ng-template>
       </div>
     </div>
     <div class='right-column'>
