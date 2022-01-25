@@ -6,6 +6,8 @@ import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 import { AuthStateService } from '../../services/auth-state.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
+import { MatDialog } from '@angular/material/dialog';
+import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
 
 @Component({
   selector: 'se-sudoku-diagonal-game',
@@ -49,23 +51,24 @@ export class DiagonalGameComponent {
     private router: Router,
     private route: ActivatedRoute,
     private authStateService: AuthStateService,
+    public infoDialog: MatDialog
   ) {
 
     this.route.paramMap.subscribe(paramMap => {
       const openID = paramMap.get('openId');
-      if(openID) {
+      if (openID) {
         this.openID = parseInt(openID);
         this.initialize();
       }
-    })
+    });
 
     this.route.queryParamMap.subscribe(paramMap => {
       const difficultyString = paramMap.get('difficulty');
-      if(difficultyString && isValidSudokuDifficulty(difficultyString)) {
+      if (difficultyString && isValidSudokuDifficulty(difficultyString)) {
         this.difficulty = difficultyString as SudokuDifficulties;
         this.initialize();
       }
-    })
+    });
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -138,7 +141,7 @@ export class DiagonalGameComponent {
     if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
       this.diagonalGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
-        if(isValidSudokuDifficulty(savedSudokuData.difficulty)) {
+        if (isValidSudokuDifficulty(savedSudokuData.difficulty)) {
           this.difficulty = savedSudokuData.difficulty as SudokuDifficulties;
         }
         this.initVars(savedSudokuData);
@@ -221,7 +224,12 @@ export class DiagonalGameComponent {
 
     this.diagonalGameService.saveSudokuFields(id, gridValues).subscribe(() => {
       console.log('saved fields');
-      alert('Successfully saved Sudoku!');
+      const dialogRef = this.infoDialog.open(GenericInfoDialogComponent, {
+        height: '400px',
+        width: '50vw',
+        autoFocus: false,
+        data: { infoMessage: 'Successfully saved Sudoku!' }
+      });
     });
   }
 
@@ -695,7 +703,12 @@ export class DiagonalGameComponent {
     // only allow digits 1-9, backspace, delete, arrow to right and arrow to left
     if (!(this.INPUT_FIELD_REGEX.test(event.key) || event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
       event.preventDefault();
-      alert('Enter a number between 1-9!');
+      this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '50vw',
+          autoFocus: false,
+          data: { infoMessage: 'Enter a number between 1-9!' }
+        });
     }
     // check if cell has already a digit
     if ((<HTMLInputElement>event.target).value.length > 0) {
@@ -703,7 +716,12 @@ export class DiagonalGameComponent {
       if (!(event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
         // do not allow further input
         event.preventDefault();
-        alert('Only a single number between 1-9 is allowed!');
+        this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '50vw',
+          autoFocus: false,
+          data: { infoMessage: 'Only a single number between 1-9 is allowed!' }
+        });
       }
     }
   }

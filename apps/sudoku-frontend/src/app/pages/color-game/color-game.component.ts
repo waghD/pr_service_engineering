@@ -6,6 +6,8 @@ import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto'
 import { ColorGameService } from './color-game.service';
 import { AuthStateService } from '../../services/auth-state.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
+import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'se-sudoku-color-game',
@@ -46,7 +48,8 @@ export class ColorGameComponent {
     public colorGameService: ColorGameService,
     private router: Router,
     private route: ActivatedRoute,
-    private authStateService: AuthStateService
+    private authStateService: AuthStateService,
+    public infoDialog: MatDialog
   ) {
 
     this.route.paramMap.subscribe(paramMap => {
@@ -224,7 +227,12 @@ export class ColorGameComponent {
 
     this.colorGameService.saveSudokuFields(id, gridValues).subscribe(() => {
       console.log('saved fields');
-      alert('Successfully saved Sudoku!');
+      const dialogRef = this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '50vw',
+          autoFocus: false,
+          data: { infoMessage: 'Successfully saved Sudoku!' }
+        });
     });
   }
 
@@ -574,7 +582,12 @@ export class ColorGameComponent {
     // only allow digits 1-9, backspace, delete, arrow to right and arrow to left
     if (!(this.INPUT_FIELD_REGEX.test(event.key) || event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
       event.preventDefault();
-      alert('Enter a number between 1-9!');
+      this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '50vw',
+          autoFocus: false,
+          data: { infoMessage: 'Enter a number between 1-9!' }
+        });
     }
     // check if cell has already a digit
     if ((<HTMLInputElement>event.target).value.length > 0) {
@@ -582,7 +595,12 @@ export class ColorGameComponent {
       if (!(event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
         // do not allow further input
         event.preventDefault();
-        alert('Only a single number between 1-9 is allowed!');
+        this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '50vw',
+          autoFocus: false,
+          data: { infoMessage: 'Only a single number between 1-9 is allowed!' }
+        });
       }
     }
   }

@@ -6,6 +6,8 @@ import { AuthStateService } from '../../services/auth-state.service';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 import { RegionGameService } from './region-game.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
+import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'se-sudoku-region-game',
@@ -42,7 +44,11 @@ export class RegionGameComponent {
   private openID = -1;
   difficulty: SudokuDifficulties = SudokuDifficulties.EASY;
 
-  constructor(public regionGameService: RegionGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
+  constructor(public regionGameService: RegionGameService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private authStateService: AuthStateService,
+              public infoDialog: MatDialog) {
 
     this.route.paramMap.subscribe(paramMap => {
       const openID = paramMap.get('openId');
@@ -219,7 +225,12 @@ export class RegionGameComponent {
 
     this.regionGameService.saveSudokuFields(id, gridValues).subscribe(() => {
       console.log('saved fields');
-      alert('Successfully saved Sudoku!');
+      const dialogRef = this.infoDialog.open(GenericInfoDialogComponent, {
+        height: '400px',
+        width: '50vw',
+        autoFocus: false,
+        data: { infoMessage: 'Successfully saved Sudoku!' }
+      });
     });
   }
 
@@ -569,7 +580,12 @@ export class RegionGameComponent {
     // only allow digits 1-9, backspace, delete, arrow to right and arrow to left
     if (!(this.INPUT_FIELD_REGEX.test(event.key) || event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
       event.preventDefault();
-      alert('Enter a number between 1-9!');
+      this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '50vw',
+          autoFocus: false,
+          data: { infoMessage: 'Enter a number between 1-9!' }
+        });
     }
     // check if cell has already a digit
     if ((<HTMLInputElement>event.target).value.length > 0) {
@@ -577,7 +593,12 @@ export class RegionGameComponent {
       if (!(event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
         // do not allow further input
         event.preventDefault();
-        alert('Only a single number between 1-9 is allowed!');
+        this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '50vw',
+          autoFocus: false,
+          data: { infoMessage: 'Only a single number between 1-9 is allowed!' }
+        });
       }
     }
   }
