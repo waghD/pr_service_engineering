@@ -2,14 +2,14 @@
 <div class='main-content'>
   <div class='region-game-container'>
     <div class='left-control-container'>
-      <div class='row-control-grid'>
+      <div class='row-control-grid hide-on-mobile'>
         <h1 class='time-heading text-align-heading'>Time</h1>
       </div>
       <div class='row-control-grid'>
         <button class='toggle-time-button' (click)='toggleTimer()'><img
           src="{{this.timerIsRunning ?'assets/img/pause_button.png'  : 'assets/img/play_button.png'}}"
           alt='toggle button' /></button>
-        <div class='line-container'>
+        <div class='line-container hide-on-mobile'>
           <hr>
         </div>
       </div>

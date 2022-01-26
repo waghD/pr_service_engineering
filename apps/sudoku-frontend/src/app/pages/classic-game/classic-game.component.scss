@@ -146,6 +146,26 @@
   .classic-game-container {
     flex-direction: column;
 
+    .left-control-container {
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+      margin: 8px;
+
+      .row-control-grid {
+        .toggle-time-button {
+          font-size: 8px;
+        }
+
+        .time-string {
+          margin: unset;
+        }
+      }
+
+    }
+
     .right-control-container {
       .row-control-grid {
         .line-container {
@@ -153,6 +173,10 @@
         }
       }
     }
+  }
+
+  .hide-on-mobile {
+    display: none !important;
   }
 }
 
