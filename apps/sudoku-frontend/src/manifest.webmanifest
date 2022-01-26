@@ -1,6 +1,6 @@
 {
-  "name": "sudoku-frontend",
-  "short_name": "sudoku-frontend",
+  "name": "Sudoku",
+  "short_name": "Sudoku",
   "theme_color": "#8ac5d1",
   "background_color": "#ffffff",
   "display": "standalone",
