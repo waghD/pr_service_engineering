@@ -13,25 +13,30 @@ function returnBlock(cell: number) {
   return Math.floor(returnRow(cell) / 3) * 3 + Math.floor(returnCol(cell) / 3);
 }
 
-function isPossibleSquare(number: number, block: number, sudoku: number[], row: number, col: number) {
-  const possibleblocks = [0, 2, 6, 8];
-  if (row == 0 || col == 0 || row == 8 || col == 8) return true;
-  if (!possibleblocks.includes(block)) return true;
-  if (row == 3 || row == 6) block = block - 3;
-  if (col == 3) block = block - 1;
-  if (col == 5) block = block + 1;
-  if (possibleblocks.includes(block)) {
-    let x = 0;
-    if (block == 0) x = 10;
-    if (block == 2) x = 8;
-    if (block == 6) x = -8;
-    if (block == 8) x = -10;
-    for (let i = 0; i <= 8; i++) {
-      if (sudoku[(Math.floor(block / 3) * 27 + i % 3 + 9 * Math.floor(i / 3) + 3 * (block % 3) + x)] == number) {
-        return false;
-      }
+function getSquare(cell:number) {
+  const square_one = [10,11,12,19,20,21,28,29,30]
+  const square_two = [14,15,16,23,24,25,32,33,34]
+  const square_three = [46,47,48,55,56,57,64,65,66]
+  const square_four = [50,51,52,59,60,61,68,69,70]
+
+  if( square_one.includes(cell)) return square_one;
+  if( square_two.includes(cell)) return square_two;
+  if( square_three.includes(cell)) return square_three;
+  if(square_four.includes(cell)) return  square_four;
+
+
+  return undefined;
+
+}
+
+function isPossibleSquare(number: number, sudoku: number[],square:number[]) {
+
+  for(const x of square){
+    if(sudoku[x]==number){
+      return  false;
     }
   }
+
   return true;
 }
 
@@ -148,9 +153,8 @@ function isPossibleDiag(number: number, cell: number, sudoku: number[]) {
     }
 
   } else if (cell % 8 == 0 && cell != 80) {
-    for (let f = 0; f < 9; f++) {
-      const x = 8 - f;
-      if (sudoku[x + 9 * f] == number) {
+    for (let f = 0; f <= 9; f++) {
+      if (sudoku[f*8] == number) {
         return false;
       }
     }
@@ -166,12 +170,14 @@ function isPossibleNumber(cell: number, number: number, sudoku: number[], type: 
   const row = returnRow(cell);
   const col = returnCol(cell);
   const block = returnBlock(cell);
+  let square;
+  if(type =="region") square = getSquare(cell);
   if (type == "diagonal") {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
       && isPossibleBlock(number, block, sudoku) && isPossibleDiag(number, cell, sudoku);
-  } else if (type == "region") {
+  } else if (type == "region" && square ) {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
-      && isPossibleBlock(number, block, sudoku) && isPossibleSquare(number, block, sudoku, row, col);
+      && isPossibleBlock(number, block, sudoku) && isPossibleSquare(number,sudoku, square);
   } else {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
       && isPossibleBlock(number, block, sudoku);
@@ -212,13 +218,39 @@ function isCorrectBlock(block: number, sudoku: number[]) {
   return blockTemp.join() == rightSequence.join();
 }
 
+function isCorrectDiagonal(sudoku:number[]){
+  const corr_leftdiag = new Array<number>(1, 2, 3, 4, 5, 6, 7, 8, 9);
+  const leftdiag = new Array<number>();
+  for (let i = 0; i<=8; i++) {
+
+    leftdiag[i] = sudoku[i*10]
+  }
+
+  leftdiag.sort();
+
+  if(leftdiag.join() == corr_leftdiag.join()){
+    const corr_rightdiag = new Array<number>(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    const rightdiag = new Array<number>();
+    for (let i = 1; i<=9; i++) {
+
+      rightdiag[i-1] = sudoku[i*8]
+    }
+    rightdiag.sort();
+    return rightdiag.join() == corr_rightdiag.join();
+
+  }
+  return false;
+}
+
 
 function isSolvedSudoku(sudoku: number[]) {
   for (let i = 0; i <= 8; i++) {
-    if (!isCorrectBlock(i, sudoku) || !isCorrectRow(i, sudoku) || !isCorrectCol(i, sudoku)) {
-      return false;
-    }
+      if (!isCorrectBlock(i, sudoku) || !isCorrectRow(i, sudoku) || !isCorrectCol(i, sudoku)) {
+        return false;
+      }
+
   }
+
 
   return true;
 
@@ -328,6 +360,11 @@ export function solveSudoku(sudoku: number[], type: string) {
 
   }
 
+  if(type == 'diagonal' && !isCorrectDiagonal(sudoku)){
+    sudoku = solveSudoku(savedSudoku[0] , type)
+    return sudoku;
+  }
+
   return sudoku;
 }
 
@@ -341,6 +378,8 @@ export function solveRegionSudoku(sudoku: number[], colours: number[], type: str
 
 export function solveColourSudoku(sudoku: number[], colours: number[], type: string) {
   const saved = new Array<Array<Array<number>>>();
+  const colored = new Array<Array<Array<number>>>();
+  const savedColours = new Array<Array<number>>();
   const savedSudoku = new Array<Array<number>>();
   let nextMove: number[][];
   let whatToTry: number;
@@ -348,12 +387,14 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
   const coloursudoku = new ColourSudoku();
   coloursudoku.colours = colours;
   coloursudoku.sudoku = sudoku;
-  const possiblecolours = generateColours();
+  let possiblecolours = generateColours();
   while (!isSolvedSudoku(coloursudoku.sudoku)) {
     nextMove = scanSudokuForUnique(coloursudoku.sudoku, type);
     if (!nextMove) {
       nextMove = saved.pop();
       coloursudoku.sudoku = savedSudoku.pop();
+      possiblecolours = colored.pop();
+      coloursudoku.colours = savedColours.pop();
     }
     whatToTry = nextRandom(nextMove);
     attempt = determineRandomPossibleValue(nextMove, whatToTry);
@@ -364,8 +405,10 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
     }
     coloursudoku.sudoku[whatToTry] = attempt;
     coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours);
-    if (possiblecolours[attempt].length > 1 && type == "colour") {
+    if (possiblecolours[attempt].length > 1 ) {
       possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours);
+      colored.push(possiblecolours.slice())
+      savedColours.push(coloursudoku.colours.slice())
     }
   }
   return coloursudoku;
