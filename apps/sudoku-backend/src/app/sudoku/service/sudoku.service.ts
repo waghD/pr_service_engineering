@@ -20,8 +20,8 @@ export class SudokuService {
   ) {
   }
 
-  getSudokus(page = 1, take = 25, type: string, userId: number): Promise<SudokuEntity[]> {
-    const user = this.userService.findUserByID(userId);
+  async getSudokus(page = 1, take = 25, type: string, userId: number): Promise<SudokuEntity[]> {
+    const user = await this.userService.findUserByID(userId);
     if (type == "classic") {
       return this.sudokuRepository.find({
         where: { type: "classic", user: user },
