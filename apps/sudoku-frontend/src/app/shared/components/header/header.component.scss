@@ -32,6 +32,7 @@ header {
     text-align: left;
     color: #000;
     background: white;
+    margin-right: 12px;
   }
 
   .heading-container {
@@ -119,6 +120,7 @@ header {
   header {
     .heading-chars {
       font-size: 60px;
+      margin: 0;
     }
 
     .heading-container {
