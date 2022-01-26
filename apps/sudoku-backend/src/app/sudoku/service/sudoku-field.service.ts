@@ -7,11 +7,11 @@ import { removeSolution } from '../helpers/sudoku-generator';
 import { SudokuFieldDto } from '../models/sudoku-field.dto';
 import {
   ColourSudoku,
-  solveColourSudoku,
+  solveColourSudoku, solveDiaColourSudoku,
   solveRegionSudoku,
   solveSudoku,
   sudokuArrayTo2DArray
-} from '../helpers/sudoku-solver';
+} from "../helpers/sudoku-solver";
 import { SudokuEntity } from '../models/sudoku.entity';
 import { SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
 
@@ -122,7 +122,9 @@ export class SudokuFieldService {
 
       if (type == 'diacolour') {
         // 'solved' has now the diagonal sudoku -> create the colors by randomly assigning them via the array
-        colours = SudokuFieldService.createColorArray(solved);
+        coloursudoku= new ColourSudoku();
+        coloursudoku.sudoku = solved;
+        coloursudoku.colours = solveDiaColourSudoku(solved);
       }
 
       if (type == 'colour' || type == 'region' || type == 'diacolour') {
@@ -160,67 +162,6 @@ export class SudokuFieldService {
     }
   }
 
-  /***
-   * Creates assignment of colors based on a given sudoku array
-   * @param sudokuValueArray the array containing the actual values
-   * @private
-   */
-  private static createColorArray(sudokuValueArray: number[]) {
-
-    // clone the array with the values for later remembering
-    const takenValues = [...sudokuValueArray];
-    // create an empty array for the colors to save and later return
-    const colorArray = Array(sudokuValueArray.length);
-
-    // for every color idx (1-9)
-    for (let colorIdx = 1; colorIdx < 10; colorIdx++) {
-      // get 9 values for each color
-      for (let valueToLookFor = 1; valueToLookFor < 10; valueToLookFor++) {
-
-        // get a random number to start the index
-        let currentIdxInValueArray = SudokuFieldService.getRandomInt(0, 80);
-
-        // search as long as a fitting value is found
-        let isNoValueFound = true;
-        while (isNoValueFound) {
-
-          // if the idx reaches the end, start from beginning of array
-          if (currentIdxInValueArray >= 81) {
-            currentIdxInValueArray = 0;
-          }
-
-          if (takenValues[currentIdxInValueArray] == valueToLookFor) {
-            // the value is one that we look for
-            // stop iteration
-            isNoValueFound = false;
-            // assign color to the result
-            colorArray[currentIdxInValueArray] = colorIdx;
-            // mark the value as taken by assigning a -1
-            takenValues[currentIdxInValueArray] = -1;
-          }
-
-          // next iteration search on next value
-          currentIdxInValueArray += 1;
-
-        }
-      }
-    }
-    console.log(colorArray);
-    return colorArray;
-  }
-
-  /**
-   * Returns a random integer between min (inclusive) and max (inclusive).
-   * The value is no lower than min (or the next integer greater than min
-   * if min isn't an integer) and no greater than max (or the next integer
-   * lower than max if max isn't an integer).
-   * Using Math.round() will give you a non-uniform distribution!
-   */
-  private static getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
 
 
   async getSudokuFields(sudokuId: number, page = 1, take = 25): Promise<SudokuFieldEntity[]> {
