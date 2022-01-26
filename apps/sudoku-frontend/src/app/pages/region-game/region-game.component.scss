@@ -5,6 +5,7 @@
   margin-top: 5em;
   display: flex;
   justify-content: center;
+  align-items: center;
 
   .left-control-container, .right-control-container {
     width: 15em;
@@ -189,5 +190,47 @@
 
     }
 
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .region-game-container {
+    flex-direction: column;
+
+    .right-control-container {
+      .row-control-grid {
+        .line-container {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  .region-game-container {
+
+    .game-grid {
+      font-size: 12px;
+    }
+  }
+}
+
+
+@media only screen and (max-width: 480px) {
+  .region-game-container {
+
+    .game-grid {
+      font-size: 10px;
+    }
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .region-game-container {
+
+    .game-grid {
+      font-size: 8px;
+    }
   }
 }
