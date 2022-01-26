@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,9 @@ import { AuthStateService } from '../../services/auth-state.service';
 import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
 import { RegionGameService } from './region-game.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
+import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'se-sudoku-region-game',
@@ -42,23 +45,29 @@ export class RegionGameComponent {
   private openID = -1;
   difficulty: SudokuDifficulties = SudokuDifficulties.EASY;
 
-  constructor(public regionGameService: RegionGameService, private router: Router, private route: ActivatedRoute, private authStateService: AuthStateService) {
+  constructor(public regionGameService: RegionGameService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private authStateService: AuthStateService,
+              public infoDialog: MatDialog,
+              public deleteDialog: MatDialog
+  ) {
 
     this.route.paramMap.subscribe(paramMap => {
       const openID = paramMap.get('openId');
-      if(openID) {
+      if (openID) {
         this.openID = parseInt(openID);
         this.initialize();
       }
-    })
+    });
 
     this.route.queryParamMap.subscribe(paramMap => {
       const difficultyString = paramMap.get('difficulty');
-      if(difficultyString && isValidSudokuDifficulty(difficultyString)) {
+      if (difficultyString && isValidSudokuDifficulty(difficultyString)) {
         this.difficulty = difficultyString as SudokuDifficulties;
         this.initialize();
       }
-    })
+    });
 
     this.sudokuAPIData = {} as ISudokuDto;
 
@@ -131,7 +140,7 @@ export class RegionGameComponent {
     if (this.openID != -1) {
       // got an id from the router, open a saved sudoku
       this.regionGameService.getSavedSudoku(this.openID).subscribe((savedSudokuData) => {
-        if(isValidSudokuDifficulty(savedSudokuData.difficulty)) {
+        if (isValidSudokuDifficulty(savedSudokuData.difficulty)) {
           this.difficulty = savedSudokuData.difficulty as SudokuDifficulties;
         }
         this.initVars(savedSudokuData);
@@ -219,7 +228,12 @@ export class RegionGameComponent {
 
     this.regionGameService.saveSudokuFields(id, gridValues).subscribe(() => {
       console.log('saved fields');
-      alert('Successfully saved Sudoku!');
+      const dialogRef = this.infoDialog.open(GenericInfoDialogComponent, {
+        height: '400px',
+        width: '50vw',
+        autoFocus: false,
+        data: { infoMessage: 'Successfully saved Sudoku!' }
+      });
     });
   }
 
@@ -424,9 +438,7 @@ export class RegionGameComponent {
     }
 
     // set booleans if everything is solved
-    if (isEverythingFilledOut(this.cacheGrid)) {
-      this.isEveryFieldAssigned = true;
-    }
+    this.isEveryFieldAssigned = isEverythingFilledOut(this.cacheGrid);
 
   }
 
@@ -547,13 +559,20 @@ export class RegionGameComponent {
   backToMenuButtonClicked() {
     // check if logged in
     if (this.authStateService.Username != '') {
-      const isRedirectOk = confirm('Behold fellow player, if you go back without saving, your changes since the last save get lost!');
-      if (isRedirectOk) {
-        // player confirmation -> go to main menu
-        this.router.navigate(['/home']).then(r => {
-          console.log('redirected=' + r);
-        });
-      }
+      const dialogRef = this.deleteDialog.open(DeleteDialogComponent, {
+        height: '400px',
+        width: '60vw',
+        autoFocus: false,
+        data: { questionText: 'Behold fellow player, if you go back without saving, your changes since the last save get lost!' }
+      });
+      dialogRef.afterClosed().subscribe(isRedirectOk => {
+        if (isRedirectOk) {
+          // player confirmation -> go to main menu
+          this.router.navigate(['/home']).then(r => {
+            console.log('redirected=' + r);
+          });
+        }
+      });
     } else {
       // logged in as guest, no saving possible just redirect
       this.router.navigate(['/home']).then(r => {
@@ -571,7 +590,12 @@ export class RegionGameComponent {
     // only allow digits 1-9, backspace, delete, arrow to right and arrow to left
     if (!(this.INPUT_FIELD_REGEX.test(event.key) || event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
       event.preventDefault();
-      alert('Enter a number between 1-9!');
+      this.infoDialog.open(GenericInfoDialogComponent, {
+        height: '400px',
+        width: '50vw',
+        autoFocus: false,
+        data: { infoMessage: 'Enter a number between 1-9!' }
+      });
     }
     // check if cell has already a digit
     if ((<HTMLInputElement>event.target).value.length > 0) {
@@ -579,7 +603,12 @@ export class RegionGameComponent {
       if (!(event.key == 'Backspace' || event.key == 'Delete' || event.key == 'ArrowLeft' || event.key == 'ArrowRight')) {
         // do not allow further input
         event.preventDefault();
-        alert('Only a single number between 1-9 is allowed!');
+        this.infoDialog.open(GenericInfoDialogComponent, {
+          height: '400px',
+          width: '50vw',
+          autoFocus: false,
+          data: { infoMessage: 'Only a single number between 1-9 is allowed!' }
+        });
       }
     }
   }

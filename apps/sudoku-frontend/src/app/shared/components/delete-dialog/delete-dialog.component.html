@@ -1,8 +1,9 @@
 <div class='delete-dialog-container'>
   <div class='inner-delete-dialog-container'>
-    <h2>Do you really want to delete this sudoku? All your progress made so far will be lost.</h2>
+    <h2>{{questionText}}</h2>
     <div class='decision-button-container'>
-      <button mat-raised-button (click)='onConfirmClick()' class='yes-button'><span class='inner-yes-text'>Yes</span></button>
+      <button mat-raised-button (click)='onConfirmClick()' class='yes-button'><span class='inner-yes-text'>Yes</span>
+      </button>
       <button mat-raised-button color='warn' (click)='onDenyClick()'>No</button>
     </div>
   </div>

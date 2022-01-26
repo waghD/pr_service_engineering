@@ -39,7 +39,7 @@
     <div class='heading-third-row-container' *ngIf='difficulty'>
       <span class='difficulty-title'>{{difficulty}}</span>
     </div>
-    <div class='single-line-heading-black-lines'>
+    <div *ngIf='routerUrlPrefix !== "/saved-games"' class='single-line-heading-black-lines'>
       <hr>
     </div>
   </div>

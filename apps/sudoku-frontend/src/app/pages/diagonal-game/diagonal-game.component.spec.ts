@@ -4,6 +4,7 @@ import { DiagonalGameComponent } from './diagonal-game.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('DiagonalGameComponent', () => {
   let component: DiagonalGameComponent;
@@ -11,7 +12,7 @@ describe('DiagonalGameComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
       declarations: [DiagonalGameComponent],
       providers: [DiagonalGameComponent],
       schemas: [NO_ERRORS_SCHEMA]
