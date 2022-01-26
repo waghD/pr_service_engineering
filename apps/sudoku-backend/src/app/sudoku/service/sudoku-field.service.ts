@@ -1,10 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { SudokuFieldEntity } from '../models/sudoku-field.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { SudokuService } from './sudoku.service';
-import { removeSolution } from '../helpers/sudoku-generator';
-import { SudokuFieldDto } from '../models/sudoku-field.dto';
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { SudokuFieldEntity } from "../models/sudoku-field.entity";
+import { Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
+import { SudokuService } from "./sudoku.service";
+import { removeSolution } from "../helpers/sudoku-generator";
+import { SudokuFieldDto } from "../models/sudoku-field.dto";
 import {
   ColourSudoku,
   solveColourSudoku, solveDiaColourSudoku,
@@ -12,8 +12,8 @@ import {
   solveSudoku,
   sudokuArrayTo2DArray
 } from "../helpers/sudoku-solver";
-import { SudokuEntity } from '../models/sudoku.entity';
-import { SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
+import { SudokuEntity } from "../models/sudoku.entity";
+import { SudokuDifficulties } from "../../../../../../libs/enums/SudokuDifficulties";
 
 type DifficultyMap = {
   [key in SudokuDifficulties]: number
@@ -99,12 +99,12 @@ export class SudokuFieldService {
       for (let x = 0; x < 81; x++) {
         emptySudoku[x] = 0;
       }
-      if (type == 'colour' || type == 'region') {
+      if (type == "colour" || type == "region") {
         const emptycolors = new Array<number>();
         for (let x = 0; x < 81; x++) {
           emptycolors[x] = 0;
         }
-        if (type == 'region') {
+        if (type == "region") {
           coloursudoku = solveRegionSudoku(emptySudoku, emptycolors, type);
         } else {
           coloursudoku = solveColourSudoku(emptySudoku, emptycolors, type);
@@ -113,19 +113,19 @@ export class SudokuFieldService {
         colours = coloursudoku.colours;
       } else {
         // create a normal diagonal sudoku if it is a diacolor
-        if (type == 'diacolour') {
-          solved = solveSudoku(emptySudoku, 'diagonal');
+        if (type == "diacolour") {
+          solved = solveSudoku(emptySudoku, "diagonal");
         } else {
           solved = solveSudoku(emptySudoku, type);
         }
       }
 
-      if (type == 'diacolour') {
+      if (type == "diacolour") {
         // 'solved' has now the diagonal sudoku -> create the colors by randomly assigning them via the array
         colours = solveDiaColourSudoku(solved);
       }
 
-      if (type == 'colour' || type == 'region' || type == 'diacolour') {
+      if (type == "colour" || type == "region" || type == "diacolour") {
         colours2d = sudokuArrayTo2DArray(colours);
       }
 
@@ -145,7 +145,7 @@ export class SudokuFieldService {
           field.value = fields2D[y][x];
           field.solution = solved2D[y][x];
           field.editable = fields2D[y][x] == 0;
-          if (type == 'colour' || type == 'diacolour' || type == 'region') field.colour = colours2d[y][x];
+          if (type == "colour" || type == "diacolour" || type == "region") field.colour = colours2d[y][x];
           field.sudoku = sudoku;
           let fieldEntity;
           if (sudokuID > 0) {
@@ -161,14 +161,13 @@ export class SudokuFieldService {
   }
 
 
-
   async getSudokuFields(sudokuId: number, page = 1, take = 25): Promise<SudokuFieldEntity[]> {
-    return this.sudokufieldRepo.createQueryBuilder('field').where('field.sudoku = :id', { id: sudokuId }).getMany();
+    return this.sudokufieldRepo.createQueryBuilder("field").where("field.sudoku = :id", { id: sudokuId }).getMany();
   }
 
   async getOneSudokuField(id: number, x: number, y: number) {
-    return await this.sudokufieldRepo.createQueryBuilder('field')
-      .where('field.x = :x and field.y = :y and field.sudoku = :id', { x: x, y: y, id: id }).getOne();
+    return await this.sudokufieldRepo.createQueryBuilder("field")
+      .where("field.x = :x and field.y = :y and field.sudoku = :id", { x: x, y: y, id: id }).getOne();
   }
 
 
