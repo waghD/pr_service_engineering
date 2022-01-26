@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { IAuthDto, IAuthErrorDto, IAuthResponseDto } from '../../../../../libs/models/IAuthDto';
 import { map, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { isDevMode } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,16 @@ export class AuthStateService {
       username,
       password
     };
+
+    let url;
+    if(isDevMode()){
+      url= 'http://localhost:8080/api/auth/login'
+    }else {
+      url= 'http://localhost/api/auth/login'
+    }
+
     try {
-      const response = await this.httpClient.post<IAuthResponseDto>('http://localhost:8080/api/auth/login', body).pipe(
+      const response = await this.httpClient.post<IAuthResponseDto>(url, body).pipe(
         take(1)
       ).toPromise();
       if (response && response.access_token) {
@@ -89,8 +98,15 @@ export class AuthStateService {
       username,
       password
     };
+    let url;
+    if(isDevMode()){
+      url= 'http://localhost:8080/api/auth/signup'
+    }else {
+      url= 'http://localhost/api/auth/signup'
+    }
+
     try {
-      const response = await this.httpClient.post<IAuthResponseDto>('http://localhost:8080/api/auth/signup', body).pipe(
+      const response = await this.httpClient.post<IAuthResponseDto>(url, body).pipe(
         take(1)
       ).toPromise();
 

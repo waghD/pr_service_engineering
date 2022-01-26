@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthStateService } from '../../services/auth-state.service';
@@ -11,7 +11,7 @@ import { SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficult
 })
 export class DiagonalGameService {
 
-  private baseApiURL = 'http://localhost:8080/api';
+  private baseApiURL:string;
 
   public readonly title = 'service-frontend';
 
@@ -20,6 +20,11 @@ export class DiagonalGameService {
   }
 
   constructor(private readonly http: HttpClient, private authStateService: AuthStateService) {
+    if(isDevMode()){
+      this.baseApiURL='http://localhost:8080/api';
+    }else{
+      this.baseApiURL='http://localhost/api';
+    }
   }
 
   getNewRandomSudoku(difficulty: SudokuDifficulties): Observable<ISudokuDto> {
