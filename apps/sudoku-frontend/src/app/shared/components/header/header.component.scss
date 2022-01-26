@@ -5,8 +5,7 @@
 }
 
 header {
-  min-width: 35em;
-  padding-top: 3em;
+  padding-top: 55px;
 
   a {
     text-decoration: none;
@@ -37,6 +36,7 @@ header {
     .heading-first-row-container, .heading-second-row-container, .heading-third-row-container {
       display: flex;
       justify-content: center;
+      align-items: center;
     }
 
     .heading-third-row-container {
@@ -109,4 +109,45 @@ header {
       background-color: black;
     }
   }
+}
+
+@media only screen and (max-width: 600px) {
+
+  header {
+    .heading-chars {
+      font-size: 60px;
+    }
+
+    .heading-container {
+      .heading-third-row-container {
+        .heading-title {
+          font-size: 35px;
+        }
+
+        .difficulty-title {
+          font-size: 25px;
+        }
+      }
+
+      .heading-img-container {
+        .heading-logo {
+          width: 5em;
+        }
+      }
+    }
+  }
+
+  .single-line-heading {
+    .heading-second-row-container {
+      margin-top: -72px;
+    }
+
+    .single-line-heading-black-lines {
+
+      hr {
+        margin-top: -52px;
+      }
+    }
+  }
+
 }

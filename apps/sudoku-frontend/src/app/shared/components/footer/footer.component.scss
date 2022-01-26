@@ -1,16 +1,30 @@
 @import "../../../../colors";
 
+:host {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  background: transparent;
+}
+
 footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+
   .main-menu-footer {
     clear: both;
-    position: relative;
-    height: 150px;
-    margin-top: -157px;
+    position: sticky;
+    width: 100%;
+    bottom: 0;
+    overflow: hidden;
   }
 
   .footer-container {
     .footer-svg {
       position: absolute;
+      overflow: hidden;
 
       .footer-rect {
         fill: $light-blue
@@ -21,7 +35,7 @@ footer {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 9em;
+      height: 80px;
 
 
       .footer-link-container {
@@ -36,7 +50,8 @@ footer {
       }
 
       .footer-sep-container {
-        margin: 0 1em -1em 1em;
+        margin: 0 1em 0 1em;
+        height: 100%;
 
         .footer-sep-svg {
           width: 2px;

@@ -12,6 +12,7 @@
       display: flex;
       justify-content: center;
       padding: 0;
+      text-align: center;
 
       .mm-li {
         font-size: 48px;
@@ -31,6 +32,30 @@
           text-decoration: none;
           color: black;
           cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .mm-container {
+    .mm-menu {
+      .mm-ul {
+        .mm-li {
+          font-size: 38px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 460px) {
+  .mm-container {
+    .mm-menu {
+      .mm-ul {
+        .mm-li {
+          font-size: 28px;
         }
       }
     }
