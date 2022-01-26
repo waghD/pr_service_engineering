@@ -149,7 +149,7 @@ export class SudokuFieldService {
           field.sudoku = sudoku;
           let fieldEntity;
           if (sudokuID > 0) {
-            fieldEntity = await this.sudokufieldRepo.save(field);
+            fieldEntity = this.sudokufieldRepo.save(field);
           } else {
             fieldEntity = field;
           }

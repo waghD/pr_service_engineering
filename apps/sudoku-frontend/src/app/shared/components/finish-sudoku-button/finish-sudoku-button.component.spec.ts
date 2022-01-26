@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('FinishSudokuButtonComponent', () => {
   let component: FinishSudokuButtonComponent;
@@ -14,7 +15,7 @@ describe('FinishSudokuButtonComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FinishSudokuButtonComponent],
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MatDialogModule],
       providers: [AuthStateService, {
         provide: Router,
         useClass: RouterTestingModule

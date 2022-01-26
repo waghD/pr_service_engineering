@@ -4,6 +4,7 @@ import { RegionGameComponent } from './region-game.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('RegionGameComponent', () => {
   let component: RegionGameComponent;
@@ -11,7 +12,7 @@ describe('RegionGameComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
       declarations: [RegionGameComponent],
       providers: [RegionGameComponent],
       schemas: [NO_ERRORS_SCHEMA]

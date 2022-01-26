@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthStateService } from '../../../services/auth-state.service';
 import { FinishSudokuButtonService } from './finish-sudoku-button.service';
+import { GenericInfoDialogComponent } from '../generic-info-dialog/generic-info-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'se-sudoku-finish-sudoku-button',
@@ -20,7 +22,7 @@ export class FinishSudokuButtonComponent {
   sudokuId: number;
   solvedTime: string;
 
-  constructor(private router: Router, private authService: AuthStateService, private finishSudokuButtonService: FinishSudokuButtonService) {
+  constructor(private router: Router, private authService: AuthStateService, private finishSudokuButtonService: FinishSudokuButtonService, public infoDialog: MatDialog) {
     this.sudokuFieldsInput = [];
     this.sudokuFieldsSolution = [];
     this.investedTime = '';
@@ -36,7 +38,9 @@ export class FinishSudokuButtonComponent {
     let isSolvedCorrectly = false;
     window.scrollTo(0, 0);
 
-    if (this.is2DArraysEqual(this.sudokuFieldsInput, this.sudokuFieldsSolution)) {
+    const transformedArray = this.sudokuFieldsSolution[0].map((_, colIndex) => this.sudokuFieldsSolution.map(row => row[colIndex]));
+
+    if (this.is2DArraysEqual(this.sudokuFieldsInput, transformedArray)) {
       isSolvedCorrectly = true;
     }
     if (isSolvedCorrectly) {
@@ -49,7 +53,16 @@ export class FinishSudokuButtonComponent {
       }
     } else {
       // display error message
-      alert('The Sudoku is not solved correctly, check your input fields and try again!');
+      const dialogRef = this.infoDialog.open(GenericInfoDialogComponent, {
+        height: '400px',
+        width: '30vw',
+        autoFocus: false,
+        data: { infoMessage: 'The Sudoku is not solved correctly, check your input fields and try again!' }
+      });
+
+      dialogRef.afterClosed().subscribe(() => {
+        console.log('Sudoku not solved correct!');
+      });
     }
   }
 
