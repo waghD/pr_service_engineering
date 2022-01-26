@@ -15,7 +15,13 @@ export class SavedGamesComponent implements OnInit {
 
   savedGames: ISudokuDto[];
 
+  displayUnimportantInfo = false;
+
   constructor(public savedGamesService: SavedGamesService, public deleteDialog: MatDialog, private router: Router, public infoDialog: MatDialog) {
+    window.matchMedia('only screen and (max-width: 700px)').addEventListener('change', (change) => {
+      this.displayUnimportantInfo = !change.matches;
+    })
+    this.displayUnimportantInfo = !window.matchMedia('only screen and (max-width: 700px)').matches
     this.savedGames = [];
   }
 

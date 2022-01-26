@@ -8,6 +8,12 @@
     h2, h3 {
       margin: 0;
     }
+    h3 {
+      font-size: 1.8em;
+    }
+    h2 {
+      font-size: 1.5em;
+    }
   }
 
   table {
@@ -53,6 +59,10 @@
     td, th {
       padding: 0.5em 1em;
       border-bottom: 1px solid black;
+
+      h3 {
+        font-size: 1.5em;
+      }
     }
   }
 
@@ -64,5 +74,25 @@
 
   .actual-id {
     display: none;
+  }
+}
+
+@media only screen and (max-width: 580px) {
+  .table-container {
+    table {
+      font-size: 12px;
+
+      td, th {
+        padding: 0.5em 0.5em;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .table-container {
+    table {
+      font-size: 10px;
+    }
   }
 }
