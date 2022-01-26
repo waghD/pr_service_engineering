@@ -25,6 +25,7 @@ footer {
     .footer-svg {
       position: absolute;
       overflow: hidden;
+      z-index: -1;
 
       .footer-rect {
         fill: $light-blue
