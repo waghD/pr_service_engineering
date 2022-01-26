@@ -3,15 +3,16 @@
 .login-banner-container {
   .login-inner-container {
     position: fixed;
-    bottom: 5vw;
+    bottom: 2px;
     right: 0;
+    background: white;
+    z-index: 10;
 
     border-top: 2px solid black;
     border-bottom: 2px solid black;
     border-left: 2px solid black;
     padding: 5px;
 
-    max-width: 15vw;
     display: flex;
 
     .left-column {
@@ -28,10 +29,10 @@
 
       .logout-button-container {
         display: flex;
-        margin-top: 5px;
+        margin-top: 2px;
 
         .img-logout-icon {
-          height: 1vw;
+          height: 16px;
           margin-right: 5px;
         }
 
@@ -54,8 +55,22 @@
     .right-column {
       .img-user-container {
         .img-user-icon {
-          width: 4vw;
+          height: 55px;
         }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 650px) {
+
+  .login-banner-container {
+    .login-inner-container {
+      .left-column {
+        margin-right: 1vw;
+      }
+      .right-column {
+        display: none;
       }
     }
   }

@@ -155,3 +155,17 @@ a {
     line-height: 1.21;
   }
 }
+
+@media only screen and (max-width: 900px) {
+  .login-container {
+    width: 100%;
+  }
+
+  .heading-container {
+    display: none;
+  }
+
+  .page-splitter {
+    display: none;
+  }
+}

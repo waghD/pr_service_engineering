@@ -5,8 +5,7 @@
 }
 
 header {
-  min-width: 35em;
-  padding-top: 3em;
+  padding-top: 55px;
 
   a {
     text-decoration: none;
@@ -16,10 +15,11 @@ header {
   .heading-blue-line {
     background: #8ac5d1;
     height: 35px;
-    position: absolute;
-    top: 20px;
+    position: relative;
     width: 100%;
     left: 0;
+    z-index: -1;
+    top: -10px;
   }
 
   .heading-chars {
@@ -31,12 +31,15 @@ header {
     letter-spacing: normal;
     text-align: left;
     color: #000;
+    background: white;
+    margin-right: 12px;
   }
 
   .heading-container {
     .heading-first-row-container, .heading-second-row-container, .heading-third-row-container {
       display: flex;
       justify-content: center;
+      align-items: center;
     }
 
     .heading-third-row-container {
@@ -48,6 +51,7 @@ header {
         line-height: 1.2;
         letter-spacing: normal;
         color: #000;
+        text-align: center;
       }
 
       .difficulty-title {
@@ -109,4 +113,47 @@ header {
       background-color: black;
     }
   }
+}
+
+@media only screen and (max-width: 600px) {
+
+  header {
+    .heading-chars {
+      font-size: 60px;
+      margin: 0;
+    }
+
+    .heading-container {
+      .heading-third-row-container {
+        .heading-title {
+          font-size: 35px;
+        }
+
+        .difficulty-title {
+          font-size: 25px;
+        }
+      }
+
+      .heading-img-container {
+        .heading-logo {
+          width: 5em;
+        }
+      }
+    }
+  }
+
+  .single-line-heading {
+    .heading-second-row-container {
+      margin-top: -72px;
+    }
+
+    .single-line-heading-black-lines {
+
+      hr {
+        margin-top: -52px;
+        width: 65%;
+      }
+    }
+  }
+
 }

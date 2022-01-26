@@ -5,6 +5,7 @@
   margin-top: 5em;
   display: flex;
   justify-content: center;
+  align-items: center;
 
   .left-control-container, .right-control-container {
     width: 15em;
@@ -139,5 +140,72 @@
 
     }
 
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .diagonal-game-container {
+    flex-direction: column;
+
+    .left-control-container {
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      align-items: center;
+      justify-content: center;
+      margin: 8px;
+
+      .row-control-grid {
+        .toggle-time-button {
+          font-size: 8px;
+        }
+
+        .time-string {
+          margin: unset;
+        }
+      }
+
+    }
+
+    .right-control-container {
+      .row-control-grid {
+        .line-container {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+}
+
+@media only screen and (max-width: 580px) {
+  .diagonal-game-container {
+
+    .game-grid {
+      font-size: 12px;
+    }
+  }
+}
+
+
+@media only screen and (max-width: 480px) {
+  .diagonal-game-container {
+
+    .game-grid {
+      font-size: 10px;
+    }
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .diagonal-game-container {
+
+    .game-grid {
+      font-size: 8px;
+    }
   }
 }

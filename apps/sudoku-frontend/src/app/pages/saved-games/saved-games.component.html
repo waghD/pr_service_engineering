@@ -3,19 +3,19 @@
   <div class='table-container'>
     <table border='0' cellspacing='0' cellpadding='0'>
       <tr class='table-header'>
-        <th><h2>Nr.</h2></th>
+        <th *ngIf='displayUnimportantInfo'><h2>Nr.</h2></th>
         <th><h2>Type</h2></th>
         <th><h2>Difficulty</h2></th>
-        <th><h2>Time</h2></th>
+        <th *ngIf='displayUnimportantInfo'><h2>Time</h2></th>
         <th><h2>Progress</h2></th>
         <th><h2>Play</h2></th>
         <th><h2>Delete</h2></th>
       </tr>
       <tr *ngFor='let oneSudoku of savedGames.slice().reverse(); let i = index'>
-        <td><h3>{{i + 1}}</h3></td>
+        <td *ngIf='displayUnimportantInfo'><h3>{{i + 1}}</h3></td>
         <td><h3>{{oneSudoku.type}}</h3></td>
         <td><h3>{{oneSudoku.difficulty}}</h3></td>
-        <td><h3>{{oneSudoku.time_string}}</h3></td>
+        <td *ngIf='displayUnimportantInfo'><h3>{{oneSudoku.time_string}}</h3></td>
         <td><h3>{{oneSudoku.filled_out_ratio}}%</h3></td>
         <td>
           <button class='default-button play-button' (click)='playButtonClicked(oneSudoku)'><span class='inner-button'><img
@@ -23,15 +23,12 @@
             alt='play button' /></span></button>
         </td>
         <td>
-          <mat-dialog-actions class='dialog-container'>
-            <button class='default-button trash-bin-button' (click)='trashButtonClick(oneSudoku)'>
-              <span class='inner-button'><img src='assets/img/trash-bin.png' alt='trash bin' /></span>
-            </button>
-          </mat-dialog-actions>
+          <button class='default-button trash-bin-button' (click)='trashButtonClick(oneSudoku)'>
+            <span class='inner-button'><img src='assets/img/trash-bin.png' alt='trash bin' /></span>
+          </button>
         </td>
       </tr>
     </table>
 
   </div>
 </div>
-<se-sudoku-footer></se-sudoku-footer>

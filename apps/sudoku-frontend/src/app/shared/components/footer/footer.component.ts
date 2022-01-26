@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'se-sudoku-footer',
@@ -9,7 +11,15 @@ export class FooterComponent {
 
   @Input() additionalClass: string;
 
-  constructor() {
+  displayFooter = true;
+
+  constructor(private router: Router) {
+    this.router.events
+    .pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe((event) => {
+      const typedEvent = event as NavigationEnd;
+      this.displayFooter = !typedEvent.url.includes('login');
+    });
     this.additionalClass = '';
   }
 

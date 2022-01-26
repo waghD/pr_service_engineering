@@ -70,10 +70,14 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "apps/sudoku-frontend/src/favicon.ico",
-              "apps/sudoku-frontend/src/assets"
+              "apps/sudoku-frontend/src/assets",
+              "apps/sudoku-frontend/src/manifest.webmanifest",
+              "apps/sudoku-frontend/src/service-worker.js"
             ],
             "styles": ["./node_modules/@angular/material/prebuilt-themes/indigo-pink.css", "apps/sudoku-frontend/src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "apps/sudoku-frontend/ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -85,8 +89,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "5kb"
+                  "maximumWarning": "5kb",
+                  "maximumError": "10kb"
                 }
               ],
               "fileReplacements": [

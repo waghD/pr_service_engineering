@@ -6,8 +6,14 @@
     justify-content: center;
 
     .elim-img {
-      max-width: 25em;
+      max-width: 80vw;
+      width: 400px;
     }
   }
+}
 
+@media only screen and (max-width: 1000px) {
+  .htp-container {
+    margin: 0 1rem;
+  }
 }
