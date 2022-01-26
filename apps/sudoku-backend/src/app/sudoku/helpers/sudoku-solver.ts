@@ -420,7 +420,6 @@ export function solveDiaColourSudoku(sudokuValueArray: number[]) {
       }
     }
   }
-  console.log(colorArray);
   return colorArray;
 }
 

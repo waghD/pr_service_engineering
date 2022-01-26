@@ -122,9 +122,7 @@ export class SudokuFieldService {
 
       if (type == 'diacolour') {
         // 'solved' has now the diagonal sudoku -> create the colors by randomly assigning them via the array
-        coloursudoku= new ColourSudoku();
-        coloursudoku.sudoku = solved;
-        coloursudoku.colours = solveDiaColourSudoku(solved);
+        colours = solveDiaColourSudoku(solved);
       }
 
       if (type == 'colour' || type == 'region' || type == 'diacolour') {
