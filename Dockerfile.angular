@@ -3,7 +3,7 @@ FROM node:12-alpine as builder
 # Set the current working directory inside the container
 WORKDIR /build
 # Copy package.json, yarn.lock files and download deps
-COPY package.json yarn.lock ./
+COPY package.json decorate-angular-cli.js yarn.lock ./
 RUN yarn global add @angular/cli
 RUN yarn
 # Copy sources to the working directory
@@ -20,6 +20,7 @@ WORKDIR /dist
 # Copy the build artifacts from the previous stage
 ARG project
 COPY --from=builder /build/dist/apps/$project /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Set the port number and expose it
 ARG port=80
 ENV PORT $port

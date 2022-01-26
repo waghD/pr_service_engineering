@@ -5,9 +5,9 @@ services:
       context: .
       dockerfile: ./Dockerfile.angular
       args:
-        project: frontend
+        project: sudoku-frontend
     ports:
-      - 8000:80
+      - 80:80
     restart: on-failure
     volumes:
       - frontend_vol:/usr/src/service-frontend/
@@ -19,9 +19,7 @@ services:
       context: .
       dockerfile: ./Dockerfile.nest
       args:
-        project: backend
-    ports:
-      - 8003:3333
+        project: sudoku-backend
     restart: on-failure
     volumes:
       - backend_vol:/usr/src/service-backend/

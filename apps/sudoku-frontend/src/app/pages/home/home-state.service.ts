@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from "@angular/core";
 import { map, take } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
@@ -16,8 +16,15 @@ export class HomeStateService {
   }
 
   constructor(private readonly http: HttpClient) {
+    let url;
+    if(isDevMode()){
+      url='http://localhost:8080/api';
+    }else{
+      url='http://localhost/api';
+    }
+
     this.http
-      .get<{ message: string }>('http://localhost:8080/api')
+      .get<{ message: string }>(url)
       .pipe(
         take(1),
         map((cur) => cur.message)
