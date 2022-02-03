@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SavedGamesService } from './saved-games.service';
-import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
+import { ISudokuDto } from '@models/sudoku.dto';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';
 import { Router } from '@angular/router';

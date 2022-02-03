@@ -1,4 +1,4 @@
-import { ISudokuSolverDto } from "../../../../../../libs/models/ISudokuSolverDto";
+import { ISudokuSolverDto } from '@models/ISudokuSolverDto';
 import { IsIn, IsNotEmpty } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { SudokuFieldDto } from "./sudoku-field.dto";

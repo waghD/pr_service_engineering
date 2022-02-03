@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { ISudokuDto } from '../../../../../../libs/models/sudoku.dto';
+import { ISudokuDto } from '@models/sudoku.dto';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ISudokuFieldDto } from '../../../../../../libs/models/sudoku-field.dto';
+import { ISudokuFieldDto } from '@models/sudoku-field.dto';
 import { ColorGameService } from './color-game.service';
 import { AuthStateService } from '../../services/auth-state.service';
-import { isValidSudokuDifficulty, SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
+import { isValidSudokuDifficulty, SudokuDifficulties } from '@enums/SudokuDifficulties';
 import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';

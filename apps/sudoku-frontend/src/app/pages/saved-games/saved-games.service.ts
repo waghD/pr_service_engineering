@@ -2,7 +2,7 @@ import { Injectable, isDevMode } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { AuthStateService } from "../../services/auth-state.service";
 import { Observable } from "rxjs";
-import { ISudokuDto } from "../../../../../../libs/models/sudoku.dto";
+import { ISudokuDto } from '@models/sudoku.dto';
 
 @Injectable({
   providedIn: "root"

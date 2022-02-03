@@ -13,7 +13,7 @@ import {
   sudokuArrayTo2DArray
 } from "../helpers/sudoku-solver";
 import { SudokuEntity } from "../models/sudoku.entity";
-import { SudokuDifficulties } from "../../../../../../libs/enums/SudokuDifficulties";
+import { SudokuDifficulties } from '@enums/SudokuDifficulties';
 
 type DifficultyMap = {
   [key in SudokuDifficulties]: number

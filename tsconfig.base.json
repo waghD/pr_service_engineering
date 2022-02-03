@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@libs/*": ["libs/*"],
+      "@models/*": ["libs/models/*"],
+      "@enums/*": ["libs/enums/*"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

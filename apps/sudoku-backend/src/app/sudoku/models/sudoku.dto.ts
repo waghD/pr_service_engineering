@@ -1,6 +1,6 @@
 import { IsIn, IsNotEmpty, IsNumber, IsPositive } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { ISudokuDto } from "../../../../../../libs/models/sudoku.dto";
+import { ISudokuDto } from '@models/sudoku.dto';
 import { SudokuFieldDto } from "./sudoku-field.dto";
 
 
