@@ -114,7 +114,14 @@ export class SudokuFieldService {
       } else {
         // create a normal diagonal sudoku if it is a diacolor
         if (type == "diacolour") {
-          solved = solveSudoku(emptySudoku, "diagonal");
+          const emptycolors = new Array<number>();
+          for (let x = 0; x < 81; x++) {
+            emptycolors[x] = 0;
+          }
+          coloursudoku = solveColourSudoku(emptySudoku,emptycolors,'diagonal')
+          solved = coloursudoku.sudoku;
+          colours = coloursudoku.colours;
+          //solved = solveSudoku(emptySudoku, "diagonal");
         } else {
           solved = solveSudoku(emptySudoku, type);
         }
@@ -122,7 +129,7 @@ export class SudokuFieldService {
 
       if (type == "diacolour") {
         // 'solved' has now the diagonal sudoku -> create the colors by randomly assigning them via the array
-        colours = solveDiaColourSudoku(solved);
+        //colours = solveDiaColourSudoku(solved);
       }
 
       if (type == "colour" || type == "region" || type == "diacolour") {

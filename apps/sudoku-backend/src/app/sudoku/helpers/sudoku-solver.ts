@@ -59,7 +59,7 @@ function generateColourRegion(colours: number []) {
 
 
 function returnColour(cell: number, number: number, colours: number [], possibleColours: number[] []) {
-  let i = Math.floor(Math.random() * (possibleColours[number].length - 1));
+  let i = Math.round(Math.random() * (possibleColours[number].length - 1));
   let x = possibleColours[number].length - 1;
   while (!isPossibleColour(cell, possibleColours[number][i], colours) && x >= 0) {
     i = x;
@@ -450,11 +450,12 @@ function getRandomInt(min, max) {
 export function solveColourSudoku(sudoku: number[], colours: number[], type: string) {
   const saved = new Array<Array<Array<number>>>();
   const savedSudoku = new Array<Array<number>>();
+  const savedColours = new Array<Array<number>>();
   let nextMove: number[][];
   let whatToTry: number;
   let attempt: number;
   let possiblecolours: number[][];
-  const coloursudoku = new ColourSudoku();
+  let coloursudoku = new ColourSudoku();
   coloursudoku.colours = colours;
   coloursudoku.sudoku = sudoku;
 
@@ -476,8 +477,15 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
     coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours);
     if (possiblecolours[attempt].length > 1) {
       possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours);
+      savedColours.push(coloursudoku.colours);
     }
   }
+
+  if (type == "diagonal" && !isCorrectDiagonal(coloursudoku.sudoku)) {
+    coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
+    return coloursudoku;
+  }
+
   return coloursudoku;
 }
 
