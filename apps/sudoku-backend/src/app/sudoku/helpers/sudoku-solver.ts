@@ -288,12 +288,22 @@ function scanSudokuForUnique(sudoku: number[], type: string): number[][] {
   return possible;
 }
 
-function generateColours() {
+function generateColours(numbers: number[], colours: number[]) {
   const possible = new Array<Array<number>>();
   for (let i = 1; i <= 9; i++) {
     possible[i] = new Array<number>();
     possible[i] = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
   }
+
+  for (let x = 0; x < 81; x++) {
+
+    if (numbers[x] != 0) {
+      const colour = colours[x];
+      possible[numbers[x]] = removeColour(numbers[x], colour, possible);
+    }
+
+  }
+
   return possible;
 }
 
@@ -439,23 +449,21 @@ function getRandomInt(min, max) {
 
 export function solveColourSudoku(sudoku: number[], colours: number[], type: string) {
   const saved = new Array<Array<Array<number>>>();
-  const colored = new Array<Array<Array<number>>>();
-  const savedColours = new Array<Array<number>>();
   const savedSudoku = new Array<Array<number>>();
   let nextMove: number[][];
   let whatToTry: number;
   let attempt: number;
+  let possiblecolours: number[][];
   const coloursudoku = new ColourSudoku();
   coloursudoku.colours = colours;
   coloursudoku.sudoku = sudoku;
-  let possiblecolours = generateColours();
+
   while (!isSolvedSudoku(coloursudoku.sudoku)) {
     nextMove = scanSudokuForUnique(coloursudoku.sudoku, type);
+    possiblecolours = generateColours(coloursudoku.sudoku, coloursudoku.colours);
     if (!nextMove) {
       nextMove = saved.pop();
       coloursudoku.sudoku = savedSudoku.pop();
-      possiblecolours = colored.pop();
-      coloursudoku.colours = savedColours.pop();
     }
     whatToTry = nextRandom(nextMove);
     attempt = determineRandomPossibleValue(nextMove, whatToTry);
@@ -468,8 +476,6 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
     coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours);
     if (possiblecolours[attempt].length > 1) {
       possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours);
-      colored.push(possiblecolours.slice());
-      savedColours.push(coloursudoku.colours.slice());
     }
   }
   return coloursudoku;
