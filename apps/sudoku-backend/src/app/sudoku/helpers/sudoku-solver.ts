@@ -81,14 +81,14 @@ function returnColour(cell: number, number: number, colours: number [], possible
 }
 
 //removes colour from possible colours
-function removeColour(number: number, colour: number, possibleColours: number[] [], type:string) {
+function removeColour(number: number, colour: number, possibleColours: number[] []) {
   const colours = new Array<number>();
   for (let x = 0; x < possibleColours[number].length; x++) {
     if (possibleColours[number][x] != colour) {
       colours.push(possibleColours[number][x]);
     }
   }
-  if(type =='diagonal') return shuffle(colours);
+
   return colours;
 }
 
@@ -333,7 +333,7 @@ function scanSudokuForUnique(sudoku: number[], type: string): number[][] {
 }
 
 //generate colours for every number and remove colours already assigned
-function generateColours(numbers: number[], colours: number[],type:string) {
+function generateColours(numbers: number[], colours: number[]) {
   const possible = new Array<Array<number>>();
   for (let i = 1; i <= 9; i++) {
     possible[i] = new Array<number>();
@@ -342,15 +342,29 @@ function generateColours(numbers: number[], colours: number[],type:string) {
 
   for (let x = 0; x < 81; x++) {
 
-    if (numbers[x] != 0) {
+    if (numbers[x] != 0 && colours[x] !=0) {
       const colour = colours[x];
-      possible[numbers[x]] = removeColour(numbers[x], colour, possible,type);
+      possible[numbers[x]] = removeColour(numbers[x], colour, possible);
     }
 
   }
 
   return possible;
 }
+
+function shortcutColour(numbers:number[], colours: number[]){
+  const possiblecolours = generateColours(numbers,colours);
+  for(let x=0;x<81;x++){
+    colours[x] = returnColour(x, numbers[x], colours, possiblecolours,numbers);
+    if (possiblecolours[numbers[x]].length > 1) {
+      possiblecolours[numbers[x]] = removeColour(numbers[x], colours[x], possiblecolours);
+    }
+
+  }
+  return colours
+}
+
+
 
 // given an array and a number, removes the number from the array
 function removeAttempt(attemptArray: number[], number: number) {
@@ -446,7 +460,7 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
 
   while (!isSolvedSudoku(coloursudoku.sudoku)) {
     nextMove = scanSudokuForUnique(coloursudoku.sudoku, type);
-    possiblecolours = generateColours(coloursudoku.sudoku, coloursudoku.colours,type);
+    possiblecolours = generateColours(coloursudoku.sudoku, coloursudoku.colours);
     if (!nextMove) {
       nextMove = saved.pop();
       coloursudoku.sudoku = savedSudoku.pop();
@@ -461,13 +475,20 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
     coloursudoku.sudoku[whatToTry] = attempt;
     coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours,coloursudoku.sudoku);
     if (possiblecolours[attempt].length > 1) {
-      possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours,type);
+      possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours);
       savedColours.push(coloursudoku.colours.slice());
     }
   }
 
-  if (type == "diagonal" && !isCorrectDiagonal(coloursudoku.sudoku) || type == "diagonal" && !isCorrectColour(coloursudoku.colours) ) {
+  if (type == "diagonal" && !isCorrectDiagonal(coloursudoku.sudoku)  ) {
     coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
+    if(!isCorrectColour(coloursudoku.colours)){
+      //coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
+      while(!isCorrectColour(coloursudoku.colours)){
+        coloursudoku.colours = shortcutColour(coloursudoku.sudoku,coloursudoku.colours)
+      }
+      return coloursudoku;
+    }
     return coloursudoku;
   }else if(!isCorrectColour(coloursudoku.colours)){
     coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
