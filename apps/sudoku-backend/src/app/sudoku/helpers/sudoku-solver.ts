@@ -58,7 +58,7 @@ function generateColourRegion(colours: number []) {
 }
 
 
-function returnColour(cell: number, number: number, colours: number [], possibleColours: number[] []) {
+function returnColour(cell: number, number: number, colours: number [], possibleColours: number[] [], sudoku:number[]) {
   let i = Math.round(Math.random() * (possibleColours[number].length - 1));
   let x = possibleColours[number].length - 1;
   while (!isPossibleColour(cell, possibleColours[number][i], colours) && x >= 0) {
@@ -66,21 +66,48 @@ function returnColour(cell: number, number: number, colours: number [], possible
     x--;
   }
 
+  if(!isPossibleColour(cell,possibleColours[number][i], colours)){
+    const pos_cell= getpossibleCell(number,possibleColours[number][i],colours,sudoku)
+    if(!pos_cell) return possibleColours[number][i];
+    const new_colour = colours[pos_cell]
+    colours[pos_cell] = possibleColours[number][i];
+    return new_colour;
+  }
+
   return possibleColours[number][i];
 }
 
-function removeColour(number: number, colour: number, possibleColours: number[] []) {
+function removeColour(number: number, colour: number, possibleColours: number[] [], type:string) {
   const colours = new Array<number>();
   for (let x = 0; x < possibleColours[number].length; x++) {
     if (possibleColours[number][x] != colour) {
       colours.push(possibleColours[number][x]);
     }
   }
+  if(type =='diagonal') return shuffle(colours);
   return colours;
 }
 
-function isPossibleColour(cell: number, colour: number, colours: number[]) {
+function getpossibleCell(number:number,colour:number,colours:number[], sudoku:number[]){
+  const possible_cells= [];
+  for(let x=0;x<81;x++){
 
+    if(sudoku[x]==number){
+      possible_cells.push(x);
+    }
+
+  }
+
+  for(const x of possible_cells){
+
+    if(isPossibleColour(x,colour,colours)) return x;
+  }
+
+}
+
+
+function isPossibleColour(cell: number, colour: number, colours: number[]) {
+   const row = returnRow(cell);
   if (cell - 9 >= 0 && colours[cell - 9] == colour) {
     return false;
   } else if (cell + 9 < 81 && colours[cell + 9] == colour) {
@@ -89,13 +116,13 @@ function isPossibleColour(cell: number, colour: number, colours: number[]) {
     return false;
   } else if (cell + 1 < 81 && colours[cell + 1] == colour) {
     return false;
-  } else if (cell + 8 < 81 && colours[cell + 8] == colour) {
+  } else if (cell + 8 < 81 && colours[cell + 8] == colour &&row !=0) {
     return false;
-  } else if (cell - 8 >= 0 && colours[cell - 8] == colour) {
+  } else if (cell - 8 >= 0 && colours[cell - 8] == colour && row !=8) {
     return false;
-  } else if (cell - 10 >= 0 && colours[cell - 10] == colour) {
+  } else if (cell - 10 >= 0 && colours[cell - 10] == colour && row !=0) {
     return false;
-  } else if (cell + 10 < 81 && colours[cell + 10] == colour) {
+  } else if (cell + 10 < 81 && colours[cell + 10] == colour && row !=8) {
     return false;
   }
 
@@ -172,7 +199,7 @@ function isPossibleNumber(cell: number, number: number, sudoku: number[], type: 
   const block = returnBlock(cell);
   let square;
   if (type == "region") square = getSquare(cell);
-  if (type == "diagonal") {
+  if (type == "diagonal"|| type == "diacolor") {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
       && isPossibleBlock(number, block, sudoku) && isPossibleDiag(number, cell, sudoku);
   } else if (type == "region" && square) {
@@ -242,6 +269,18 @@ function isCorrectDiagonal(sudoku: number[]) {
   return false;
 }
 
+function isCorrectColour(colours:number[]){
+
+  for(let x = 0; x<81;x++){
+    if(!isPossibleColour(x,colours[x],colours)){
+      return false;
+    }
+  }
+
+  return true;
+
+}
+
 
 function isSolvedSudoku(sudoku: number[]) {
   for (let i = 0; i <= 8; i++) {
@@ -250,6 +289,7 @@ function isSolvedSudoku(sudoku: number[]) {
     }
 
   }
+
 
 
   return true;
@@ -288,7 +328,7 @@ function scanSudokuForUnique(sudoku: number[], type: string): number[][] {
   return possible;
 }
 
-function generateColours(numbers: number[], colours: number[]) {
+function generateColours(numbers: number[], colours: number[],type:string) {
   const possible = new Array<Array<number>>();
   for (let i = 1; i <= 9; i++) {
     possible[i] = new Array<number>();
@@ -299,7 +339,7 @@ function generateColours(numbers: number[], colours: number[]) {
 
     if (numbers[x] != 0) {
       const colour = colours[x];
-      possible[numbers[x]] = removeColour(numbers[x], colour, possible);
+      possible[numbers[x]] = removeColour(numbers[x], colour, possible,type);
     }
 
   }
@@ -461,7 +501,7 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
 
   while (!isSolvedSudoku(coloursudoku.sudoku)) {
     nextMove = scanSudokuForUnique(coloursudoku.sudoku, type);
-    possiblecolours = generateColours(coloursudoku.sudoku, coloursudoku.colours);
+    possiblecolours = generateColours(coloursudoku.sudoku, coloursudoku.colours,type);
     if (!nextMove) {
       nextMove = saved.pop();
       coloursudoku.sudoku = savedSudoku.pop();
@@ -474,14 +514,17 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
       savedSudoku.push(coloursudoku.sudoku.slice());
     }
     coloursudoku.sudoku[whatToTry] = attempt;
-    coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours);
+    coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours,coloursudoku.sudoku);
     if (possiblecolours[attempt].length > 1) {
-      possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours);
-      savedColours.push(coloursudoku.colours);
+      possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours,type);
+      savedColours.push(coloursudoku.colours.slice());
     }
   }
 
-  if (type == "diagonal" && !isCorrectDiagonal(coloursudoku.sudoku)) {
+  if (type == "diagonal" && !isCorrectDiagonal(coloursudoku.sudoku) || type == "diagonal" && !isCorrectColour(coloursudoku.colours) ) {
+    coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
+    return coloursudoku;
+  }else if(!isCorrectColour(coloursudoku.colours)){
     coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
     return coloursudoku;
   }

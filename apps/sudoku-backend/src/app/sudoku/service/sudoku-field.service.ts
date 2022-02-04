@@ -118,18 +118,12 @@ export class SudokuFieldService {
           for (let x = 0; x < 81; x++) {
             emptycolors[x] = 0;
           }
-          coloursudoku = solveColourSudoku(emptySudoku,emptycolors,'diagonal')
+          coloursudoku = solveColourSudoku(emptySudoku,emptycolors,'diagonal');
           solved = coloursudoku.sudoku;
           colours = coloursudoku.colours;
-          //solved = solveSudoku(emptySudoku, "diagonal");
         } else {
           solved = solveSudoku(emptySudoku, type);
         }
-      }
-
-      if (type == "diacolour") {
-        // 'solved' has now the diagonal sudoku -> create the colors by randomly assigning them via the array
-        //colours = solveDiaColourSudoku(solved);
       }
 
       if (type == "colour" || type == "region" || type == "diacolour") {
