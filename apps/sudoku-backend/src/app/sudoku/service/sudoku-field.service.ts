@@ -7,7 +7,7 @@ import { removeSolution } from "../helpers/sudoku-generator";
 import { SudokuFieldDto } from "../models/sudoku-field.dto";
 import {
   ColourSudoku,
-  solveColourSudoku, solveDiaColourSudoku,
+  solveColourSudoku,
   solveRegionSudoku,
   solveSudoku,
   sudokuArrayTo2DArray
