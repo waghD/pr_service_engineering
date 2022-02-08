@@ -11,7 +11,7 @@
       numbers, any set of nine characters or symbols can be used.</p>
     <figure class='htp-img-container'>
       <div class='htp-figure-container'>
-        <img src='assets/img/htp-rows-cols-box.png' alt='rows, cols and boxes'>
+        <img src='assets/img/htp-rows-cols-box.png' alt='rows, cols and boxes' class='elim-img'>
         <figcaption>Figure 1: Rows, Cols and Boxes</figcaption>
       </div>
     </figure>
@@ -29,8 +29,7 @@
     </p>
     <h1>Solving - Elimination</h1>
     <p>What do we mean by using “process of elimination” to play Sudoku? Here is an example. In this Sudoku grid (shown
-      in Figure 2), the far left-hand vertical column (circled in Blue) is missing only a few numbers: 1, 5 and 6.
-
+      in Figure 2), the third upper horizontal row (circled in Blue) is missing only a few numbers: 1, 3, 4, and 7.
       One way to figure out which numbers can go in each space is to use “process of elimination” by checking to see
       which other numbers are already included within each square – since there can be no duplication of numbers 1-9
       within each square (or row or column).</p>
@@ -40,8 +39,8 @@
         <figcaption>Figure 2: Elimination</figcaption>
       </div>
     </figure>
-    <p>In this case, we can quickly notice that there are already number 1s in the top left and center left squares of
-      the grid (with number 1s circled in red). This means that there is only one space remaining in the far left column
+    <p>In this case, we can quickly notice that there are already number 1s in the top right and top center squares of
+      the grid (with number 1s circled in red). This means that there is only one space remaining in the third upper row
       where a 1 could possibly go – circled in green. This is how the process of elimination works in Sudoku – you find
       out which spaces are available, which numbers are missing – and then deduce, based on the position of those
       numbers within the grid, which numbers fit into each space.
@@ -50,8 +49,45 @@
       combinations and a wide range of levels of difficulty. But it’s all based on the simple principles of using
       numbers 1-9, filling in the blank spaces based on deductive reasoning, and never repeating any numbers within each
       square, row or column.</p>
-    <p>Of course there are much more advanced techniques adn approaches for solving a Sudoko. But with this foundation
-      you should be able to solve your first Grids!</p>
+    <p>Of course there are much more advanced techniques and approaches for solving a Sudoko. But with this foundation
+      you should be able to solve your first grids!</p>
+    <h1>Diagonal Sudoku</h1>
+    <p>A diagonal Sudoku follows the same rules as a classic Sudoku. However, the diagonals in the Sudoku field may
+      contain the numbers 1-9 only once (see Figure 3).</p>
+    <figure class='htp-img-container'>
+      <div class='htp-figure-container'>
+        <img src='assets/img/htp-dia.png' alt='diagonal explained' class='elim-img'>
+        <figcaption>Figure 3: Diagonal Sudoku</figcaption>
+      </div>
+    </figure>
+    <h1>Color Sudoku</h1>
+    <p>A color Sudoku follows the same rules as a classic Sudoku. However, each color may contain the numbers 1-9 only
+      once (see Figure 4).</p>
+    <figure class='htp-img-container'>
+      <div class='htp-figure-container'>
+        <img src='assets/img/htp-color.png' alt='color explained' class='elim-img'>
+        <figcaption>Figure 4: Color Sudoku</figcaption>
+      </div>
+    </figure>
+    <h1>Dia-Color Sudoku</h1>
+    <p>A diagonal-color Sudoku follows combines the rules of a color sudoku and a diagonal sudoku. Therefore, each color
+      may contain the numbers 1-9 only
+      once and the diagonals may contain the numbers 1-9 only once (see Figure 5).</p>
+    <figure class='htp-img-container'>
+      <div class='htp-figure-container'>
+        <img src='assets/img/htp-dia-color.png' alt='diagonal color explained' class='elim-img'>
+        <figcaption>Figure 5: Dia-Color Sudoku</figcaption>
+      </div>
+    </figure>
+    <h1>Region Sudoku</h1>
+    <p>A color Sudoku follows the same rules as a classic Sudoku. However, each region may contain the numbers 1-9 only
+      once (see Figure 6).</p>
+    <figure class='htp-img-container'>
+      <div class='htp-figure-container'>
+        <img src='assets/img/htp-region.png' alt='region explained' class='elim-img'>
+        <figcaption>Figure 6: Region Sudoku</figcaption>
+      </div>
+    </figure>
     <p class='footnote'>This explanations have been refactored from the pages <a
       href='https://sudoku.com/how-to-play/sudoku-rules-for-complete-beginners/'>sudoku.com</a> and <a
       href='https://dailystandard.com/sudoku/tutorial/tutorial_1.php'>dailystandard.com</a></p>

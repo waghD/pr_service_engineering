@@ -4,25 +4,19 @@
     <div class='mm-container'>
       <div class='mm-menu'>
         <ul class='mm-ul'>
-          <li class='mm-li'><a (click)="goToSudokuGame('/classic-game')">Sudoku Classic</a></li>
-        </ul>
-        <ul class='mm-ul'>
-          <li class='mm-li'><a (click)="goToSudokuGame('/diagonal-game')">Sudoku Diagonal</a></li>
-        </ul>
-        <ul class='mm-ul'>
-          <li class='mm-li'><a (click)="goToSudokuGame('/color-game')">Sudoku Color</a></li>
-        </ul>
-        <ul class='mm-ul'>
-          <li class='mm-li'><a (click)="goToSudokuGame('/diagonal-color-game')">Sudoku Dia-Color</a></li>
-        </ul>
-        <ul class='mm-ul'>
-          <li class='mm-li'><a (click)="goToSudokuGame('/region-game')">Sudoku Region</a></li>
+          <li class='mm-li'><a (click)='playButtonClicked()'>Play</a></li>
         </ul>
         <ul *ngIf='authStateService.Username !== "" && authStateService.isLoggedIn' class='mm-ul'>
-          <li class='mm-li'><a routerLink='/saved-games'>Load Saved Sudoku</a></li>
+          <li class='mm-li'><a routerLink='/saved-games'>Open</a></li>
         </ul>
         <ul class='mm-ul'>
           <li class='mm-li'><a routerLink='/how-to-play'>How to Play</a></li>
+        </ul>
+        <ul class='mm-ul'>
+          <li class='mm-li'><a routerLink='/impress'>Impress</a></li>
+        </ul>
+        <ul class='mm-ul'>
+          <li class='mm-li'><a routerLink='/privacy'>Privacy</a></li>
         </ul>
       </div>
     </div>

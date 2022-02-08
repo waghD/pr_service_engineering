@@ -9,12 +9,16 @@ $success-dark-green: #4CAF50;
 $success-light-green: rgba(76, 175, 80, .5);
 $confirmation-green: #77dd77;
 
-$color-sudoku-color-1: red;
-$color-sudoku-color-2: green;
-$color-sudoku-color-3: yellow;
-$color-sudoku-color-4: blue;
-$color-sudoku-color-5: purple;
-$color-sudoku-color-6: orange;
-$color-sudoku-color-7: tan;
-$color-sudoku-color-8: aquamarine;
-$color-sudoku-color-9: grey;
+// color sudoku
+$color-sudoku-color-1: #87cefa;
+$color-sudoku-color-2: #d8bfd8;
+$color-sudoku-color-3: #fff8dc;
+$color-sudoku-color-4: #deb887;
+$color-sudoku-color-5: #b0c4de;
+$color-sudoku-color-6: #98fb98;
+$color-sudoku-color-7: #ee82ee;
+$color-sudoku-color-8: #ffb6c1;
+$color-sudoku-color-9: #7fffd4;
+
+//central vars
+$footer-height: 100px;
