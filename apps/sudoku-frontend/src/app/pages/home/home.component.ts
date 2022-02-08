@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HomeStateService } from './home-state.service';
-import { AuthStateService } from '@Services/auth-state.service';
+import { AuthStateService } from '../../services/auth-state.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DifficultySelectionComponent } from './difficulty-selection/difficulty-selection.component';

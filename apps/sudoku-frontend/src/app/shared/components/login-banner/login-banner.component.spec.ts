@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginBannerComponent } from './login-banner.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { AuthStateService } from '@Services/auth-state.service';
+import { AuthStateService } from '../../../services/auth-state.service';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';

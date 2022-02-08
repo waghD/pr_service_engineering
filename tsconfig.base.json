@@ -17,8 +17,7 @@
     "paths": {
       "@libs/*": ["libs/*"],
       "@models/*": ["libs/models/*"],
-      "@enums/*": ["libs/enums/*"],
-      "@Services/*": ["apps/sudoku-frontend/src/app/services/*"]
+      "@enums/*": ["libs/enums/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

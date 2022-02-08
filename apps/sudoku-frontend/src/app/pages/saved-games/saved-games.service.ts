@@ -1,6 +1,6 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { AuthStateService } from "@Services/auth-state.service";
+import { AuthStateService } from "../../services/auth-state.service";
 import { Observable } from "rxjs";
 import { ISudokuDto } from '@models/sudoku.dto';
 

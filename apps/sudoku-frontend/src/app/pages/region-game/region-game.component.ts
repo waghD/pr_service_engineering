@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ISudokuDto } from '@models/sudoku.dto';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthStateService } from '@Services/auth-state.service';
+import { AuthStateService } from '../../services/auth-state.service';
 import { ISudokuFieldDto } from '@models/sudoku-field.dto';
 import { RegionGameService } from './region-game.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '@enums/SudokuDifficulties';
