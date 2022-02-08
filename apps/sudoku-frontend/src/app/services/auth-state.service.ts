@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { IAuthDto, IAuthErrorDto, IAuthResponseDto } from "../../../../../libs/models/IAuthDto";
+import { IAuthDto, IAuthErrorDto, IAuthResponseDto } from '@models/IAuthDto';
 import { map, take } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { isDevMode } from "@angular/core";

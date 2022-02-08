@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { SudokuDifficulties } from '../../../../../../../libs/enums/SudokuDifficulties';
+import { SudokuDifficulties } from '@enums/SudokuDifficulties';
 
 @Component({
   selector: 'se-sudoku-difficulty-selection',
