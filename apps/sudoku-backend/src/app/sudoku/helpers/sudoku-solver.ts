@@ -13,6 +13,7 @@ function returnBlock(cell: number) {
   return Math.floor(returnRow(cell) / 3) * 3 + Math.floor(returnCol(cell) / 3);
 }
 
+//get colored square based on cell number
 function getSquare(cell: number) {
   const square_one = [10, 11, 12, 19, 20, 21, 28, 29, 30];
   const square_two = [14, 15, 16, 23, 24, 25, 32, 33, 34];
@@ -29,6 +30,7 @@ function getSquare(cell: number) {
 
 }
 
+//check if only one of a number is inside a square
 function isPossibleSquare(number: number, sudoku: number[], square: number[]) {
 
   for (const x of square) {
@@ -40,6 +42,7 @@ function isPossibleSquare(number: number, sudoku: number[], square: number[]) {
   return true;
 }
 
+//generate colour for square
 function generateColourRegion(colours: number []) {
   const blocks = [0, 2, 6, 8];
   const possible_colours = shuffle([1, 2, 3, 4]);
@@ -57,18 +60,27 @@ function generateColourRegion(colours: number []) {
   return colours;
 }
 
-
-function returnColour(cell: number, number: number, colours: number [], possibleColours: number[] []) {
-  let i = Math.floor(Math.random() * (possibleColours[number].length - 1));
+//return the colour for the cell
+function returnColour(cell: number, number: number, colours: number [], possibleColours: number[] [], sudoku:number[]) {
+  let i = Math.round(Math.random() * (possibleColours[number].length - 1));
   let x = possibleColours[number].length - 1;
   while (!isPossibleColour(cell, possibleColours[number][i], colours) && x >= 0) {
     i = x;
     x--;
   }
 
+  if(!isPossibleColour(cell,possibleColours[number][i], colours)){
+    const pos_cell= getpossibleCell(number,possibleColours[number][i],colours,sudoku)
+    if(!pos_cell) return possibleColours[number][i];
+    const new_colour = colours[pos_cell]
+    colours[pos_cell] = possibleColours[number][i];
+    return new_colour;
+  }
+
   return possibleColours[number][i];
 }
 
+//removes colour from possible colours
 function removeColour(number: number, colour: number, possibleColours: number[] []) {
   const colours = new Array<number>();
   for (let x = 0; x < possibleColours[number].length; x++) {
@@ -76,11 +88,31 @@ function removeColour(number: number, colour: number, possibleColours: number[] 
       colours.push(possibleColours[number][x]);
     }
   }
+
   return colours;
 }
 
-function isPossibleColour(cell: number, colour: number, colours: number[]) {
+//check if colour can be pur somewhere else
+function getpossibleCell(number:number,colour:number,colours:number[], sudoku:number[]){
+  const possible_cells= [];
+  for(let x=0;x<81;x++){
 
+    if(sudoku[x]==number){
+      possible_cells.push(x);
+    }
+
+  }
+
+  for(const x of possible_cells){
+
+    if(isPossibleColour(x,colour,colours)) return x;
+  }
+
+}
+
+//checks if the same colour is in one of the neighbouring cells
+function isPossibleColour(cell: number, colour: number, colours: number[]) {
+   const row = returnRow(cell);
   if (cell - 9 >= 0 && colours[cell - 9] == colour) {
     return false;
   } else if (cell + 9 < 81 && colours[cell + 9] == colour) {
@@ -89,19 +121,19 @@ function isPossibleColour(cell: number, colour: number, colours: number[]) {
     return false;
   } else if (cell + 1 < 81 && colours[cell + 1] == colour) {
     return false;
-  } else if (cell + 8 < 81 && colours[cell + 8] == colour) {
+  } else if (cell + 8 < 81 && colours[cell + 8] == colour &&row !=0) {
     return false;
-  } else if (cell - 8 >= 0 && colours[cell - 8] == colour) {
+  } else if (cell - 8 >= 0 && colours[cell - 8] == colour && row !=8) {
     return false;
-  } else if (cell - 10 >= 0 && colours[cell - 10] == colour) {
+  } else if (cell - 10 >= 0 && colours[cell - 10] == colour && row !=0) {
     return false;
-  } else if (cell + 10 < 81 && colours[cell + 10] == colour) {
+  } else if (cell + 10 < 81 && colours[cell + 10] == colour && row !=8) {
     return false;
   }
 
   return true;
 }
-
+//shuffle an arry
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -172,7 +204,7 @@ function isPossibleNumber(cell: number, number: number, sudoku: number[], type: 
   const block = returnBlock(cell);
   let square;
   if (type == "region") square = getSquare(cell);
-  if (type == "diagonal") {
+  if (type == "diagonal"|| type == "diacolor") {
     return isPossibleRow(number, row, sudoku) && isPossibleCol(number, col, sudoku)
       && isPossibleBlock(number, block, sudoku) && isPossibleDiag(number, cell, sudoku);
   } else if (type == "region" && square) {
@@ -218,6 +250,7 @@ function isCorrectBlock(block: number, sudoku: number[]) {
   return blockTemp.join() == rightSequence.join();
 }
 
+//check if a sudoku has two correct diagonals
 function isCorrectDiagonal(sudoku: number[]) {
   const corr_leftdiag = new Array<number>(1, 2, 3, 4, 5, 6, 7, 8, 9);
   const leftdiag = new Array<number>();
@@ -242,6 +275,19 @@ function isCorrectDiagonal(sudoku: number[]) {
   return false;
 }
 
+//check if we have a correct colour sudoku
+function isCorrectColour(colours:number[]){
+
+  for(let x = 0; x<81;x++){
+    if(!isPossibleColour(x,colours[x],colours)){
+      return false;
+    }
+  }
+
+  return true;
+
+}
+
 
 function isSolvedSudoku(sudoku: number[]) {
   for (let i = 0; i <= 8; i++) {
@@ -250,8 +296,6 @@ function isSolvedSudoku(sudoku: number[]) {
     }
 
   }
-
-
   return true;
 
 }
@@ -288,14 +332,39 @@ function scanSudokuForUnique(sudoku: number[], type: string): number[][] {
   return possible;
 }
 
-function generateColours() {
+//generate colours for every number and remove colours already assigned
+function generateColours(numbers: number[], colours: number[]) {
   const possible = new Array<Array<number>>();
   for (let i = 1; i <= 9; i++) {
     possible[i] = new Array<number>();
     possible[i] = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
   }
+
+  for (let x = 0; x < 81; x++) {
+
+    if (numbers[x] != 0 && colours[x] !=0) {
+      const colour = colours[x];
+      possible[numbers[x]] = removeColour(numbers[x], colour, possible);
+    }
+
+  }
+
   return possible;
 }
+
+function shortcutColour(numbers:number[], colours: number[]){
+  const possiblecolours = generateColours(numbers,colours);
+  for(let x=0;x<81;x++){
+    colours[x] = returnColour(x, numbers[x], colours, possiblecolours,numbers);
+    if (possiblecolours[numbers[x]].length > 1) {
+      possiblecolours[numbers[x]] = removeColour(numbers[x], colours[x], possiblecolours);
+    }
+
+  }
+  return colours
+}
+
+
 
 // given an array and a number, removes the number from the array
 function removeAttempt(attemptArray: number[], number: number) {
@@ -375,87 +444,26 @@ export function solveRegionSudoku(sudoku: number[], colours: number[], type: str
   return coloursudoku;
 }
 
-/***
- * Creates assignment of colors based on a given sudoku array
- * @param sudokuValueArray the array containing the actual values
- * @private
- */
-export function solveDiaColourSudoku(sudokuValueArray: number[]) {
-
-  // clone the array with the values for later remembering
-  const takenValues = [...sudokuValueArray];
-  // create an empty array for the colors to save and later return
-  const colorArray = Array(sudokuValueArray.length);
-
-  // for every color idx (1-9)
-  for (let colorIdx = 1; colorIdx < 10; colorIdx++) {
-    // get 9 values for each color
-    for (let valueToLookFor = 1; valueToLookFor < 10; valueToLookFor++) {
-
-      // get a random number to start the index
-      let currentIdxInValueArray = getRandomInt(0, 80);
-
-      // search as long as a fitting value is found
-      let isNoValueFound = true;
-      while (isNoValueFound) {
-
-        // if the idx reaches the end, start from beginning of array
-        if (currentIdxInValueArray >= 81) {
-          currentIdxInValueArray = 0;
-        }
-
-        if (takenValues[currentIdxInValueArray] == valueToLookFor) {
-          // the value is one that we look for
-          // stop iteration
-          isNoValueFound = false;
-          // assign color to the result
-          colorArray[currentIdxInValueArray] = colorIdx;
-          // mark the value as taken by assigning a -1
-          takenValues[currentIdxInValueArray] = -1;
-        }
-
-        // next iteration search on next value
-        currentIdxInValueArray += 1;
-
-      }
-    }
-  }
-  return colorArray;
-}
-
-/**
- * Returns a random integer between min (inclusive) and max (inclusive).
- * The value is no lower than min (or the next integer greater than min
- * if min isn't an integer) and no greater than max (or the next integer
- * lower than max if max isn't an integer).
- * Using Math.round() will give you a non-uniform distribution!
- */
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 
 export function solveColourSudoku(sudoku: number[], colours: number[], type: string) {
   const saved = new Array<Array<Array<number>>>();
-  const colored = new Array<Array<Array<number>>>();
-  const savedColours = new Array<Array<number>>();
   const savedSudoku = new Array<Array<number>>();
+  const savedColours = new Array<Array<number>>();
   let nextMove: number[][];
   let whatToTry: number;
   let attempt: number;
-  const coloursudoku = new ColourSudoku();
+  let possiblecolours: number[][];
+  let coloursudoku = new ColourSudoku();
   coloursudoku.colours = colours;
   coloursudoku.sudoku = sudoku;
-  let possiblecolours = generateColours();
+
   while (!isSolvedSudoku(coloursudoku.sudoku)) {
     nextMove = scanSudokuForUnique(coloursudoku.sudoku, type);
+    possiblecolours = generateColours(coloursudoku.sudoku, coloursudoku.colours);
     if (!nextMove) {
       nextMove = saved.pop();
       coloursudoku.sudoku = savedSudoku.pop();
-      possiblecolours = colored.pop();
-      coloursudoku.colours = savedColours.pop();
     }
     whatToTry = nextRandom(nextMove);
     attempt = determineRandomPossibleValue(nextMove, whatToTry);
@@ -465,13 +473,28 @@ export function solveColourSudoku(sudoku: number[], colours: number[], type: str
       savedSudoku.push(coloursudoku.sudoku.slice());
     }
     coloursudoku.sudoku[whatToTry] = attempt;
-    coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours);
+    coloursudoku.colours[whatToTry] = returnColour(whatToTry, attempt, coloursudoku.colours, possiblecolours,coloursudoku.sudoku);
     if (possiblecolours[attempt].length > 1) {
       possiblecolours[attempt] = removeColour(attempt, coloursudoku.colours[whatToTry], possiblecolours);
-      colored.push(possiblecolours.slice());
       savedColours.push(coloursudoku.colours.slice());
     }
   }
+
+  if (type == "diagonal" && !isCorrectDiagonal(coloursudoku.sudoku)  ) {
+    coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
+    if(!isCorrectColour(coloursudoku.colours)){
+      //coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
+      while(!isCorrectColour(coloursudoku.colours)){
+        coloursudoku.colours = shortcutColour(coloursudoku.sudoku,coloursudoku.colours)
+      }
+      return coloursudoku;
+    }
+    return coloursudoku;
+  }else if(!isCorrectColour(coloursudoku.colours)){
+    coloursudoku = solveColourSudoku(savedSudoku[0],savedColours[0],type)
+    return coloursudoku;
+  }
+
   return coloursudoku;
 }
 

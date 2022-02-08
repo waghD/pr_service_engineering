@@ -7,7 +7,7 @@ import { removeSolution } from "../helpers/sudoku-generator";
 import { SudokuFieldDto } from "../models/sudoku-field.dto";
 import {
   ColourSudoku,
-  solveColourSudoku, solveDiaColourSudoku,
+  solveColourSudoku,
   solveRegionSudoku,
   solveSudoku,
   sudokuArrayTo2DArray
@@ -114,15 +114,16 @@ export class SudokuFieldService {
       } else {
         // create a normal diagonal sudoku if it is a diacolor
         if (type == "diacolour") {
-          solved = solveSudoku(emptySudoku, "diagonal");
+          const emptycolors = new Array<number>();
+          for (let x = 0; x < 81; x++) {
+            emptycolors[x] = 0;
+          }
+          coloursudoku = solveColourSudoku(emptySudoku,emptycolors,'diagonal');
+          solved = coloursudoku.sudoku;
+          colours = coloursudoku.colours;
         } else {
           solved = solveSudoku(emptySudoku, type);
         }
-      }
-
-      if (type == "diacolour") {
-        // 'solved' has now the diagonal sudoku -> create the colors by randomly assigning them via the array
-        colours = solveDiaColourSudoku(solved);
       }
 
       if (type == "colour" || type == "region" || type == "diacolour") {
