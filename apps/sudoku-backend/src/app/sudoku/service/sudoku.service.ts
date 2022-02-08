@@ -6,7 +6,7 @@ import { SudokuFieldService } from './sudoku-field.service';
 import { SudokuDto } from '../models/sudoku.dto';
 import { UserService } from '../../auth/services/user.service';
 import { SudokuSolverDto } from '../models/sudoku-solver.dto';
-import { SudokuDifficulties } from '../../../../../../libs/enums/SudokuDifficulties';
+import { SudokuDifficulties } from '@enums/SudokuDifficulties';
 
 
 @Injectable()

@@ -1,4 +1,3 @@
-import { ISudokuDto } from "./sudoku.dto";
 
 export interface ISudokuFieldDto {
   x:number;

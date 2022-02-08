@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { IAuthDto } from '../../../../../../libs/models/IAuthDto';
+import { IAuthDto } from '@models/IAuthDto';
 
 export class UserDto implements IAuthDto {
 

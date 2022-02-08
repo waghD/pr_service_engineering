@@ -23,7 +23,7 @@ import {
   getValidDifficulties,
   isValidSudokuDifficulty,
   SudokuDifficulties
-} from '../../../../../../libs/enums/SudokuDifficulties';
+} from '@enums/SudokuDifficulties';
 
 @ApiTags("Sudoku")
 @Controller("sudokus")
