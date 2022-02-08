@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthStateService } from '../../../services/auth-state.service';
+import { AuthStateService } from '@Services/auth-state.service';
 import { FinishSudokuButtonService } from './finish-sudoku-button.service';
 import { GenericInfoDialogComponent } from '../generic-info-dialog/generic-info-dialog.component';
 import { MatDialog } from '@angular/material/dialog';

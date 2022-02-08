@@ -4,7 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ISudokuFieldDto } from '@models/sudoku-field.dto';
 import { DiagonalColorGameService } from './diagonal-color-game.service';
-import { AuthStateService } from '../../services/auth-state.service';
+import { AuthStateService } from '@Services/auth-state.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '@enums/SudokuDifficulties';
 import { MatDialog } from '@angular/material/dialog';
 import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';

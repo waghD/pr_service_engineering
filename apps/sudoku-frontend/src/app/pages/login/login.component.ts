@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthStateService } from '../../services/auth-state.service';
+import { AuthStateService } from '@Services/auth-state.service';
 import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 

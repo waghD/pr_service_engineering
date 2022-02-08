@@ -1,7 +1,7 @@
 import { Injectable, isDevMode } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { AuthStateService } from "../../services/auth-state.service";
+import { AuthStateService } from "@Services/auth-state.service";
 import { ISudokuDto } from '@models/sudoku.dto';
 import { ISudokuFieldDto } from '@models/sudoku-field.dto';
 import { SudokuDifficulties } from '@enums/SudokuDifficulties';
