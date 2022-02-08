@@ -6,6 +6,7 @@ module.exports = {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
       stringifyContentPathRegex: '\\.(html|svg)$',
+      isolatedModules: true
     },
   },
   coverageDirectory: '../../coverage/apps/service-frontend',
