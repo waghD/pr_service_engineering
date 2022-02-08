@@ -52,6 +52,14 @@
         <div class='line-container'>
           <hr>
         </div>
+        <mat-slide-toggle class='slide-toggle-button' checked='true' color='primary' (toggleChange)='helperSwitched()'>
+          <span class='slide-toggle-button-text'>Helper Mode</span>
+        </mat-slide-toggle>
+      </div>
+      <div class='row-control-grid'>
+        <div class='line-container'>
+          <hr>
+        </div>
         <button class='default-button back-to-menu-button' (click)='backToMenuButtonClicked()'>
           <span class='inner-button'>
           <span class='button-text'>Back to Menu</span>

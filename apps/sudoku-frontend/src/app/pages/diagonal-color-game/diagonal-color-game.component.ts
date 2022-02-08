@@ -665,6 +665,8 @@ export class DiagonalColorGameComponent {
         for (let j = 0; j < this.cacheGrid.length; j++) {
           this.highlightField(i, j, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, true);
           this.highlightField(i, j, this.ERROR_BACKGROUND_COL_CSS_CLASSNAME, true);
+          this.highlightField(i, j, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, true);
+          this.highlightField(i, j, this.ERROR_BACKGROUND_DIAGONAL_CSS_CLASSNAME, true);
         }
       }
     }
