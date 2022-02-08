@@ -20,6 +20,8 @@ export class FinishSudokuButtonComponent {
   investedTime: string;
   @Input()
   sudokuId: number;
+  @Input()
+  isErrorInSudoku: boolean;
   solvedTime: string;
 
   constructor(private router: Router, private authService: AuthStateService, private finishSudokuButtonService: FinishSudokuButtonService, public infoDialog: MatDialog) {
@@ -28,6 +30,7 @@ export class FinishSudokuButtonComponent {
     this.investedTime = '';
     this.solvedTime = '';
     this.sudokuId = -1;
+    this.isErrorInSudoku = false;
   }
 
   /***
@@ -43,7 +46,7 @@ export class FinishSudokuButtonComponent {
     if (this.is2DArraysEqual(this.sudokuFieldsInput, transformedArray)) {
       isSolvedCorrectly = true;
     }
-    if (isSolvedCorrectly) {
+    if (isSolvedCorrectly || (!this.isErrorInSudoku)) {
       this.solvedTime = this.investedTime;
 
       // display success message
