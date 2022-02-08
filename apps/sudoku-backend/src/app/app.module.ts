@@ -12,7 +12,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
   imports: [
     ConfigModule.forRoot( {isGlobal:true}),
     TypeOrmModule.forRoot({
-      type: "sqlite",
+      type: "better-sqlite3",
       database: "sudoku",
       autoLoadEntities:true,
       synchronize:true
