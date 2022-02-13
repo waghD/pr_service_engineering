@@ -7,8 +7,10 @@ import { ColorGameService } from './color-game.service';
 import { AuthStateService } from '../../services/auth-state.service';
 import { isValidSudokuDifficulty, SudokuDifficulties } from '@enums/SudokuDifficulties';
 import { GenericInfoDialogComponent } from '../../shared/components/generic-info-dialog/generic-info-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogState } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../../shared/components/delete-dialog/delete-dialog.component';
+import { LoaderDialogComponent } from '../../shared/components/loader-dialog/loader-dialog.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'se-sudoku-color-game',
@@ -47,6 +49,9 @@ export class ColorGameComponent {
 
   isErrorInSudoku: boolean;
 
+  private loaderRef: MatDialogRef<LoaderDialogComponent>;
+  private loaderStartTime: number;
+
   constructor(
     public colorGameService: ColorGameService,
     private router: Router,
@@ -55,6 +60,14 @@ export class ColorGameComponent {
     public infoDialog: MatDialog,
     public deleteDialog: MatDialog
   ) {
+
+    this.loaderRef = this.infoDialog.open(LoaderDialogComponent, {
+      disableClose: true,
+      data: {
+        message: 'Lade Sudoku'
+      }
+    });
+    this.loaderStartTime = Date.now();
 
     this.route.paramMap.subscribe(paramMap => {
       const openID = paramMap.get('openId');
@@ -163,6 +176,17 @@ export class ColorGameComponent {
    * @param sudokuData the sudoko object containing the values
    */
   initVars(sudokuData: ISudokuDto) {
+
+    if(this.loaderRef && this.loaderRef.getState() === MatDialogState.OPEN) {
+      const loaderTimeDiff = Date.now() - this.loaderStartTime;
+      if(loaderTimeDiff > environment.minLoaderDuration) {
+        this.loaderRef.close();
+      } else {
+        setTimeout(() => {
+          this.loaderRef.close();
+        }, environment.minLoaderDuration - loaderTimeDiff);
+      }
+    }
 
     /***
      * Fills the sudokuGrid with data specified from a SudokuEntity
