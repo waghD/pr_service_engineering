@@ -8,6 +8,8 @@ import { DeleteDialogComponent } from './components/delete-dialog/delete-dialog.
 import { MatButtonModule } from '@angular/material/button';
 import { FinishSudokuButtonComponent } from './components/finish-sudoku-button/finish-sudoku-button.component';
 import { GenericInfoDialogComponent } from './components/generic-info-dialog/generic-info-dialog.component';
+import { SudokuTypeSelectionComponent } from '../pages/home/sudoku-type-selection/sudoku-type-selection.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { GenericInfoDialogComponent } from './components/generic-info-dialog/gen
     FinishSudokuButtonComponent,
     LoginBannerComponent,
     DeleteDialogComponent,
-    GenericInfoDialogComponent
+    GenericInfoDialogComponent,
+    SudokuTypeSelectionComponent
   ],
   exports: [
     HeaderComponent,
@@ -28,7 +31,8 @@ import { GenericInfoDialogComponent } from './components/generic-info-dialog/gen
   imports: [
     CommonModule,
     RouterModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
   ]
 })
 export class SharedModule {

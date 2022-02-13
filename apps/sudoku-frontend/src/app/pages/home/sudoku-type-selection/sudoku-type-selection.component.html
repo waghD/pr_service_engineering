@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Choose Sudoku Type</h2>
+<mat-dialog-content>
+  <div class='mm-container'>
+    <div class='mm-menu'>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="goToSudokuGame('/classic-game')">Classic</a></li>
+      </ul>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="goToSudokuGame('/diagonal-game')">Diagonal</a></li>
+      </ul>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="goToSudokuGame('/color-game')">Color</a></li>
+      </ul>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="goToSudokuGame('/diagonal-color-game')">Dia-Color</a></li>
+      </ul>
+      <ul class='mm-ul'>
+        <li class='mm-li'><a (click)="goToSudokuGame('/region-game')">Region</a></li>
+      </ul>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)='cancel()'>Cancel</button>
+</mat-dialog-actions>

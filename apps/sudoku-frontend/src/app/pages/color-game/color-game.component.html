@@ -1,4 +1,5 @@
-<se-sudoku-header additionalClass='single-line-heading' pageHeading='Color' [difficulty]='difficulty'></se-sudoku-header>
+<se-sudoku-header additionalClass='single-line-heading' pageHeading='Color'
+                  [difficulty]='difficulty'></se-sudoku-header>
 <div class='main-content'>
   <div class='color-game-container'>
     <div class='left-control-container'>
@@ -51,6 +52,14 @@
         <div class='line-container'>
           <hr>
         </div>
+        <mat-slide-toggle class='slide-toggle-button' checked='true' color='primary' (toggleChange)='helperSwitched()'>
+          <span class='slide-toggle-button-text'>Helper Mode</span>
+        </mat-slide-toggle>
+      </div>
+      <div class='row-control-grid'>
+        <div class='line-container'>
+          <hr>
+        </div>
         <button class='default-button back-to-menu-button' (click)='backToMenuButtonClicked()'>
           <span class='inner-button'>
           <span class='button-text'>Back to Menu</span>
@@ -65,7 +74,8 @@
         <se-sudoku-finish-sudoku-button [sudokuFieldsInput]='cacheGrid'
                                         [sudokuFieldsSolution]='solvedGrid'
                                         [investedTime]='this.timeString'
-                                        [sudokuId]='this.sudokuAPIData.id'>
+                                        [sudokuId]='this.sudokuAPIData.id'
+                                        [isErrorInSudoku]='this.isErrorInSudoku'>
         </se-sudoku-finish-sudoku-button>
       </div>
     </div>

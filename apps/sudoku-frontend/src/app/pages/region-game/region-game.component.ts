@@ -45,6 +45,8 @@ export class RegionGameComponent {
   private openID = -1;
   difficulty: SudokuDifficulties = SudokuDifficulties.EASY;
 
+  isErrorInSudoku: boolean;
+
   constructor(public regionGameService: RegionGameService,
               private router: Router,
               private route: ActivatedRoute,
@@ -130,6 +132,8 @@ export class RegionGameComponent {
 
     this.NON_EDITABLE_CSS_CLASSNAME = 'non-editable-field';
     this.isEveryFieldAssigned = false;
+
+    this.isErrorInSudoku = false;
   }
 
   /**
@@ -242,6 +246,13 @@ export class RegionGameComponent {
    * Called when clicking outside the current selected cell
    */
   focusOutFunction(): void {
+
+    let errorInBox = false;
+    let errorInColumn = false;
+    let errorInRow = false;
+    let errorInColor = false;
+
+
     // parses all filled fields and caches them in the cacheGrid variable
     Object.entries(this.gridForm.value).forEach(([key, value]) => {
       //get cell idx of 'cellXY'
@@ -302,9 +313,12 @@ export class RegionGameComponent {
       const rowDomElement = document.getElementsByClassName('row-nr-' + rowIdx);
 
       if (hasDuplicates(this.cacheGrid[rowIdx])) {
-        //found a duplicate in the row, add error class
-        console.warn('Duplicate in row ' + (rowIdx + 1) + '!');
-        rowDomElement[0].classList.add(this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME);
+        errorInRow = true;
+        if (this.isInHelperMode) {
+          //found a duplicate in the row, add error class
+          console.warn('Duplicate in row ' + (rowIdx + 1) + '!');
+          rowDomElement[0].classList.add(this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME);
+        }
       } else {
         // if no error, remove (previous) error class
         rowDomElement[0].classList.remove(this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME);
@@ -323,9 +337,12 @@ export class RegionGameComponent {
 
       //check if array has duplicates
       if (hasDuplicates(colArr)) {
-        console.warn('Duplicate in column ' + (x) + '!');
-        for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
-          this.highlightField(x, rowIdx, this.ERROR_BACKGROUND_COL_CSS_CLASSNAME, false);
+        errorInColumn = true;
+        if (this.isInHelperMode) {
+          console.warn('Duplicate in column ' + (x) + '!');
+          for (let rowIdx = 0; rowIdx < this.cacheGrid.length; rowIdx++) {
+            this.highlightField(x, rowIdx, this.ERROR_BACKGROUND_COL_CSS_CLASSNAME, false);
+          }
         }
       } else {
         // no duplicates, but value could have been deleted, revalidate to no error
@@ -392,8 +409,11 @@ export class RegionGameComponent {
       const startIdxCol = boxArray['startIdxCols'];
 
       if (hasDuplicates(currentArray)) {
-        console.warn('Duplicate in 3x3 ');
-        this.highlightBox(startIdxRow, startIdxCol, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, false);
+        errorInBox = true;
+        if (this.isInHelperMode) {
+          console.warn('Duplicate in 3x3 ');
+          this.highlightBox(startIdxRow, startIdxCol, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, false);
+        }
       } else {
         this.highlightBox(startIdxRow, startIdxCol, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, true);
       }
@@ -416,7 +436,10 @@ export class RegionGameComponent {
       }
       // all values for the current colour are now in valuesFoundForColor, check if it has any duplicates
       if (hasDuplicates(valuesFoundForColor)) {
-        this.highlightColor(currentColorIdx, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, this.sudokuAPIData, false);
+        errorInColor = true;
+        if (this.isInHelperMode) {
+          this.highlightColor(currentColorIdx, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, this.sudokuAPIData, false);
+        }
       } else {
         this.highlightColor(currentColorIdx, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, this.sudokuAPIData, true);
       }
@@ -439,6 +462,9 @@ export class RegionGameComponent {
 
     // set booleans if everything is solved
     this.isEveryFieldAssigned = isEverythingFilledOut(this.cacheGrid);
+
+    // additional check if there is an error
+    this.isErrorInSudoku = (errorInRow || errorInColumn || errorInBox || errorInColor);
 
   }
 
@@ -550,6 +576,18 @@ export class RegionGameComponent {
   helperSwitched() {
     // switch mode
     this.isInHelperMode = !this.isInHelperMode;
+    // clear all error highlights
+    if (!this.isInHelperMode) {
+      for (let i = 0; i < this.cacheGrid.length; i++) {
+        const rowDomElement = document.getElementsByClassName('row-nr-' + i);
+        rowDomElement[0].classList.remove(this.ERROR_BACKGROUND_ROW_CSS_CLASSNAME);
+        for (let j = 0; j < this.cacheGrid.length; j++) {
+          this.highlightField(i, j, this.ERROR_BACKGROUND_BOX_CSS_CLASSNAME, true);
+          this.highlightField(i, j, this.ERROR_BACKGROUND_COL_CSS_CLASSNAME, true);
+          this.highlightField(i, j, this.ERROR_BACKGROUND_COLOR_CSS_CLASSNAME, true);
+        }
+      }
+    }
   }
 
 

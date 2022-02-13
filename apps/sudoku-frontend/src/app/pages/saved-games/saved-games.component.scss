@@ -8,9 +8,11 @@
     h2, h3 {
       margin: 0;
     }
+
     h3 {
       font-size: 1.8em;
     }
+
     h2 {
       font-size: 1.5em;
     }
@@ -18,7 +20,7 @@
 
   table {
     border-collapse: collapse;
-    overflow:auto;
+    overflow: auto;
 
     .dialog-container {
       margin: 0;
@@ -28,31 +30,31 @@
       min-height: 52px;
       align-items: center;
       box-sizing: content-box;
+    }
 
-      .trash-bin-button {
-        -webkit-transition: background-color 0.5s linear;
-        -ms-transition: background-color 0.5s linear;
-        transition: background-color 0.5s linear;
+    .trash-bin-button {
+      -webkit-transition: background-color 0.25s linear;
+      -ms-transition: background-color 0.25s linear;
+      transition: background-color 0.25s linear;
 
-        &:hover {
-          background-color: $error-red;
-          -webkit-transition: background-color 0.5s linear;
-          -ms-transition: background-color 0.5s linear;
-          transition: background-color 0.5s linear;
-        }
+      &:hover {
+        background-color: $error-red;
+        -webkit-transition: background-color 0.25s linear;
+        -ms-transition: background-color 0.25s linear;
+        transition: background-color 0.25s linear;
       }
     }
 
     .play-button {
-      -webkit-transition: background-color 0.5s linear;
-      -ms-transition: background-color 0.5s linear;
-      transition: background-color 0.5s linear;
+      -webkit-transition: background-color 0.25s linear;
+      -ms-transition: background-color 0.25s linear;
+      transition: background-color 0.25s linear;
 
       &:hover {
         background-color: $confirmation-green;
-        -webkit-transition: background-color 0.5s linear;
-        -ms-transition: background-color 0.5s linear;
-        transition: background-color 0.5s linear;
+        -webkit-transition: background-color 0.25s linear;
+        -ms-transition: background-color 0.25s linear;
+        transition: background-color 0.25s linear;
       }
     }
 

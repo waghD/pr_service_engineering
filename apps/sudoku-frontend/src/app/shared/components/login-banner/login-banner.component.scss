@@ -3,16 +3,13 @@
 .login-banner-container {
   .login-inner-container {
     position: fixed;
-    bottom: 2px;
-    right: 0;
+    bottom: 35px;
+    right: 17px;
     background: white;
     z-index: 10;
 
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
-    border-left: 2px solid black;
+    border: 2px solid black;
     padding: 5px;
-
     display: flex;
 
     .left-column {
@@ -53,6 +50,8 @@
     }
 
     .right-column {
+      margin-right: 1vw;
+
       .img-user-container {
         .img-user-icon {
           height: 55px;
@@ -66,9 +65,12 @@
 
   .login-banner-container {
     .login-inner-container {
+      right: 1px;
+
       .left-column {
         margin-right: 1vw;
       }
+
       .right-column {
         display: none;
       }
