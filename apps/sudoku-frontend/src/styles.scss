@@ -64,3 +64,7 @@ p {
 .mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
   background-color: $light-blue-contrast-background;
 }
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: $light-blue;
+}
