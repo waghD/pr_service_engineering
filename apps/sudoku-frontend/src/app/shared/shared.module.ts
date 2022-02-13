@@ -10,6 +10,8 @@ import { FinishSudokuButtonComponent } from './components/finish-sudoku-button/f
 import { GenericInfoDialogComponent } from './components/generic-info-dialog/generic-info-dialog.component';
 import { SudokuTypeSelectionComponent } from '../pages/home/sudoku-type-selection/sudoku-type-selection.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LoaderDialogComponent } from './components/loader-dialog/loader-dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     LoginBannerComponent,
     DeleteDialogComponent,
     GenericInfoDialogComponent,
-    SudokuTypeSelectionComponent
+    SudokuTypeSelectionComponent,
+    LoaderDialogComponent
   ],
   exports: [
     HeaderComponent,
@@ -32,7 +35,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     CommonModule,
     RouterModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SharedModule {
